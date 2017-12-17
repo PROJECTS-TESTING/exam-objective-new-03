@@ -1,0 +1,179 @@
+﻿@using Exam_Objective.Models
+@using System.Collections.Generic
+
+@{
+    ViewBag.Title = "CreateTest";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="paddind-lr-30">
+    @{var SubjectsEntity = (List<SubjectsModel>)ViewBag.Subject;
+
+        <h3><span>จัดการแบบทดสอบ / วิชา</span><span id="asubject" data-asubj="@SubjectsEntity[0].SubjectID"></span>@SubjectsEntity[0].SubjectName</h3>
+
+    }
+
+    <hr />
+
+    <p class="text-left">
+        <button type="button" class="btn btn-default" onclick="window.history.back()"><span class="fa fa-reply"></span> ย้อนกลับ</button>
+        <button id="btnCrtTest" name="btnCrtTest" class="btn btn-primary" data-toggle="modal" data-target="#TestModal"><span class="fa fa-plus"></span> เพิ่มแบบทดสอบ</button>
+    </p><hr style="margin:2px;" />
+
+    <div class="modal fade" id="TestModal" tabindex="-1" role="dialog" aria-labelledby="User" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5 class="modal-title"><label id="title" name="title"></label><label><span>วิชา</span>@SubjectsEntity[0].SubjectName</label></h5>
+                </div>
+
+                <div class="modal-body">
+                    <form id="TForm0" method="post" class="form-horizontal">
+                        <p class="show-chevron-rightdown text-left collapsed menu-slidet" data-toggle="collapse" data-target="#demo0"> ทั่วไป</p>
+                        <div id="demo0" class="collapse">
+                            <br />
+                            @Html.Partial("/Views/Testing/PartialTests/_Partial1SetGenerals.cshtml")
+                        </div>
+
+                        <hr style="margin:0px;" />
+                        <p class="show-chevron-rightdown text-left collapsed menu-slidet" data-toggle="collapse" data-target="#demo1"> กำหนดเวลา</p>
+                        <div id="demo1" class="collapse">
+                            <br />
+                            @Html.Partial("/Views/Testing/PartialTests/_Partial2SetTime.cshtml")
+                        </div>
+
+                        <hr style="margin:0px;" />
+                        <p class="show-chevron-rightdown text-left collapsed menu-slidet" data-toggle="collapse" data-target="#demo3"> รูปแบบ</p>
+                        <div id="demo3" class="collapse">
+                            <br />
+                            @Html.Partial("/Views/Testing/PartialTests/_Partial3SetFormat.cshtml")
+                        </div>
+
+                        <hr style="margin:0px;" />
+                        <p class="show-chevron-rightdown text-left collapsed menu-slidet" data-toggle="collapse" data-target="#demo4"> จำกัดการเข้าถึง</p>
+                        <div id="demo4" class="collapse">
+                            <br />
+                            @Html.Partial("/Views/Testing/PartialTests/_Partial4RestrictAccess.cshtml")
+                        </div>
+
+                        <hr style="margin:0px;" />
+                        <br />
+                        <div class="form-group">
+                            <div class="col-xs-10 col-xs-offset-3">
+                                <button type="button" id="btnSave" class="btn btn-primary btnSave">บันทึก</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
+                            </div>
+                        </div><br />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>แบบทดสอบวิชา @SubjectsEntity[0].SubjectName ที่มีกลุ่มเรียนแล้ว</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{var TestEntity = (List<ExamTopicModel>)ViewBag.DataExamtest;
+                if (TestEntity.Count > 0 && TestEntity != null)
+                {
+                    foreach (var rows in TestEntity)
+                    {
+                        <tr>
+                            <td>
+                                <span class="fa  fa-caret-right"> </span>
+                                <span>@rows.ExamtopicName</span>
+                                <span>กลุ่มเรียน </span>@rows.StudyGroup
+                                <span> | </span>
+                                <span title="รายละเอีนด" class="fa fa-search link-action btnView" data-toggle="modal" data-target="#TestModal" data-examtopicid="@rows.ExamtopicID"> รายละเอียด </span>
+                                <span title="แก้ไข" class="fa fa-cog link-action btnEdit" data-toggle="modal" data-target="#TestModal" data-examtopicid="@rows.ExamtopicID"> แก้ไข</span>
+                                <span title="ลบ" class="fa  fa-times link-action btnDelete" data-examtopicid="@rows.ExamtopicID" data-Exname="@rows.ExamtopicName"> ลบ</span>
+                                <span> | </span>
+                                <a title="แก้ไขแบบทดสอบ" class="link-action" href="@Url.Action("EditQuiz", "Testing", new { etid = rows.ExamtopicID, subid = SubjectsEntity[0].SubjectID })"> แก้ไขแบบทดสอบ</a>
+                                <span> | </span>
+                                <span title="ผลการสอบ" class="link-action">ผลการสอบ</span>
+                                <span> | </span>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr><td><span style="color:#ff0000">*ยังไม่มีแบบทดสอบในนี้</span></td></tr>}
+            }
+        </tbody>
+    </table>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>แบบทดสอบวิชา @SubjectsEntity[0].SubjectName ที่ยังไม่มีกลุ่มเรียน</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{var TestEntitynill = (List<ExamTopicModel>)ViewBag.DataNullGroup;
+                if (TestEntitynill.Count > 0 && TestEntitynill != null)
+                {
+                    foreach (var rows in TestEntitynill)
+                    {
+                        <tr>
+                            <td>
+                                <span class="fa  fa-caret-right"> </span>
+                                <span>@rows.ExamtopicName</span>
+                                <span>กลุ่มเรียน </span>@rows.StudyGroup
+                                <span> | </span>
+                                <span title="รายละเอีนด" class="fa fa-search link-action btnView" data-toggle="modal" data-target="#TestModal" data-examtopicid="@rows.ExamtopicID"> รายละเอียด </span>
+                                <span title="แก้ไข" class="fa fa-cog link-action btnEdit" data-toggle="modal" data-target="#TestModal" data-examtopicid="@rows.ExamtopicID"> แก้ไข</span>
+                                <span title="ลบ" class="fa  fa-times link-action btnDelete" data-examtopicid="@rows.ExamtopicID" data-Exname="@rows.ExamtopicName"> ลบ</span>
+                                <span> | </span>
+                                <a title="แก้ไขแบบทดสอบ" class="link-action" href="@Url.Action("EditQuiz", "Testing", new { etid = rows.ExamtopicID, subid = SubjectsEntity[0].SubjectID })"> แก้ไขแบบทดสอบ</a>
+                                <span> | </span>
+                                <span title="ผลการสอบ" class="link-action">ผลการสอบ</span>
+                                <span> | </span>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr><td><span style="color:#ff0000">*ยังไม่มีแบบทดสอบในนี้</span></td></tr>}
+            }
+        </tbody>
+    </table>
+</div>
+               
+ @section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.inputmask.bundle.js"></script>
+    <script src="~/Scripts/jquery.inputmask.bundle.min.js"></script>
+    <script src="~/Scripts/tinymce/jquery.tinymce.min.js"></script>
+    <script src="~/Scripts/tinymce/tinymce.min.js"></script> 
+     <script type="text/javascript">
+         var DataTest = {
+             ExamtopicID: 0,
+             ExamtopicName: $("[name='TestName']").val(),
+             Explantion: $("[name='Explantion']").val(),
+             SubjectID: $('#asubject').data("asubj"),
+             DatetoBegin: $("[name='DatetoBegin']").val(),
+             TimetoBegin: $("[name='TimetoBegin']").val(),
+             TimetoEnd: $("[name='TimetoEnd']").val(),
+             NewPage: $("[name='NewPage']").val(),
+             HowtoPage: $("[name='HowtoPage']").val(),
+             Sequences: "0",
+             GroupID: $("[name='Groupstudy']").val(),
+             ExamtopicPW: $("[name='PwTest']").val(),
+             NumberOfTimes: $("[name='NumberOfTimes']").val(),
+             InNetWork: "",
+             isUpdateable: 0
+         };
+     </script>
+<script src="~/Scripts/Scriptss/CreateTestJs.js"></script>
+<script src="~/Scripts/Scriptss/Text-Editor-1.js"></script>
+<script src="~/Scripts/Scriptss/ShowPW-HidePW-Js.js"></script>  
+ }

@@ -1,0 +1,174 @@
+﻿@using Exam_Objective.Models
+@using System.Collections.Generic
+
+@{
+    ViewBag.Title = "EditQuiz";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="paddind-lr-30">
+    @{
+        var SubjectsEntity = (List<SubjectsModel>)ViewBag.Subject;
+        var groupTest = (List<TestGroupModel>)ViewBag.testGroup;
+        var examtoPic = (List<ExamTopicModel>)ViewBag.examtopic;
+        <h4><span>แก้ไขแบบทดสอบ / วิชา</span>@SubjectsEntity[0].SubjectName <span id="subj" data-subject="@SubjectsEntity[0].SubjectID"></span></h4>
+        <h4>
+            @examtoPic[0].ExamtopicName<span> กลุ่มเรียน:</span>@{if (groupTest.Count > 0 && groupTest != null)
+                {@groupTest[0].StudyGroup}
+            else
+            {<span>ยังไม่มีกลุ่มเรียน</span>}}
+        </h4>
+        <div id="explan" data-explantion="@examtoPic[0].Explantion"></div>
+    }
+
+    <hr />
+    <form>
+        <div class="form-group">
+            <div class="row text-left">
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-default" onclick='window.history.back()'><span class="fa fa-reply"></span> ย้อนกลับ</button>
+                </div>
+                <div class="col-md-3">
+                    <select style="max-width:180px;" class="form-control" id="idsuite" name="idsuite">
+                        <option value="0">แบบทดสอบชุดที่ 1</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button id="btnAddsuite" class="btn btn-default" data-toggle="" data-target=""><span class="fa fa-plus"></span> เพิ่มจำนวนชุด</button>
+                </div>
+            </div>
+            <hr /><span style="font-size:18px;">แบบทดสอบชุดที่ 1  </span><span title="ลบ" class="fa  fa-times link-action btnDelete"></span>
+            <br />
+        </div>
+    </form>
+    @*--------- Button Dialog เพิ่มข้อสอบ -------------*@
+    <button id="btnAddQuiz1" class="btn btn-primary" data-toggle="modal" data-target="#EditQ1Model"><span class="fa fa-plus"></span> เพิ่มทีละข้อ</button>
+    <button id="btnAddQuiz2" class="btn btn-primary" data-toggle="modal" data-target="#EditQ2Model"><span class="fa fa-plus"></span> เพิ่มจากความยากง่าย</button>
+    <button id="btnAddQuiz3" class="btn btn-primary" data-toggle="modal" data-target="#EditQ3Model"><span class="fa fa-plus"></span> เพิ่มแบบสุ่ม</button>
+    <hr style="margin:2px;" />
+    @*----- Dialog เพิ่มที่ละข้อ -------*@
+    <div class="modal fade" id="EditQ1Model" tabindex="-1" role="dialog" aria-labelledby="User" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5 class="modal-title"><label id="title" name="title"></label><label><span>เพิ่มข้อสอบทีละข้อ</span></label></h5>
+                </div>
+
+                <div class="modal-body">
+                    <form id="createQ1Form" method="post" class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">ชื่อกลุ่มเรียน<span style="color:red"> *</span></label>
+                            <div class="col-md-5">
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">รหัสผ่าน<span style="color:red"> *</span></label>
+                            <div class="col-md-5">
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-xs-10 col-xs-offset-3">
+                                <button type="button" id="btnSave" class="btn btn-primary btnSave">บันทึก</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*----- Dailog เพิ่มจากค่าความยากง่าย -------*@
+    <div class="modal fade" id="EditQ2Model" tabindex="-1" role="dialog" aria-labelledby="User" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5 class="modal-title"><label id="title" name="title"></label><label><span>เพิ่มข้อสอบจากค่าความยากง่าย</span></label></h5>
+                </div>
+
+                <div class="modal-body">
+                    <form id="createQ2Form" method="post" class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">ชื่อกลุ่มเรียน<span style="color:red"> *</span></label>
+                            <div class="col-md-5">
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">รหัสผ่าน<span style="color:red"> *</span></label>
+                            <div class="col-md-5">
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-xs-10 col-xs-offset-3">
+                                <button type="button" id="btnSave" class="btn btn-primary btnSave">บันทึก</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*----- Dialog เพิ่มแบบสุ่ม -------*@
+    <div class="modal fade" id="EditQ3Model" tabindex="-1" role="dialog" aria-labelledby="User" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5 class="modal-title"><label id="title" name="title"></label><label><span>เพิ่มข้อสอบแบบสุ่ม</span></label></h5>
+                </div>
+
+                <div class="modal-body">
+                    <form id="createQ3Form" method="post" class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">ชื่อกลุ่มเรียน<span style="color:red"> *</span></label>
+                            <div class="col-md-5">
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">รหัสผ่าน<span style="color:red"> *</span></label>
+                            <div class="col-md-5">
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-xs-10 col-xs-offset-3">
+                                <button type="button" id="btnSave" class="btn btn-primary btnSave">บันทึก</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+        var str = $('#explan').data("explantion");
+        $('#explan').html(str);
+
+    </script>
+}

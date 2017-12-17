@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ExamSystemModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Choice">
+    <Key>
+      <PropertyRef Name="ChoiceID" />
+      <PropertyRef Name="ProposID" />
+    </Key>
+    <Property Name="ChoiceID" Type="Int32" Nullable="false" />
+    <Property Name="ProposID" Type="Int32" Nullable="false" />
+    <Property Name="Choice1" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Answer" Type="Int32" Nullable="false" />
+    <Property Name="Distracter" Type="Double" />
+    <NavigationProperty Name="Propostition" Relationship="Self.FK_Choice_Propostition" FromRole="Choice" ToRole="Propostition" />
+  </EntityType>
+  <EntityType Name="Lesson">
+    <Key>
+      <PropertyRef Name="LessonID" />
+      <PropertyRef Name="SubjectID" />
+    </Key>
+    <Property Name="LessonID" Type="Int32" Nullable="false" />
+    <Property Name="SubjectID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="LesName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="UserID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Subjects" Relationship="Self.FK_Lesson_Subjects" FromRole="Lesson" ToRole="Subjects" />
+    <NavigationProperty Name="Objectives" Relationship="Self.FK_Objectives_Lesson" FromRole="Lesson" ToRole="Objectives" />
+  </EntityType>
+  <EntityType Name="Objectives">
+    <Key>
+      <PropertyRef Name="OjectivesID" />
+      <PropertyRef Name="LessonID" />
+    </Key>
+    <Property Name="OjectivesID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="LessonID" Type="Int32" Nullable="false" />
+    <Property Name="SubjectID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="TextObj" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Lesson" Relationship="Self.FK_Objectives_Lesson" FromRole="Objectives" ToRole="Lesson" />
+    <NavigationProperty Name="Propostition" Relationship="Self.FK_Propostition_Objectives" FromRole="Objectives" ToRole="Propostition" />
+  </EntityType>
+  <EntityType Name="Propostition">
+    <Key>
+      <PropertyRef Name="ProposID" />
+    </Key>
+    <Property Name="ProposID" Type="Int32" Nullable="false" />
+    <Property Name="ObjectivesID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="LessonID" Type="Int32" Nullable="false" />
+    <Property Name="ProposName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="TestPropos" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ScoreMain" Type="Double" Nullable="false" />
+    <Property Name="Continuity" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Difficulty" Type="Double" />
+    <Property Name="Discimination" Type="Double" />
+    <Property Name="IOC" Type="Double" />
+    <NavigationProperty Name="Choice" Relationship="Self.FK_Choice_Propostition" FromRole="Propostition" ToRole="Choice" />
+    <NavigationProperty Name="Objectives" Relationship="Self.FK_Propostition_Objectives" FromRole="Propostition" ToRole="Objectives" />
+  </EntityType>
+  <EntityType Name="Subjects">
+    <Key>
+      <PropertyRef Name="SubjectID" />
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="SubjectID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="UserID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="SubjectName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Theory" Type="Int32" />
+    <Property Name="Practice" Type="Int32" />
+    <Property Name="Course" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Lesson" Relationship="Self.FK_Lesson_Subjects" FromRole="Subjects" ToRole="Lesson" />
+    <NavigationProperty Name="UserSystem" Relationship="Self.FK__Subjects__UserID__38996AB5" FromRole="Subjects" ToRole="UserSystem" />
+    <NavigationProperty Name="UserSystem1" Relationship="Self.Management" FromRole="Subjects" ToRole="UserSystem" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="UserSystem">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Fname" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Lname" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="PWLogin" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Subjects" Relationship="Self.FK__Subjects__UserID__38996AB5" FromRole="UserSystem" ToRole="Subjects" />
+    <NavigationProperty Name="Subjects1" Relationship="Self.Management" FromRole="UserSystem" ToRole="Subjects" />
+  </EntityType>
+  <Association Name="FK_Choice_Propostition">
+    <End Role="Propostition" Type="Self.Propostition" Multiplicity="1" />
+    <End Role="Choice" Type="Self.Choice" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Propostition">
+        <PropertyRef Name="ProposID" />
+      </Principal>
+      <Dependent Role="Choice">
+        <PropertyRef Name="ProposID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Lesson_Subjects">
+    <End Role="Subjects" Type="Self.Subjects" Multiplicity="1" />
+    <End Role="Lesson" Type="Self.Lesson" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Subjects">
+        <PropertyRef Name="SubjectID" />
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Lesson">
+        <PropertyRef Name="SubjectID" />
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Objectives_Lesson">
+    <End Role="Lesson" Type="Self.Lesson" Multiplicity="1" />
+    <End Role="Objectives" Type="Self.Objectives" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Lesson">
+        <PropertyRef Name="LessonID" />
+        <PropertyRef Name="SubjectID" />
+      </Principal>
+      <Dependent Role="Objectives">
+        <PropertyRef Name="LessonID" />
+        <PropertyRef Name="SubjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Propostition_Objectives">
+    <End Role="Objectives" Type="Self.Objectives" Multiplicity="1" />
+    <End Role="Propostition" Type="Self.Propostition" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Objectives">
+        <PropertyRef Name="OjectivesID" />
+        <PropertyRef Name="LessonID" />
+      </Principal>
+      <Dependent Role="Propostition">
+        <PropertyRef Name="ObjectivesID" />
+        <PropertyRef Name="LessonID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Subjects__UserID__38996AB5">
+    <End Role="UserSystem" Type="Self.UserSystem" Multiplicity="1" />
+    <End Role="Subjects" Type="Self.Subjects" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserSystem">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Subjects">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Management">
+    <End Role="Subjects" Type="Self.Subjects" Multiplicity="*" />
+    <End Role="UserSystem" Type="Self.UserSystem" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="ExamSystemEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Choice" EntityType="Self.Choice" />
+    <EntitySet Name="Lesson" EntityType="Self.Lesson" />
+    <EntitySet Name="Objectives" EntityType="Self.Objectives" />
+    <EntitySet Name="Propostition" EntityType="Self.Propostition" />
+    <EntitySet Name="Subjects" EntityType="Self.Subjects" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <EntitySet Name="UserSystem" EntityType="Self.UserSystem" />
+    <AssociationSet Name="FK_Choice_Propostition" Association="Self.FK_Choice_Propostition">
+      <End Role="Propostition" EntitySet="Propostition" />
+      <End Role="Choice" EntitySet="Choice" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Lesson_Subjects" Association="Self.FK_Lesson_Subjects">
+      <End Role="Subjects" EntitySet="Subjects" />
+      <End Role="Lesson" EntitySet="Lesson" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Objectives_Lesson" Association="Self.FK_Objectives_Lesson">
+      <End Role="Lesson" EntitySet="Lesson" />
+      <End Role="Objectives" EntitySet="Objectives" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Propostition_Objectives" Association="Self.FK_Propostition_Objectives">
+      <End Role="Objectives" EntitySet="Objectives" />
+      <End Role="Propostition" EntitySet="Propostition" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Subjects__UserID__38996AB5" Association="Self.FK__Subjects__UserID__38996AB5">
+      <End Role="UserSystem" EntitySet="UserSystem" />
+      <End Role="Subjects" EntitySet="Subjects" />
+    </AssociationSet>
+    <AssociationSet Name="Management" Association="Self.Management">
+      <End Role="Subjects" EntitySet="Subjects" />
+      <End Role="UserSystem" EntitySet="UserSystem" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

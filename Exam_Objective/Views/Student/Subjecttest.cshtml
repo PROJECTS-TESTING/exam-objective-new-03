@@ -1,0 +1,16 @@
+﻿@using Exam_Objective.Models
+@using System.Collections.Generic
+@{
+    ViewBag.Title = "Subjecttest";
+    Layout = "~/Views/Shared/_LayoutStudent.cshtml";
+}
+<div class="paddind-lr-30">
+    @{
+        var datasubject = (List<SubjectsModel>)ViewBag.DataSubject;
+
+        <h3><span>วิชา</span>@datasubject[0].SubjectName / @datasubject[0].Fname @datasubject[0].Lname</h3>
+    }
+    <hr />
+</div>
+@section scripts{
+}

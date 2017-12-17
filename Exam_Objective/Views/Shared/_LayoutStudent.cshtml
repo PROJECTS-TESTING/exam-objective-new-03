@@ -1,0 +1,157 @@
+﻿@using Exam_Objective.Models
+@using System;
+@using System.Collections.Generic;
+@{
+    var user = Session["User"] as UserSystemModel;
+    if (user != null)
+    {
+
+    }
+    else
+    {
+        <script>
+            alert("กรุณาทำการ Login เพื่อเข้าสู่ระบบ !");
+            window.location.href = '@Url.Action("Login","Login")';
+        </script>
+    }
+    var a = "";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - เว็บแอพพลิเคชั่นระบบสอบออนไลน์และการวิเคราะห์มาตรฐานข้อสอบแบบปรนัย</title>
+    <link rel="shortcut icon" href="~/faviconRMUTI.png">
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Styles/sweetalert.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/modernizr-2.8.3.js"></script>
+    <script src="~/Scripts/sweetalert.min.js"></script>
+    <script src="~/Scripts/jquery-2.1.3.js"></script>
+    <script src="~/Scripts/jquery-2.1.3.min.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+    <link href="~/Content/Plugins/line-icons/line-icons.css" rel="stylesheet" />
+    <link href="~/Content/Plugins/line-icons/style.css" rel="stylesheet" />
+    <link href="~/Content/Plugins/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link href="~/Content/Plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link href="~/Content/Contents/scrollTops.css" rel="stylesheet" />
+    <link href="~/Content/Contents/menu-test.css" rel="stylesheet" />
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+</head>
+<body @{ @a   }>
+    <nav class="navbar navbar-default navbar-fixed-top bg-nav1" style="background-color:#1a1735">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("TESTING Online", "Index", "Home", null, new { @class = "navbar-brand  icon-layers" })
+            </div>
+            @*-------------- MenuNav ---------------*@
+            @Html.Partial("_MenuMinimizeStudent")
+            <div class="hidden-menu-left">
+                <ul class="nav navbar-nav pull-right">
+                    <!-- BEGIN NOTIFICATION DROPDOWN -->
+                    <li class="dropdown dropdown-user">
+                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                            <i class="icon-user"></i><!-- <img alt="" class="img-circle" src="~/assets/layouts/layout/img/avatar3_small.jpg"> --> <!--ใส่รูปโปรไฟล์ -->
+                            <span class="username">
+                                @if (user != null)
+                                {
+                                    @user.Fname
+
+                                }
+                                else
+                                {
+                                }
+                            </span>
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-default">
+                            @*<li>
+                                    <a href="page_user_profile_1.html">
+                                        <i class="icon-user"></i> My Profile
+                                    </a>
+                                </li>*@
+                            @if (user == null)
+                            {
+                                <script>
+                                    alert("กรุณาทำการ Login เพื่อเข้าสู่ระบบ !");
+                                    window.location.href = '@Url.Action("Login","Login")';
+                                </script>
+                            }
+                            else// check == null
+                            {
+
+                                if (user.check == 1)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("Logout", "Login")">
+                                            <!-- href="page_user_login_1.html"
+                                            @* @Html.ActionLink("Logout", "Logout", "Login");*@-->
+                                            <i class="icon-key">
+                                                @*<i class="icon-key"></i>*@ Log Out
+                                            </i>
+                                        </a>
+                                        @*</a>*@
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li>
+                                        <a href="@Url.Action("Sls", "Login")">
+                                            <!-- href="page_user_login_1.html"
+                                            @* @Html.ActionLink("Logout", "Logout", "Login");*@-->
+                                            <i class="icon-key">
+                                                @*<i class="icon-key"></i>*@ Log Out
+                                            </i>
+                                        </a>
+                                        @*</a>*@
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </li>
+                    <!-- END USER LOGIN DROPDOWN -->
+                    <!-- BEGIN QUICK SIDEBAR TOGGLER -->
+                    <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
+                    <!-- END QUICK SIDEBAR TOGGLER -->
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+    @*-------------- MenuLeft ---------------*@
+    <div class="menuL hidden-menu-left">
+        @Html.Partial("_MenuStudent")
+    </div>
+    <div class="paddings">
+        <div class="padding-body">
+            @RenderBody()
+        </div>
+    </div>
+    @*------------------Footer----------------------*@
+    <div class="iBannerFix">
+        <footer class="container-fluid text-center">
+            <p><span style="font-size:12px;">มหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน </span><span class="text-right" style="font-size:10px;">&copy; @DateTime.Now.Year TESTING.</span> </p>
+        </footer>
+    </div>
+
+    <button type="button" id="top" class="text-center">TOP</button>
+    <script src="~/Scripts/Scriptss/dataalert.js"></script>
+    <script src="~/Scripts/Scriptss/scrollTops.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery.inputmask.js"></script>
+    <script src="~/Scripts/jquery.inputmask.min.js"></script>
+    <script src="~/Scripts/inputmask.js"></script>
+    <script src="~/Scripts/inputmask.min.js"></script>
+    @RenderSection("scripts", required: true)
+</body>
+</html>

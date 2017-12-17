@@ -1,0 +1,51 @@
+﻿@using Exam_Objective.Models
+@using System.Collections.Generic
+    <div class="form-group">
+        <label class="col-md-3 control-label">รหัสผ่าน</label>
+        <div class="col-md-5">
+            <input type="password" class="form-control" name="PwTest" id="PwTest" />
+            <sapn title="randompassword" style="margin:12px" class="fa fa-random link-action" onclick="RandomPass(4,'#PwTest')"></sapn>
+            <input type="checkbox" onclick=" CheckBlockPW('PwTest')"> ไม่ปกปิด
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-3 control-label">กลุ่มเรียน</label>   
+        <div class="col-md-5">
+            <select style="max-width:150px;" class="form-control" id="Groupstudy" name="Groupstudy">
+                <option value="0">--เลือกกลุ่มเรียน--</option>
+@{var GroupEntity = (List<TestGroupModel>)ViewBag.testGroup;
+   
+    foreach (var rows in GroupEntity)
+    {
+                <option value="@rows.GroupID">@rows.StudyGroup</option>
+        
+    }
+    }
+            </select>
+            </div>
+        </div>
+
+    <div class="form-group">
+        <label class="col-md-3 control-label">จำนวนครั้งที่ให้ทำ</label>
+        <div class="col-md-5">
+            <select style="max-width:150px;" class="form-control" id="NumberOfTimes" name="NumberOfTimes">
+                <option value="0">ไม่จำกัด</option>
+                <option value="1">1 ครั้ง</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-3 control-label">ต้องใช้เครื่องในเครือข่าย</label>
+        <div class="col-md-8" style="padding-right:0px;">
+            <input style="max-width:50px; min-width:50px;border: 1px solid #d3d5d5;border-radius: 4px;margin-top:5px;" type="text" maxlength="3" class="" name="InNetWork1" id="InNetWork1" />.
+            <input style="max-width:50px; min-width:50px;border: 1px solid #d3d5d5;border-radius: 4px;" type="text" maxlength="3" class="" name="InNetWork2" id="InNetWork2" />.
+            <input style="max-width:50px; min-width:50px;border: 1px solid #d3d5d5;border-radius: 4px;" type="text" maxlength="3" class="" name="InNetWork3" id="InNetWork3" />.
+            <input style="max-width:50px; min-width:50px;border: 1px solid #d3d5d5;border-radius: 4px;" type="text" maxlength="3" class="" name="InNetWork4" id="InNetWork4" />
+            <input type="checkbox" onclick=""> เปิดใช้งาน
+        </div>
+       
+        </div>
+
+

@@ -1,0 +1,56 @@
+﻿@using Exam_Objective.Models
+@using System.Collections.Generic
+@{
+    ViewBag.Title = "ViewMemder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="paddind-lr-30">
+    @{
+        var pathG = (List<PathMemberModel>)ViewBag.pathSujG;
+        foreach (var rows in pathG)
+        {
+            <h3><span>วิชา</span>@rows.SubjectName<span> / </span><span>สมาชิกกลุ่มเรียน</span> @rows.StudyGroup</h3>
+        }
+    }
+    <hr />
+    <button type="button" class="btn btn-default" onclick='window.history.back()'><span class="fa fa-reply"></span> ย้อนกลับ</button><hr style="margin:5px;" />
+
+
+    @{ var dataMem = (List<MemberModel>)ViewBag.DataMem;
+        var i = 1;
+        if (dataMem.Count > 0)
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">ลำดับ</th>
+                        <th>รหัส</th>
+                        <th>ชื่อ</th>
+                        <th>นามสกุล</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var rows in dataMem)
+                    {
+                    <tr>
+                        <td class="text-center" width="8%">@i<sapn>. </sapn></td>
+                        <td width="15%">-</td>
+                        <td width="20%">@rows.Fname</td>
+                        <td>@rows.Lname</td>
+                    </tr>
+                    i++;
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p><span style="color:red">*ยังไม่มีสมาชิกในกลุ่ม</span></p> }
+    }
+
+
+</div>
+
+    @section scripts{
+      
+    }
