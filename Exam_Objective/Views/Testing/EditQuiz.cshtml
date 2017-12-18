@@ -59,22 +59,24 @@
                 <div class="modal-body">
                     <form id="createQ1Form" method="post" class="form-horizontal">
                         <div class="form-group">
-                            <label class="col-md-3 control-label">ชื่อกลุ่มเรียน<span style="color:red"> *</span></label>
+                            <label class="col-md-3 control-label">เลือกบทเรียน</label>
                             <div class="col-md-5">
-
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">รหัสผ่าน<span style="color:red"> *</span></label>
-                            <div class="col-md-5">
-
+                                <select style="max-width:250px;" class="form-control" id="idObjective" name="idObjective">
+                                    <option value="0">--เลือกบทเรียน--</option>
+                                     @{ 
+                                        var dataLesson = (List<LessonModel>)ViewBag.Lesson;
+                                        foreach(var rows in dataLesson)
+                                        {
+                                            <option value="@rows.LessonID">@rows.LesName</option>
+                                        }
+                                    }
+                                </select>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="col-xs-10 col-xs-offset-3">
-                                <button type="button" id="btnSave" class="btn btn-primary btnSave">บันทึก</button>
+                                <button type="button" id="btnSave" class="btn btn-primary btnSave">เพิ่ม</button>
                                 <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
                             </div>
                         </div>
@@ -98,22 +100,37 @@
                 <div class="modal-body">
                     <form id="createQ2Form" method="post" class="form-horizontal">
                         <div class="form-group">
-                            <label class="col-md-3 control-label">ชื่อกลุ่มเรียน<span style="color:red"> *</span></label>
+                            <label class="col-md-3 control-label">เลือกบทเรียน</label>
                             <div class="col-md-5">
-
+                                <select style="max-width:250px;" class="form-control" id="idObjective" name="idObjective">
+                                    <option value="0">--เลือกบทเรียน--</option>
+                                    @{ 
+                                       
+                                        foreach(var rows in dataLesson)
+                                        {
+                                            <option value="@rows.LessonID">@rows.LesName</option>
+                                        }
+                                    }
+                                </select>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="col-md-3 control-label">รหัสผ่าน<span style="color:red"> *</span></label>
+                            <label class="col-md-3 control-label">เลือกระดับ</label>
                             <div class="col-md-5">
-
+                                <select style="max-width:250px;" class="form-control" id="idObjective" name="idObjective">
+                                    <option value="0">ง่ายมาก</option>
+                                    <option value="1">ง่าย</option>
+                                    <option value="2">ปานกลาง</option>
+                                    <option value="3">ยาก</option>
+                                    <option value="4">ยากมาก</option>
+                                </select>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="col-xs-10 col-xs-offset-3">
-                                <button type="button" id="btnSave" class="btn btn-primary btnSave">บันทึก</button>
+                                <button type="button" id="btnSave" class="btn btn-primary btnSave">เพิ่ม</button>
                                 <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
                             </div>
                         </div>
@@ -135,34 +152,39 @@
                 </div>
 
                 <div class="modal-body">
+                   
                     <form id="createQ3Form" method="post" class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">ชื่อกลุ่มเรียน<span style="color:red"> *</span></label>
-                            <div class="col-md-5">
-
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">รหัสผ่าน<span style="color:red"> *</span></label>
-                            <div class="col-md-5">
-
-                            </div>
-                        </div>
+                        
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">เลือกบทเรียน</label>
+                                    <div class="col-md-5">
+                                        <select style="max-width:250px;" class="form-control" id="idObjective" name="idObjective">
+                                            <option value="0">--เลือกบทเรียน--</option>
+                                             @{ 
+                                        foreach(var rows in dataLesson)
+                                        {
+                                            <option value="@rows.LessonID">@rows.LesName</option>
+                                        }
+                                    }
+                                        </select>
+                                    </div>
+                                </div>
+                            
+                       
 
                         <div class="form-group">
                             <div class="col-xs-10 col-xs-offset-3">
-                                <button type="button" id="btnSave" class="btn btn-primary btnSave">บันทึก</button>
+                                <button type="button" id="btnSave" class="btn btn-primary btnSave">เพิ่ม</button>
                                 <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
                             </div>
                         </div>
                     </form>
-                </div>
-            </div>
+                       </div>
+                   </div>
+               </div>
         </div>
-    </div>
-
-</div>
+ </div>
+ 
 
 @section scripts{
     <script type="text/javascript">

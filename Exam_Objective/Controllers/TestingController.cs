@@ -306,6 +306,18 @@ namespace Exam_Objective.Controllers
                               }
                               ).ToList();
                 ViewBag.examtopic = Examto;
+
+                var LessonData = (from l in DB.Lesson
+                                  where user.UserID == l.UserID && l.SubjectID == subid
+                                  orderby l.LessonID
+                                  select new LessonModel
+                                  {
+                                      LessonID = l.LessonID,
+                                      LesName = l.LesName,
+                                      TextLesson = l.TextLesson
+
+                                  }).DistinctBy(r => r.LesName).ToList();
+                ViewBag.Lesson = LessonData;
             }
 
             return View();
