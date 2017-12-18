@@ -63,9 +63,9 @@
                             <div class="col-md-5">
                                 <select style="max-width:250px;" class="form-control" id="idObjective" name="idObjective">
                                     <option value="0">--เลือกบทเรียน--</option>
-                                     @{ 
+                                    @{
                                         var dataLesson = (List<LessonModel>)ViewBag.Lesson;
-                                        foreach(var rows in dataLesson)
+                                        foreach (var rows in dataLesson)
                                         {
                                             <option value="@rows.LessonID">@rows.LesName</option>
                                         }
@@ -104,9 +104,9 @@
                             <div class="col-md-5">
                                 <select style="max-width:250px;" class="form-control" id="idObjective" name="idObjective">
                                     <option value="0">--เลือกบทเรียน--</option>
-                                    @{ 
-                                       
-                                        foreach(var rows in dataLesson)
+                                    @{
+
+                                        foreach (var rows in dataLesson)
                                         {
                                             <option value="@rows.LessonID">@rows.LesName</option>
                                         }
@@ -152,25 +152,25 @@
                 </div>
 
                 <div class="modal-body">
-                   
+
                     <form id="createQ3Form" method="post" class="form-horizontal">
-                        
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label">เลือกบทเรียน</label>
-                                    <div class="col-md-5">
-                                        <select style="max-width:250px;" class="form-control" id="idObjective" name="idObjective">
-                                            <option value="0">--เลือกบทเรียน--</option>
-                                             @{ 
-                                        foreach(var rows in dataLesson)
+
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">เลือกบทเรียน</label>
+                            <div class="col-md-5">
+                                <select style="max-width:250px;" class="form-control" id="idObjective" name="idObjective">
+                                    <option value="0">--เลือกบทเรียน--</option>
+                                    @{
+                                        foreach (var rows in dataLesson)
                                         {
                                             <option value="@rows.LessonID">@rows.LesName</option>
                                         }
                                     }
-                                        </select>
-                                    </div>
-                                </div>
-                            
-                       
+                                </select>
+                            </div>
+                        </div>
+
+
 
                         <div class="form-group">
                             <div class="col-xs-10 col-xs-offset-3">
@@ -179,11 +179,36 @@
                             </div>
                         </div>
                     </form>
-                       </div>
-                   </div>
-               </div>
+                </div>
+            </div>
         </div>
- </div>
+    </div>
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>ข้อสอบ</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+        var dataQuiz = (List<PropositionModel>)ViewBag.QuizData;
+        foreach (var rows in dataQuiz)
+        {
+            <tr>
+                <td>
+                    <span class="col-md-10">@rows.ProposName @rows.LesName</span>
+                    <span class="col-md-2 text-right">
+                    <span title="รายละเอีนด" class="fa fa-search link-action btnView" data-toggle="modal" data-target="#TestModal" data-examtopicid=""> รายละเอียด </span>
+                    <span title="ลบ" class="fa  fa-times link-action btnDelete" data-examtopicid="" data-Exname=""> ลบ</span>
+                    </span>
+               </td>
+            </tr>
+        }
+            }
+            
+        </tbody>
+    </table>
+</div>
  
 
 @section scripts{

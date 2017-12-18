@@ -325,6 +325,21 @@ namespace Exam_Objective.Controllers
                                   }).DistinctBy(r => r.LesName).ToList();
                 ViewBag.Lesson = LessonData;
             }
+            using(var DB = new dbEntities())
+            {
+                var DataQuiz = (from l in DB.Lesson
+                                join o in DB.Objective on l.LessonID equals o.LessonID
+                                join p in DB.Proposition on o.ObjID equals p.ObjID
+                                select new PropositionModel
+                                {
+                                    ProposID = p.ProposID,
+                                    ProposName = p.ProposName,
+                                    LessonID = l.LessonID,
+                                    LesName = l.LesName
+                                }
+                                ).ToList();
+                ViewBag.QuizData = DataQuiz;
+            }
 
             return View();
         }

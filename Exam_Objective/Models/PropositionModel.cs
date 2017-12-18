@@ -24,6 +24,8 @@ namespace Exam_Objective.Models
         //for join
         public string ObjName { get; set; }
         public int Nchoice { get; set; }
+        public int LessonID { get; set; }
+        public string LesName { get; set; }
         //for Choice        
         [AllowHtml]
         [UIHint("tinymce_full_compressed")]
