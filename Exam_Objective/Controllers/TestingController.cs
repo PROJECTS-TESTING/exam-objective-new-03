@@ -270,7 +270,7 @@ namespace Exam_Objective.Controllers
                 return RedirectToAction("Index", "Student");
             }
 
-            using(var DB = new dbEntities())
+            using (var DB = new dbEntities())
             {
                 var SubjectData = (from s in DB.Subjects
                                    join u in DB.UserSystem on s.UserID equals u.UserID
@@ -283,7 +283,9 @@ namespace Exam_Objective.Controllers
                                        UserID = s.UserID
                                    }).ToList();
                 ViewBag.Subject = SubjectData;
-
+            }
+            using (var DB = new dbEntities())
+            {
                 var idG = (from e in DB.ExamTopic where e.ExamtopicID == etid select e.GroupID).FirstOrDefault();
 
                 var GroupData = (from g in DB.TestGroup
@@ -295,7 +297,9 @@ namespace Exam_Objective.Controllers
                                      GroupPW = g.GroupPW
                                  }).ToList();
                 ViewBag.testGroup = GroupData;
-
+            }
+            using (var DB = new dbEntities())
+            {
                 var Examto = (from e in DB.ExamTopic
                               where e.ExamtopicID == etid
                               select new ExamTopicModel
@@ -306,7 +310,9 @@ namespace Exam_Objective.Controllers
                               }
                               ).ToList();
                 ViewBag.examtopic = Examto;
-
+            }
+            using (var DB = new dbEntities())
+            {
                 var LessonData = (from l in DB.Lesson
                                   where user.UserID == l.UserID && l.SubjectID == subid
                                   orderby l.LessonID
