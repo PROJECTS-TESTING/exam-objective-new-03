@@ -129,10 +129,8 @@ namespace Exam_Objective.Controllers
                 {
                     if (examtopic.isUpdateable != 1)
                     {
-                        if (DB.ExamTopic.Where(x => x.ExamtopicID == 0).Count() != 0)
-                        {
-                            examtopic.ExamtopicID = DB.ExamTopic.Max(x => x.ExamtopicID) + 1;
-                        }
+                            examtopic.ExamtopicID = DB.ExamTopic.Count() != 0 ? DB.ExamTopic.Max(x => x.ExamtopicID) + 1:1;
+                        
                         DB.ExamTopic.Add(new ExamTopic
                         {
                             ExamtopicID = examtopic.ExamtopicID,
@@ -269,7 +267,19 @@ namespace Exam_Objective.Controllers
             {
                 return RedirectToAction("Index", "Student");
             }
-
+            using(var DB = new dbEntities())
+            {
+                if (DB.ExamBody.Where(eb => eb.ExamtopicID == etid).Count() == 0)
+                {
+                    DB.ExamBody.Add(new ExamBody {
+                        ExamBodyID = (DB.ExamBody.Count() != 0) ? DB.ExamBody.Max(e => e.ExamBodyID) + 1 : 1,
+                        ExamtopicID = etid,
+                       
+                    });
+                DB.SaveChanges();
+                }
+                ViewBag.DataExambodyID = (from e in DB.ExamBody where e.ExamtopicID == etid select e.ExamBodyID).ToList();
+            }
             using (var DB = new dbEntities())
             {
                 var SubjectData = (from s in DB.Subjects
@@ -327,6 +337,26 @@ namespace Exam_Objective.Controllers
             }
             using(var DB = new dbEntities())
             {
+                var countPropo = (from l in DB.Lesson
+
+                                  let countP = (from o in DB.Objective
+                                                join p in DB.Proposition on o.ObjID equals p.ObjID
+                                                where o.ObjID == p.ObjID && o.LessonID == l.LessonID
+                                                select l).Count()
+
+                                  where user.UserID == l.UserID && l.SubjectID == subid
+                                  orderby l.LessonID
+                                  select new LessonModel
+                                  {
+                                      LessonID = l.LessonID,
+                                      LesName = l.LesName,
+                                      TextLesson = l.TextLesson,
+                                      CountProposID = countP
+                                  }).ToList();
+                ViewBag.countProposi = countPropo;
+            }
+            using(var DB = new dbEntities())
+            {
                 var DataQuiz = (from l in DB.Lesson
                                 join o in DB.Objective on l.LessonID equals o.LessonID
                                 join p in DB.Proposition on o.ObjID equals p.ObjID
@@ -335,9 +365,10 @@ namespace Exam_Objective.Controllers
                                     ProposID = p.ProposID,
                                     ProposName = p.ProposName,
                                     LessonID = l.LessonID,
-                                    LesName = l.LesName
+                                    LesName = l.LesName,
+                                    ObjID = o.ObjID
                                 }
-                                ).ToList();
+                                ).DistinctBy(x => x.LesName).ToList();
                 ViewBag.QuizData = DataQuiz;
             }
 

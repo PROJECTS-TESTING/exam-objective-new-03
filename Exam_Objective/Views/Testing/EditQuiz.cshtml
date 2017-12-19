@@ -27,23 +27,22 @@
                 <div class="col-md-2">
                     <button type="button" class="btn btn-default" onclick='window.history.back()'><span class="fa fa-reply"></span> ย้อนกลับ</button>
                 </div>
-                <div class="col-md-3">
+                @*<div class="col-md-3">
                     <select style="max-width:180px;" class="form-control" id="idsuite" name="idsuite">
                         <option value="0">แบบทดสอบชุดที่ 1</option>
                     </select>
-                </div>
-                <div class="col-md-2">
-                    <button id="btnAddsuite" class="btn btn-default" data-toggle="" data-target=""><span class="fa fa-plus"></span> เพิ่มจำนวนชุด</button>
-                </div>
+                </div>*@
+
             </div>
-            <hr /><span style="font-size:18px;">แบบทดสอบชุดที่ 1  </span><span title="ลบ" class="fa  fa-times link-action btnDelete"></span>
-            <br />
+            <hr />@*<span style="font-size:18px;">แบบทดสอบชุดที่ 1  </span><span title="ลบ" class="fa  fa-times link-action btnDelete"></span>*@
+          
         </div>
     </form>
     @*--------- Button Dialog เพิ่มข้อสอบ -------------*@
     <button id="btnAddQuiz1" class="btn btn-primary" data-toggle="modal" data-target="#EditQ1Model"><span class="fa fa-plus"></span> เพิ่มทีละข้อ</button>
     <button id="btnAddQuiz2" class="btn btn-primary" data-toggle="modal" data-target="#EditQ2Model"><span class="fa fa-plus"></span> เพิ่มจากความยากง่าย</button>
     <button id="btnAddQuiz3" class="btn btn-primary" data-toggle="modal" data-target="#EditQ3Model"><span class="fa fa-plus"></span> เพิ่มแบบสุ่ม</button>
+    <button id="btnShowQuizEx" class="btn btn-default"><span class="fa fa-search"></span> ดูตัวอย่าง</button>
     <hr style="margin:2px;" />
     @*----- Dialog เพิ่มที่ละข้อ -------*@
     <div class="modal fade" id="EditQ1Model" tabindex="-1" role="dialog" aria-labelledby="User" aria-hidden="true">
@@ -61,17 +60,55 @@
                         <div class="form-group">
                             <label class="col-md-3 control-label">เลือกบทเรียน</label>
                             <div class="col-md-5">
-                                <select style="max-width:250px;" class="form-control" id="idObjective" name="idObjective">
+                                <select style="max-width:250px;" class="form-control showCate" id="showCate" name="showCate" data-cate="cateid">
                                     <option value="0">--เลือกบทเรียน--</option>
                                     @{
                                         var dataLesson = (List<LessonModel>)ViewBag.Lesson;
+                                        var countP = (List<LessonModel>)ViewBag.countProposi;
                                         foreach (var rows in dataLesson)
                                         {
-                                            <option value="@rows.LessonID">@rows.LesName</option>
-                                        }
+                                            <option value="@rows.LessonID">
+                                                @rows.LesName
+                                            @{
+                                                foreach (var rows2 in countP)
+                                                {
+                                                    if (rows.LessonID == rows2.LessonID)
+                                                    {
+                                                        <span>(@rows2.CountProposID)</span>
+                                                    }
+                                                }
+                                            }
+                                        </option>
+                                    }
                                     }
                                 </select>
                             </div>
+                        </div>
+
+                        <div class="form-group" style="padding:5px;">
+                            <table id="tshowCate" class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>ข้อสอบ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                    var dataQuiz = (List<PropositionModel>)ViewBag.QuizData;
+                                    foreach (var rows in dataQuiz)
+                                     {
+                                     <tr class="Row" data-pid="@rows.ProposID" data-cateid="@rows.LessonID">
+                                        <td>
+                                            <input type="checkbox" data-IDPropos="@rows.ProposID"/>
+                                             @rows.ProposName          
+                                        <span title="รายละเอีนด" class="fa fa-search link-action btnView" data-toggle="modal" data-target="#TestModal" data-examtopicid=""></span>
+                                        </td>
+                                    </tr>
+}
+                                    }
+
+                                </tbody>
+                            </table>
                         </div>
 
                         <div class="form-group">
@@ -108,8 +145,19 @@
 
                                         foreach (var rows in dataLesson)
                                         {
-                                            <option value="@rows.LessonID">@rows.LesName</option>
-                                        }
+                                            <option value="@rows.LessonID">
+                                                @rows.LesName
+                                            @{
+                                                foreach (var rows2 in countP)
+                                                {
+                                                    if (rows.LessonID == rows2.LessonID)
+                                                    {
+                                                        <span>(@rows2.CountProposID)</span>
+                                                    }
+                                                }
+                                            }
+                                        </option>
+                                    }
                                     }
                                 </select>
                             </div>
@@ -163,8 +211,19 @@
                                     @{
                                         foreach (var rows in dataLesson)
                                         {
-                                            <option value="@rows.LessonID">@rows.LesName</option>
-                                        }
+                                            <option value="@rows.LessonID">
+                                                @rows.LesName
+                                            @{
+                                                foreach (var rows2 in countP)
+                                                {
+                                                    if (rows.LessonID == rows2.LessonID)
+                                                    {
+                                                        <span>(@rows2.CountProposID)</span>
+                                                    }
+                                                }
+                                            }
+                                        </option>
+                                    }
                                     }
                                 </select>
                             </div>
@@ -183,7 +242,7 @@
             </div>
         </div>
     </div>
-    <table class="table table-striped table-bordered">
+    <table id="tshowCate" class="table table-striped table-bordered">
         <thead>
             <tr>
                 <th>ข้อสอบ</th>
@@ -191,21 +250,21 @@
         </thead>
         <tbody>
             @{
-        var dataQuiz = (List<PropositionModel>)ViewBag.QuizData;
-        foreach (var rows in dataQuiz)
-        {
-            <tr>
-                <td>
-                    <span class="col-md-10">@rows.ProposName @rows.LesName</span>
-                    <span class="col-md-2 text-right">
-                    <span title="รายละเอีนด" class="fa fa-search link-action btnView" data-toggle="modal" data-target="#TestModal" data-examtopicid=""> รายละเอียด </span>
-                    <span title="ลบ" class="fa  fa-times link-action btnDelete" data-examtopicid="" data-Exname=""> ลบ</span>
-                    </span>
-               </td>
-            </tr>
-        }
+              
+                foreach (var rows in dataQuiz)
+                {
+                    <tr>
+                        <td>
+                            <span class="col-md-10">@rows.ProposName @rows.LesName</span>
+                            <span class="col-md-2 text-right">
+                                <span title="รายละเอีนด" class="fa fa-search link-action btnView" data-toggle="modal" data-target="#TestModal" data-examtopicid=""> รายละเอียด </span>
+                                <span title="ลบ" class="fa  fa-times link-action btnDelete" data-examtopicid="" data-Exname=""> ลบ</span>
+                            </span>
+                        </td>
+                    </tr>
+                }
             }
-            
+
         </tbody>
     </table>
 </div>
@@ -217,5 +276,28 @@
         var str = $('#explan').data("explantion");
         $('#explan').html(str);
 
+        //show table for option:selected
+        $("#tshowCate").find('.Row').hide(); //เปิดมายังไม่ให้โชว์อะไร
+        $('select.showCate').bind('change', function () {
+            $('select.showCate').attr('disabled', 'disabled');
+            $("#tshowCate").find('.Row').hide();
+            var cAttribute = '';
+            $('select.showCate').each(function () {
+                console.log($(this).data('cate'));
+                if ($(this).val() != '0') {
+                    cAttribute += '[data-' + $(this).data('cate') + '="' + $(this).val() + '"]';
+                }
+            });
+            $('#tshowCate').find('.Row' + cAttribute).show();
+            $('select.showCate').removeAttr('disabled');
+            $(':checkbox').each(function () { $(this).removeAttr('checked'); });
+        });
+
+        // btnAddQuiz1
+        $('#btnAddQuiz1').click(function () {
+            $('select.showCate').val('0');
+            $("#tshowCate").find('.Row').hide();
+            $(':checkbox').each(function () { $(this).removeAttr('checked'); });
+        });
     </script>
 }

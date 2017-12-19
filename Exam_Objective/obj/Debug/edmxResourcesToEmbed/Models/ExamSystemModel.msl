@@ -17,7 +17,6 @@
         <MappingFragment StoreEntitySet="ExamBody">
           <ScalarProperty Name="ExamBodyID" ColumnName="ExamBodyID" />
           <ScalarProperty Name="ExamtopicID" ColumnName="ExamtopicID" />
-          <ScalarProperty Name="ExamSuiteID" ColumnName="ExamSuiteID" />
           <ScalarProperty Name="KR20" ColumnName="KR20" />
           <ScalarProperty Name="KR21" ColumnName="KR21" />
         </MappingFragment>

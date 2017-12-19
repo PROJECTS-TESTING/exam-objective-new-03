@@ -18,7 +18,6 @@
     </Key>
     <Property Name="ExamBodyID" Type="Int32" Nullable="false" />
     <Property Name="ExamtopicID" Type="Int32" Nullable="false" />
-    <Property Name="ExamSuiteID" Type="Int32" Nullable="false" />
     <Property Name="KR20" Type="Double" />
     <Property Name="KR21" Type="Double" />
     <NavigationProperty Name="ExamTopic" Relationship="Self.FK__ExamBody__Examto__753864A1" FromRole="ExamBody" ToRole="ExamTopic" />

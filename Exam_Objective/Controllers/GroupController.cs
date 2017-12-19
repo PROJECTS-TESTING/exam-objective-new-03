@@ -109,7 +109,7 @@ namespace Exam_Objective.Controllers
                        
                         if (!group.StudyGroup.Equals(checkGruop))
                         {
-                            group.GroupID = DB.TestGroup.Max(x => x.GroupID) + 1;
+                            group.GroupID = (DB.TestGroup.Count()!=0) ? DB.TestGroup.Max(x => x.GroupID) + 1 : 1;
                             DB.TestGroup.Add(new TestGroup
                             {
                                 GroupID = group.GroupID,
