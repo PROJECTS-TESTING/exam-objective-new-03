@@ -360,6 +360,7 @@ namespace Exam_Objective.Controllers
                 var DataQuiz = (from l in DB.Lesson
                                 join o in DB.Objective on l.LessonID equals o.LessonID
                                 join p in DB.Proposition on o.ObjID equals p.ObjID
+                                where user.UserID == l.UserID && l.SubjectID == subid
                                 select new PropositionModel
                                 {
                                     ProposID = p.ProposID,
@@ -368,7 +369,7 @@ namespace Exam_Objective.Controllers
                                     LesName = l.LesName,
                                     ObjID = o.ObjID
                                 }
-                                ).DistinctBy(x => x.LesName).ToList();
+                                ).ToList();
                 ViewBag.QuizData = DataQuiz;
             }
 
