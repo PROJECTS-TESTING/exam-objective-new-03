@@ -1,5 +1,6 @@
 ﻿@using Exam_Objective.Models
 @using System.Collections.Generic
+
 @{
     ViewBag.Title = "CreateLesson_Obj";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -14,9 +15,8 @@
             {
                 <h3><span class="fa  fa-tasks">หน่วยเรียนและวัตถุประสงค์ / วิชา</span>@rows.SubjectName</h3>
             }
-
         }
-        @{var SubjectShareEntity = (List<SubjectsModel>)ViewBag.SubjectShare;
+        @{var SubjectShareEntity = (List<SubjectsModel>)ViewBag.SubjectShare; 
 
             foreach (var rows in SubjectShareEntity)
             {
@@ -65,8 +65,6 @@
                         <br />
                     </div>
                 }
-
-
             }
 
         </div>
@@ -74,6 +72,7 @@
     <button class="btn btn-primary" type="button" id="btnCrtLesson"><i class="fa fa-plus-circle"></i> สร้างบทเรียน</button>
     <button class="btn btn-danger" type="button" id="btnCrtOjec"><i class="fa fa-plus-circle"></i> สร้างวัตถุประสงค์</button>
 </div>
+
 <form id="formLesson">
     <div id="LessonModal" class="modal fade">
         <div class="modal-dialog">
@@ -213,8 +212,6 @@
         </div>
     </div>
 </form>
-
-
 
 @section scripts{
     <script src="~/Scripts/jquery.validate.js"></script>
@@ -458,7 +455,6 @@
                 form.submit();
             }
         });
-
     </script>
 
 }

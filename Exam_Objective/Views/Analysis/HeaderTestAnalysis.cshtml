@@ -1,0 +1,71 @@
+﻿
+@{
+    ViewBag.Title = "HeaderTestAnalysis";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<h2 class="text-center">ระบุรายละเอียดข้อสอบ</h2>
+<br /><br /><br /><br />
+<form ng-app="myApp" ng-controller="validateCtrl"
+      name="myForm" novalidate>
+    <div class="form-group">
+        <p class="control-label col-sm-2 col-sm-offset-2">
+            รายวิชา :
+            <p class="col-sm-6">
+                <input type="text" class="form-control" name="user" ng-model="user" id="subj" required>
+                <span style="color:red" ng-show="myForm.user.$dirty && myForm.user.$invalid">
+                    <span ng-show="myForm.user.$error.required">ระบุชื่อวิชา</span>
+                </span>
+            </p>
+        </p>
+    </div><br /><br />
+    <div class="form-group">
+        <label class="control-label col-sm-2 col-sm-offset-2">รหัสวิชา :</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" id="subjpass">
+        </div>
+    </div><br /><br />
+    <div class="form-group">
+        <label class="control-label col-sm-2 col-sm-offset-2">อาจารย์ผู้สอน :</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" id="User">
+        </div>
+    </div><br /><br />
+    <div class="form-group">
+        <label class="control-label col-sm-2 col-sm-offset-2">ภาคการศึกษา :</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" id="term">
+        </div>
+    </div><br /><br />
+    <div class="form-group">
+        <label class="control-label col-sm-2 col-sm-offset-2">ช่วงการสอบ :</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" id="timetest">
+        </div>
+    </div><br /><br />
+    <div class="form-group">
+        <label class="control-label col-sm-2 col-sm-offset-2">ปีการศึกษา :</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" id="years">
+        </div>
+    </div><br /><br /><br />
+    <div class="row">
+        <div class="col-md-6">
+        </div>
+        <div class="col-md-6">
+            <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("TestAnalysis", "Analysis")'">ตกลง</button>
+            <button type="button" class="btn btn-danger">ยกเลิก</button>
+        </div>
+    </div>
+ </form>
+    <script>
+        var app = angular.module('myApp', []);
+        app.controller('validateCtrl', function ($scope) {
+            $scope.user = 'John Doe';
+            $scope.email = 'john.doe@gmail.com';
+        });
+    </script>
+
+    @section scripts{
+    }

@@ -69,11 +69,13 @@
     <p class="show-chevron-rightdown text-left collapsed menu-child" data-toggle="collapse" data-target="#demo34"><span class="fa  fa-users " style="padding-left:0px;"></span> สมาชิก</p>
     <div id="demo34" class="collapse menu-grandchild">
         <span style="padding-left:60px;">@Html.ActionLink(" เพิ่มกลุ่มเรียน", "Index", "Group", null, new { @class = "fa fa-plus-square noneline-grandchild" })</span>
+        <span style="padding-left:60px;">@Html.ActionLink(" เพิ่มกลุ่มผู้เชี่ยวชาญ", "indexGroup", "IOC", null, new { @class = "fa fa-plus-square noneline-grandchild" })</span>
     </div>
 
     <p class="show-chevron-rightdown text-left collapsed menu-child" data-toggle="collapse" data-target="#demo33"><span class="fa fa-line-chart " style="padding-left:0px;"></span> การวิเคราะห์</p>
     <div id="demo33" class="collapse menu-grandchild">
-        <span style="padding-left:60px;">@Html.ActionLink(" การวิเคราะห์", "Tests", "Home", null, new { @class = "fa fa-tasks noneline-grandchild" })</span>
+        <span style="padding-left:60px;">@Html.ActionLink(" เพิ่มเนื้อหาเกี่ยวกับข้อสอบ", "index", "Contents", null, new { @class = "fa fa-plus-square noneline-grandchild" })</span>
+        <span style="padding-left:60px;">@Html.ActionLink(" การวิเคราะห์", "Analysis", "Analysis", null, new { @class = "fa fa-line-chart noneline-grandchild" })</span>
     </div>
 
 </div>

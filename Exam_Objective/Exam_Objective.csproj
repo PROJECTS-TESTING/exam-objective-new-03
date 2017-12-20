@@ -166,9 +166,12 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Commoncode\Log.cs" />
     <Compile Include="Commoncode\NetworkAll.cs" />
+    <Compile Include="Controllers\AnalysisController.cs" />
+    <Compile Include="Controllers\ContentsController.cs" />
     <Compile Include="Controllers\ExamBankController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IOCController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\StudentController.cs" />
     <Compile Include="Controllers\SubjectsController.cs" />
@@ -176,6 +179,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AnalysisModel.cs" />
     <Compile Include="Models\Choice.cs">
       <DependentUpon>ExamSystemModel.tt</DependentUpon>
     </Compile>
@@ -877,6 +881,7 @@
     <Content Include="Scripts\tinymce\themes\mobile\theme.min.js" />
     <Content Include="Scripts\tinymce\themes\modern\theme.min.js" />
     <Content Include="Scripts\tinymce\tinymce.min.js" />
+    <Content Include="Styles\buttonA.css" />
     <Content Include="Styles\sweetalert.css" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -950,6 +955,18 @@
     <Content Include="Views\Student\MySubject.cshtml" />
     <Content Include="Views\Student\SubjectLogin.cshtml" />
     <Content Include="Views\Student\Subjecttest.cshtml" />
+    <Content Include="Views\Analysis\Analysis.cshtml" />
+    <Content Include="Views\Analysis\EvaluationIOC.cshtml" />
+    <Content Include="Views\Analysis\HeaderTestAnalysis.cshtml" />
+    <Content Include="Views\Analysis\jsonReadFile.cshtml" />
+    <Content Include="Views\Analysis\ShowAnalysistest.cshtml" />
+    <Content Include="Views\Analysis\TestAnalysis.cshtml" />
+    <Content Include="Views\IOC\Index.cshtml" />
+    <Content Include="Views\IOC\AddGroupIOC.cshtml" />
+    <Content Include="Views\IOC\Contents.cshtml" />
+    <Content Include="Views\Contents\Index.cshtml" />
+    <Content Include="Views\IOC\SpecialistLogin.cshtml" />
+    <Content Include="Views\IOC\indexGroup.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
