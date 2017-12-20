@@ -255,7 +255,7 @@ namespace Exam_Objective.Controllers
             return Json(jsonreturn);
         }
 
-        // แก้ไขแบบทดสอบ
+        // --------------- แก้ไขแบบทดสอบ -------------
         public ActionResult EditQuiz(int etid, string subid)
         {
             var user = Session["User"] as UserSystemModel;
@@ -493,6 +493,36 @@ namespace Exam_Objective.Controllers
                 jsonreturn = new JsonRespone { status = false, message = "เกิดข้อผิดพลาด" + ex.Message };
             }
             return Json(jsonreturn);
+        }
+
+        public ActionResult ViewTesting(string subjid, int exbody, int extopic)
+        {
+            var user = Session["User"] as UserSystemModel;
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
+            else if (user.Status == "student")
+            {
+                return RedirectToAction("Index", "Student");
+            }
+            using(var DB = new dbEntities())
+            {
+                ViewBag.DataExamtopic = (from e in DB.ExamTopic
+                                         where e.ExamtopicID == extopic
+                                         select new ExamTopicModel
+                                         {
+                                             ExamtopicID = e.ExamtopicID,
+                                             ExamtopicName = e.ExamtopicName,
+                                             DatetoBegin = e.DatetoBegin,
+                                             TimetoBegin = e.TimetoBegin,
+                                             TimetoEnd = e.TimetoEnd,
+                                             NewPage = e.NewPage,
+                                             HowtoPage = e.HowtoPage,
+                                             
+                                         }).ToList();
+            }
+            return View();
         }
     }
 }

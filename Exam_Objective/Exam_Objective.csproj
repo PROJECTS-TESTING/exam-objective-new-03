@@ -968,6 +968,8 @@
     <Content Include="Views\Contents\Index.cshtml" />
     <Content Include="Views\IOC\SpecialistLogin.cshtml" />
     <Content Include="Views\IOC\indexGroup.cshtml" />
+    <Content Include="Views\Testing\ViewTesting.cshtml" />
+    <Content Include="Views\Shared\_MenuTesting.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

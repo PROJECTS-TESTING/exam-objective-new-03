@@ -1,0 +1,67 @@
+﻿@using Exam_Objective.Models
+@using System.Collections.Generic
+@{
+    var dataExamtopics = (List<ExamTopicModel>)ViewBag.DataExamtopic;
+}
+@{
+    ViewBag.Title = "ViewTesting";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>@dataExamtopics[0].ExamtopicName</h4>
+
+@section scripts{
+    <script type="text/javascript">
+
+        var datein = $('#datein').data("dates");
+        var i = [];
+        i = datein.split(' ');
+        datein = i[0].split('/');
+        //alert(datein);
+        var DateBegin = {
+            dateBegin: datein[0],
+            monthBegin: datein[1],
+            yearBegin: datein[2]
+        };
+
+        var TimeBegin = $('#datein1').data("dates");
+
+        var TimeEnd = $('#datein2').data("dates");
+
+        var countDownDate = new Date(DateBegin.monthBegin + " " + DateBegin.dateBegin + ", " + DateBegin.yearBegin + " " + TimeEnd).getTime();
+        var d = new Date();
+        if (d.getDate() == DateBegin.dateBegin && (d.getMonth()+1) == DateBegin.monthBegin && d.getFullYear() == DateBegin.yearBegin) {
+            // Update the count down every 1 second
+            var x = setInterval(function () {
+
+                // Get todays date and time
+                var now = new Date().getTime();
+
+                // Find the distance between now an the count down date
+                var distance = countDownDate - now;
+
+                // Time calculations for days, hours, minutes and seconds
+                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                // If the count down is over, write some text
+                if (distance < 0) {
+                    clearInterval(x);
+                    document.getElementById("timeEnd").innerHTML = TimeBegin + "-" + TimeEnd + " น.";
+                    document.getElementById("demo").innerHTML = "หมดเวลาทำแบบทดสอบ";
+                }
+                else {
+                    document.getElementById("timeEnd").innerHTML = TimeBegin + "-" + TimeEnd + " น.";
+                    // Output the result in an element with id="demo"
+                    document.getElementById("demo").innerHTML = hours + " ชั่วโมง " + minutes + " นาที " + seconds + " วินาที ";
+                }
+            }, 1000);
+        } else {
+            document.getElementById("timeEnd").innerHTML = TimeBegin + "-" + TimeEnd + " น.";
+            document.getElementById("demo").innerHTML = "ยังไม่ถึงเวลาทำแบบทดสอบ";
+        }
+
+    </script>
+}

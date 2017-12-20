@@ -1,0 +1,18 @@
+﻿@using Exam_Objective.Models
+@using System.Collections.Generic
+@{
+    var dataExamtopic = (List<ExamTopicModel>)ViewBag.DataExamtopic;
+}
+<div class="menu">
+    <div class="text-center" style="background-color:#eaeaeb; min-height:150px;border-radius:2px;border:solid 1px #bdbcbc">
+        <br/>
+        <p>เวลาเริ่ม-เวลาสิ้นสุด</p>
+        <p id="timeEnd">00:00:00-00:00:00 น.</p>
+        <p>เหลือเวลาในการทำ</p>
+        <p id="demo">0 ชั่วโมง 0 นาที 0 วินาที </p>
+    </div>
+</div>
+
+<span id="datein" data-dates="@dataExamtopic[0].DatetoBegin"></span>
+<span id="datein1" data-dates="@dataExamtopic[0].TimetoBegin"></span>
+<span id="datein2" data-dates="@dataExamtopic[0].TimetoEnd"></span>

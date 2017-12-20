@@ -11,7 +11,7 @@
     {
         <script>
             alert("กรุณาทำการ Login เพื่อเข้าสู่ระบบ !");
-            window.location.href = '@Url.Action("Login","Login")';
+            window.location.href = '@Url.Action("Login", "Login")';
         </script>
     }
     var a = "";
@@ -90,7 +90,7 @@
                             {
                                 <script>
                                     alert("กรุณาทำการ Login เพื่อเข้าสู่ระบบ !");
-                                    window.location.href = '@Url.Action("Login","Login")';
+                                    window.location.href = '@Url.Action("Login", "Login")';
                                 </script>
                             }
                             else// check == null
@@ -130,40 +130,48 @@
                     <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
                     <!-- END QUICK SIDEBAR TOGGLER -->
                 </ul>
-              
+
 
             </div>
         </div>
     </nav>
+    @{ if (ViewBag.Title == "ViewTesting")
+        {
+            <div class="menuL hidden-menu-left">
+                 @Html.Partial("_MenuTesting")
+            </div>
+        }
+        else
+        {
+                @*-------------- MenuLeft ---------------*@
+                <div class="menuL hidden-menu-left">
+                    @Html.Partial("_Menu")
 
-    @*-------------- MenuLeft ---------------*@
-    <div class="menuL hidden-menu-left">
-        @Html.Partial("_Menu")
+                </div>
+            }
+        }
+                <div class="paddings">
+                    <div class="padding-body">
+                        @RenderBody()
+                    </div>
+                </div>
 
-    </div>
-
-    <div class="paddings">
-        <div class="padding-body">
-            @RenderBody()
-        </div>
-    </div>
-
-    @*------------------Footer----------------------*@
-    <div class="iBannerFix">
-        <footer class="container-fluid text-center">
-            <p><span style="font-size:12px;">มหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน </span><span class="text-right" style="font-size:10px;">&copy; @DateTime.Now.Year TESTING.</span> </p>
-        </footer>
-    </div>
+                @*------------------Footer----------------------*@
+                <div class="iBannerFix">
+                    <footer class="container-fluid text-center">
+                        <p><span style="font-size:12px;">มหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน </span><span class="text-right" style="font-size:10px;">&copy; @DateTime.Now.Year TESTING.</span> </p>
+                    </footer>
+                </div>
 
 
-    <button type="button" id="top" class="text-center">TOP</button>
-    <script src="~/Scripts/Scriptss/dataalert.js"></script>
-    <script src="~/Scripts/Scriptss/scrollTops.js"></script>
-    <script src="~/Scripts/bootstrap.min.js"></script>
-    <script src="~/Scripts/jquery.inputmask.js"></script>
-    <script src="~/Scripts/jquery.inputmask.min.js"></script>
-    <script src="~/Scripts/inputmask.js"></script>
-    <script src="~/Scripts/inputmask.min.js"></script>
-    @RenderSection("scripts", required: true)
-</body>
+                <button type="button" id="top" class="text-center">TOP</button>
+                <script src="~/Scripts/Scriptss/dataalert.js"></script>
+                <script src="~/Scripts/Scriptss/scrollTops.js"></script>
+                <script src="~/Scripts/bootstrap.min.js"></script>
+                <script src="~/Scripts/jquery.inputmask.js"></script>
+                <script src="~/Scripts/jquery.inputmask.min.js"></script>
+                <script src="~/Scripts/inputmask.js"></script>
+                <script src="~/Scripts/inputmask.min.js"></script>
+                @RenderSection("scripts", required: true)
+        </body>
 </html>
