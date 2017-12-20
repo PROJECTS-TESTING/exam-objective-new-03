@@ -10,6 +10,7 @@
         var SubjectsEntity = (List<SubjectsModel>)ViewBag.Subject;
         var groupTest = (List<TestGroupModel>)ViewBag.testGroup;
         var examtoPic = (List<ExamTopicModel>)ViewBag.examtopic;
+        var ShowDataQuiz = (List<ShowQuizModel>)ViewBag.ShowQuiz;
         <h4><span>แก้ไขแบบทดสอบ / วิชา</span>@SubjectsEntity[0].SubjectName <span id="subj" data-subject="@SubjectsEntity[0].SubjectID"></span></h4>
         <h4>
             @examtoPic[0].ExamtopicName<span> กลุ่มเรียน:</span>@{if (groupTest.Count > 0 && groupTest != null)
@@ -28,14 +29,14 @@
                     <button type="button" class="btn btn-default" onclick='window.history.back()'><span class="fa fa-reply"></span> ย้อนกลับ</button>
                 </div>
                 @*<div class="col-md-3">
-                    <select style="max-width:180px;" class="form-control" id="idsuite" name="idsuite">
-                        <option value="0">แบบทดสอบชุดที่ 1</option>
-                    </select>
-                </div>*@
+                        <select style="max-width:180px;" class="form-control" id="idsuite" name="idsuite">
+                            <option value="0">แบบทดสอบชุดที่ 1</option>
+                        </select>
+                    </div>*@
 
             </div>
             <hr />@*<span style="font-size:18px;">แบบทดสอบชุดที่ 1  </span><span title="ลบ" class="fa  fa-times link-action btnDelete"></span>*@
-          
+
         </div>
     </form>
     @*--------- Button Dialog เพิ่มข้อสอบ -------------*@
@@ -69,17 +70,17 @@
                                         {
                                             <option value="@rows.LessonID">
                                                 @rows.LesName
-                                            @{
-                                                foreach (var rows2 in countP)
-                                                {
-                                                    if (rows.LessonID == rows2.LessonID)
+                                                @{
+                                                    foreach (var rows2 in countP)
                                                     {
-                                                        <span>(@rows2.CountProposID)</span>
+                                                        if (rows.LessonID == rows2.LessonID)
+                                                        {
+                                                            <span>(@rows2.CountProposID)</span>
+                                                        }
                                                     }
                                                 }
-                                            }
-                                        </option>
-                                    }
+                                            </option>
+                                        }
                                     }
                                 </select>
                             </div>
@@ -94,18 +95,19 @@
                                 </thead>
                                 <tbody>
                                     @{
-                                    var dataQuiz = (List<PropositionModel>)ViewBag.QuizData;
-                                    foreach (var rows in dataQuiz)
-                                     {
-                                     <tr class="Row" data-pid="@rows.ProposID" data-cateid="@rows.LessonID">
-                                        <td>
-                                            <input type="checkbox" data-IDPropos="@rows.ProposID"/>
-                                             @rows.ProposName          
-                                        <span title="รายละเอีนด" class="fa fa-search link-action btnView" data-toggle="modal" data-target="#TestModal" data-examtopicid=""></span>
-                                        </td>
-                                    </tr>
-}
-                                    }
+                                        var dataQuiz = (List<PropositionModel>)ViewBag.QuizData;
+                                        foreach (var rows in dataQuiz)
+                                        {
+                                            
+                                            <tr class="Row" data-pid="@rows.ProposID" data-cateid="@rows.LessonID">
+                                                <td>
+                                                    <input type="checkbox" value="@rows.ProposID" />
+                                                    @rows.ProposName
+                                                    <span title="รายละเอีนด" class="fa fa-search link-action btnView" data-toggle="modal" data-target="#TestModal" data-examtopicid=""></span>
+                                                </td>
+                                            </tr> 
+                                            }
+                                        }
 
                                 </tbody>
                             </table>
@@ -147,17 +149,17 @@
                                         {
                                             <option value="@rows.LessonID">
                                                 @rows.LesName
-                                            @{
-                                                foreach (var rows2 in countP)
-                                                {
-                                                    if (rows.LessonID == rows2.LessonID)
+                                                @{
+                                                    foreach (var rows2 in countP)
                                                     {
-                                                        <span>(@rows2.CountProposID)</span>
+                                                        if (rows.LessonID == rows2.LessonID)
+                                                        {
+                                                            <span>(@rows2.CountProposID)</span>
+                                                        }
                                                     }
                                                 }
-                                            }
-                                        </option>
-                                    }
+                                            </option>
+                                        }
                                     }
                                 </select>
                             </div>
@@ -213,17 +215,17 @@
                                         {
                                             <option value="@rows.LessonID">
                                                 @rows.LesName
-                                            @{
-                                                foreach (var rows2 in countP)
-                                                {
-                                                    if (rows.LessonID == rows2.LessonID)
+                                                @{
+                                                    foreach (var rows2 in countP)
                                                     {
-                                                        <span>(@rows2.CountProposID)</span>
+                                                        if (rows.LessonID == rows2.LessonID)
+                                                        {
+                                                            <span>(@rows2.CountProposID)</span>
+                                                        }
                                                     }
                                                 }
-                                            }
-                                        </option>
-                                    }
+                                            </option>
+                                        }
                                     }
                                 </select>
                             </div>
@@ -250,15 +252,15 @@
         </thead>
         <tbody>
             @{
-              
-                foreach (var rows in dataQuiz)
-                {
+                    
+                    foreach (var rows in ShowDataQuiz)
+                    {
                     <tr>
                         <td>
                             <span class="col-md-10">@rows.ProposName @rows.LesName</span>
                             <span class="col-md-2 text-right">
                                 <span title="รายละเอีนด" class="fa fa-search link-action btnView" data-toggle="modal" data-target="#TestModal" data-examtopicid=""> รายละเอียด </span>
-                                <span title="ลบ" class="fa  fa-times link-action btnDelete" data-examtopicid="" data-Exname=""> ลบ</span>
+                                <span title="ลบ" class="fa  fa-times link-action btnDelete" id="btnDelete" data-proposiid="@rows.ProposID" data-proposiname="@rows.ProposName"> ลบ</span>
                             </span>
                         </td>
                     </tr>
@@ -268,36 +270,157 @@
         </tbody>
     </table>
 </div>
- 
+
 
 @section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.inputmask.bundle.js"></script>
+    <script src="~/Scripts/jquery.inputmask.bundle.min.js"></script>
     <script type="text/javascript">
+    var str = $('#explan').data("explantion");
+    $('#explan').html(str);
 
-        var str = $('#explan').data("explantion");
-        $('#explan').html(str);
+    //show table for option:selected
+    $("#tshowCate").find('.Row').hide(); //เปิดมายังไม่ให้โชว์อะไร
+    $('select.showCate').bind('change', function () {
+    $('select.showCate').attr('disabled', 'disabled');
+    $("#tshowCate").find('.Row').hide();
+    var cAttribute = '';
+    $('select.showCate').each(function () {
+    console.log($(this).data('cate'));
+    if ($(this).val() != '0') {
+    cAttribute += '[data-' + $(this).data('cate') + '="' + $(this).val() + '"]';
+    }
+    });
+    $('#tshowCate').find('.Row' + cAttribute).show();
+    $('select.showCate').removeAttr('disabled');
+    $(':checkbox').each(function () { $(this).removeAttr('checked'); });
+    });
 
-        //show table for option:selected
-        $("#tshowCate").find('.Row').hide(); //เปิดมายังไม่ให้โชว์อะไร
-        $('select.showCate').bind('change', function () {
-            $('select.showCate').attr('disabled', 'disabled');
-            $("#tshowCate").find('.Row').hide();
-            var cAttribute = '';
-            $('select.showCate').each(function () {
-                console.log($(this).data('cate'));
-                if ($(this).val() != '0') {
-                    cAttribute += '[data-' + $(this).data('cate') + '="' + $(this).val() + '"]';
+    @* btnAddQuiz1 *@
+    $('#btnAddQuiz1').click(function () {
+    $('select.showCate').val('0');
+    $("#tshowCate").find('.Row').hide();
+        $(':checkbox').each(function () { $(this).removeAttr('checked'); });
+       
+    });
+
+    @* Button Save OR Select Quiz*@
+    $('#btnSave').click(function () {
+    var c = [];
+    $(':checkbox').each(function () {
+    if ($(this).is(':checked')) {
+    c.push($(this).val());
+    }
+    });
+        var Data1 = { ExamBodyID:@ViewBag.DataExambodyID, ProposID: c };
+        //alert(Data1.ProposID);
+        $.ajax({
+            type: "POST",
+            cache: false,
+            url: "AddQuiz",
+            dataType: "json",
+            data: Data1,
+            traditional: true,
+            beforeSend: function () {
+
+            },
+
+            success: function (res) {
+                var status = false;
+                var message = 'ดำเนินการไม่สำเร็จ';
+                if (res != null && res != undefined) {
+                    status = res.status;
+                    message = res.message != '' ? res.message : message;
                 }
-            });
-            $('#tshowCate').find('.Row' + cAttribute).show();
-            $('select.showCate').removeAttr('disabled');
-            $(':checkbox').each(function () { $(this).removeAttr('checked'); });
-        });
+                if (status == false) {
+                    swal("เกิดข้อผิดพลาด", message, "error");
+                }  else {
+                    swal({
+                        title: message,
+                        type: "success",
+                        showConfirmButton: false,
+                        timer: 1000,
+                        closeOnConfirm: false
+                    },
+                        function () {
+                            location.reload(true);
+                        });
+                }
+            },
+            error: function (xhr, ajaxOption, thrownError) {
+                swal("เกิดข้อผิดพลาด", message, "error");
+            },
+            complete: function () {
 
-        // btnAddQuiz1
-        $('#btnAddQuiz1').click(function () {
-            $('select.showCate').val('0');
-            $("#tshowCate").find('.Row').hide();
-            $(':checkbox').each(function () { $(this).removeAttr('checked'); });
+            }
         });
+    });
+
+        @* Button Delete *@
+        $('.btnDelete').click(function () {
+            var id = $(this).data("proposiid");
+            var gname = $(this).data("proposiname");
+            //alert(id);
+            swal({
+                title: "ต้องการลบข้อสอบ : " + gname + " ?",
+                text: "ข้อสอบที่ลบจะสามารถเพิ่มเข้าใหม่ได้ !",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "ใช่ ต้องการลบ",
+                cancelButtonText: "ยกเลิก !",
+                closeOnConfirm: true,
+                colseOnCancel: true
+            },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        $.ajax({
+                            type: "POST",
+                            cache: false,
+                            url: "DeleteQuiz",
+                            dataType: "json",
+                            data: { id: id },
+                            traditional: true,
+                            beforeSend: function () {
+                            },
+                            success: function (res) {
+
+                                var status = false;
+                                var message = 'ดำเนินการไม่สำเร็จ';
+                                if (res != null && res != undefined) {
+                                    status = res.status;
+                                    message = res.message != '' ? res.message : message;
+                                }
+                                if (status == false) {
+                                    swal("เกิดข้อผิดพลาด", message, "error");
+                                } else {
+                                    swal({
+                                        title: "ลบข้อสอบสำเร็จ",
+                                        type: "success",
+                                        showConfirmButton: false,
+                                        timer: 1000,
+                                        closeOnConfirm: false
+                                    },
+                                        function () {
+                                            location.reload(true);
+                                        });
+                                }
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+                                swal("เกิดข้อผิดพลาด", message, "error");
+                            },
+                            complete: function () {
+
+                            },
+                        });
+                    }
+                }
+
+
+            );
+
+        });        
     </script>
 }
