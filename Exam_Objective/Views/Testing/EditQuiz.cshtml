@@ -98,16 +98,16 @@
                                         var dataQuiz = (List<PropositionModel>)ViewBag.QuizData;
                                         foreach (var rows in dataQuiz)
                                         {
-                                            
+
                                             <tr class="Row" data-pid="@rows.ProposID" data-cateid="@rows.LessonID">
                                                 <td>
                                                     <input type="checkbox" value="@rows.ProposID" />
                                                     @rows.ProposName
-                                                    <span title="รายละเอีนด" class="fa fa-search link-action btnView" data-toggle="modal" data-target="#TestModal" data-examtopicid=""></span>
+                                                    <span title="รายละเอีนด" class="fa fa-search link-action btnView" data-toggle="modal" data-target="#ShowQuizModal" data-proid="@rows.ProposID"></span>
                                                 </td>
-                                            </tr> 
-                                            }
+                                            </tr>
                                         }
+                                    }
 
                                 </tbody>
                             </table>
@@ -252,14 +252,14 @@
         </thead>
         <tbody>
             @{
-                    
-                    foreach (var rows in ShowDataQuiz)
-                    {
+
+                foreach (var rows in ShowDataQuiz)
+                {
                     <tr>
                         <td>
                             <span class="col-md-10">@rows.ProposName @rows.LesName</span>
                             <span class="col-md-2 text-right">
-                                <span title="รายละเอีนด" class="fa fa-search link-action btnView" data-toggle="modal" data-target="#TestModal" data-examtopicid=""> รายละเอียด </span>
+                                <span title="รายละเอีนด" class="fa fa-search link-action btnView" data-toggle="modal" data-target="#ShowQuizModal" data-proid="@rows.ProposID"> รายละเอียด </span>
                                 <span title="ลบ" class="fa  fa-times link-action btnDelete" id="btnDelete" data-proposiid="@rows.ProposID" data-proposiname="@rows.ProposName"> ลบ</span>
                             </span>
                         </td>
@@ -270,13 +270,90 @@
         </tbody>
     </table>
 </div>
-
+<!--form view detail-->
+<form id="formProposdetail">
+    <div id="ShowQuizModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">รายละเอียดข้อสอบ<label id="titlev" name="titlev"></label></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="panel panel-default col-md-3">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <input type="hidden" class="form-control" id="isUpdateable" name="isUpdateable" value="1" />
+                                    <input type="hidden" class="form-control" id="ProposIDv" name="ProposIDv" value="0" />
+                                    <label class="bold">Question : </label>
+                                    <label id="ProposNamev" name="ProposNamev"></label>
+                                </div>
+                                <div class="form-group">
+                                    <label id="smainv" class="bold">Marked out of:</label>
+                                    <label id="ScoreMainv" name="ScoreMainv"></label>
+                                </div>
+                                <div class="form-group">
+                                    <label id="Userv" class="bold"></label>
+                                    <label id="Nameuv" name="Nameuv"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default col-md-9">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="bold"></label>
+                                    <label id="TextProposv" name="TextProposv"></label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="bold">Select one or more : </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="bold" id="radiochoice1"><input type="radio" name="gender"> 1. </label>
+                                    <label class="bold" id="checkchoice1"><input name="check1" type="checkbox" id="check1" /> 1. </label>
+                                    <label id="Choice1v" name="Choice1v"></label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="bold" id="radiochoice2"><input type="radio" name="gender"> 2. </label>
+                                    <label class="bold" id="checkchoice2"><input name="check2" type="checkbox" id="check2" /> 2. </label>
+                                    <label id="Choice2v" name="Choice2v"></label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="bold" id="radiochoice3"><input type="radio" name="gender"> 3. </label>
+                                    <label class="bold" id="checkchoice3"><input name="check3" type="checkbox" id="check3" /> 3. </label>
+                                    <label id="Choice3v" name="Choice3v"></label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="bold" id="radiochoice4"><input type="radio" name="gender"> 4. </label>
+                                    <label class="bold" id="checkchoice4"><input name="check4" type="checkbox" id="check4" /> 4. </label>
+                                    <label id="Choice4v" name="Choice4v"></label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="bold" id="radiochoice5"><input type="radio" name="gender"> 5. </label>
+                                    <label class="bold" id="checkchoice5"><input name="check5" type="checkbox" id="check5" /> 5. </label>
+                                    <label id="Choice5v" name="Choice5v"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnClose" class="btn btn-danger" data-dismiss="modal" title="ปิดการแสดงรายอะเอียดข้อสอบ">ปิด</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 
 @section scripts{
     <script src="~/Scripts/jquery.validate.js"></script>
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.inputmask.bundle.js"></script>
     <script src="~/Scripts/jquery.inputmask.bundle.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/tinymce/jquery.tinymce.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/tinymce/tinymce.min.js"></script>
+    <script src="~/Scripts/tinymce/plugins/tiny_mce_wiris/wirisplugin-generic.js"></script>
+    <script src="~/Scripts/tinymce/plugins/tiny_mce_wiris/core/display.js"></script>
     <script type="text/javascript">
     var str = $('#explan').data("explantion");
     $('#explan').html(str);
@@ -303,7 +380,7 @@
     $('select.showCate').val('0');
     $("#tshowCate").find('.Row').hide();
         $(':checkbox').each(function () { $(this).removeAttr('checked'); });
-       
+
     });
 
     @* Button Save OR Select Quiz*@
@@ -421,6 +498,91 @@
 
             );
 
-        });        
+        });
+         //View Propos by id
+        $('.btnView').click(function () {
+            var idp = $(this).data("proid");
+            //alert(idp);
+            //tinyMCE.activeEditor.setContent('');  //clear text in tinyeditor
+            $.ajax({
+                type: "POST", // method ที่จะส่ง
+                cache: false,
+                url: "ViewPropos",  // ส่งไปให้ที่ได้ ระบุ
+                dataType: "json", // ชนิดข้อมูลที่ส่ง
+                data: { idp: idp},//$('#formSubject').serialize(), // ข้อมูลที่ส่ง
+                traditional: true, // การจดจำข้อมูล
+                beforeSend: function () { // ก่องส่ง data จะให้ทำไร
+
+                },
+                success: function (res) {
+                    var status = false;
+                    var message = 'ดำเนินการไม่สำเร็จ';
+                    if (res != null && res != undefined) {
+                        status = res.status;
+                        message = res.message != '' ? res.message : message;
+                    }
+                    if (status == false) {
+                        swal("เกิดข้อผิดพลาด", message, "error");
+
+                    } else {
+                        $("#ProposIDv").text(res.data.ProposID);
+                        $("#ProposNamev").text(res.data.ProposName);
+                        $("#TextProposv").html(res.data.TextPropos);
+                        $("#ScoreMainv").text(res.data.ScoreMain);
+                        $("#Choice1v").html(res.data.Choice1);
+                        if ((res.data.Choice1) != null) {
+                        } else {
+                            $("#radiochoice1").html("");
+                            $("#checkchoice1").html("");
+                        }
+                        $("#Choice2v").html(res.data.Choice2);
+                        if ((res.data.Choice2) != null) {
+                        } else {
+                            $("#radiochoice2").html("");
+                            $("#checkchoice2").html("");
+                        }
+                        $("#Choice3v").html(res.data.Choice3);
+                        if ((res.data.Choice3) != null) {
+                        } else {
+                            $("#radiochoice3").html("");
+                            $("#checkchoice3").html("");
+                        }
+                        $("#Choice4v").html(res.data.Choice4);
+                        if ((res.data.Choice4) != null) {
+                        } else {
+                            $("#radiochoice4").html("");
+                            $("#checkchoice4").html("");
+                        }
+                        $("#Choice5v").html(res.data.Choice5);
+                        if ((res.data.Choice5) != null) {
+                        } else {
+                            $("#radiochoice5").html("");
+                            $("#checkchoice5").html("");
+                        }
+                        if ((res.data.CheckChoice) == '2') {
+                            $("#radiochoice1").html("");
+                            $("#radiochoice2").html("");
+                            $("#radiochoice3").html("");
+                            $("#radiochoice4").html("");
+                            $("#radiochoice5").html("");
+                        } else {
+                            $("#checkchoice1").html("");
+                            $("#checkchoice2").html("");
+                            $("#checkchoice3").html("");
+                            $("#checkchoice4").html("");
+                            $("#checkchoice5").html("");
+                        }
+                        $("#proposdetailModal").modal("show");
+                        $("#formPropos").find('.form-group').removeClass('has-error');
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    swal("เกิดข้อผิดพลาด", message, "error");
+                },
+                complete: function () {
+
+                },
+            });
+        });
     </script>
 }

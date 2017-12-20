@@ -438,5 +438,61 @@ namespace Exam_Objective.Controllers
             }
             return Json(jsonreturn);
         }
+
+        public JsonResult ViewPropos(int idp)
+        {
+            var jsonreturn = new JsonRespone();
+            try
+            {
+                using (var DB = new dbEntities())
+                {
+                    int CountChoice = DB.Choice.Where(x => x.ProposID == idp).Count();
+                    string[] TChoice = new string[6];
+                    for (int i = 1; i <= CountChoice; i++)
+                    {
+                        TChoice[i] = (from c in DB.Choice
+                                      where c.ProposID == idp && c.ChoiceID == i
+                                      select c.TextChoice
+                                     ).FirstOrDefault();
+                    }
+                    var TextChoice1 = TChoice[1];
+                    var TextChoice2 = TChoice[2];
+                    var TextChoice3 = TChoice[3];
+                    var TextChoice4 = TChoice[4];
+                    var TextChoice5 = TChoice[5];
+                    var EditPropos = (from p in DB.Proposition
+                                      join c in DB.Proposition on p.ProposID equals c.ProposID
+                                      where p.ProposID == idp
+                                      select new PropositionModel
+                                      {
+                                          ProposID = p.ProposID,
+                                          ProposName = p.ProposName,
+                                          TextPropos = p.TextPropos,
+                                          ScoreMain = p.ScoreMain,
+                                          CheckChoice = p.CheckChoice,
+                                          Choice1 = TextChoice1,
+                                          Choice2 = TextChoice2,
+                                          Choice3 = TextChoice3,
+                                          Choice4 = TextChoice4,
+                                          Choice5 = TextChoice5
+
+                                      }).FirstOrDefault();
+
+                    if (EditPropos == null)
+                    {
+                        jsonreturn = new JsonRespone { status = false, message = "เกิดข้อผิดพลาด" };
+                    }
+                    else
+                    {
+                        jsonreturn = new JsonRespone { status = true, message = "บันทึกเรียบร้อย", data = EditPropos };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                jsonreturn = new JsonRespone { status = false, message = "เกิดข้อผิดพลาด" + ex.Message };
+            }
+            return Json(jsonreturn);
+        }
     }
 }
