@@ -22,7 +22,6 @@ namespace Exam_Objective.Models
     
         public int ExamBodyID { get; set; }
         public int ExamtopicID { get; set; }
-        public int ExamSuiteID { get; set; }
         public Nullable<double> KR20 { get; set; }
         public Nullable<double> KR21 { get; set; }
     

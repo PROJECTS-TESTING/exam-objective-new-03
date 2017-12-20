@@ -129,10 +129,8 @@ namespace Exam_Objective.Controllers
                 {
                     if (examtopic.isUpdateable != 1)
                     {
-                        if (DB.ExamTopic.Where(x => x.ExamtopicID == 0).Count() != 0)
-                        {
-                            examtopic.ExamtopicID = DB.ExamTopic.Max(x => x.ExamtopicID) + 1;
-                        }
+                            examtopic.ExamtopicID = DB.ExamTopic.Count() != 0 ? DB.ExamTopic.Max(x => x.ExamtopicID) + 1:1;
+                        
                         DB.ExamTopic.Add(new ExamTopic
                         {
                             ExamtopicID = examtopic.ExamtopicID,
@@ -269,8 +267,20 @@ namespace Exam_Objective.Controllers
             {
                 return RedirectToAction("Index", "Student");
             }
-
             using(var DB = new dbEntities())
+            {
+                if (DB.ExamBody.Where(eb => eb.ExamtopicID == etid).Count() == 0)
+                {
+                    DB.ExamBody.Add(new ExamBody {
+                        ExamBodyID = (DB.ExamBody.Count() != 0) ? DB.ExamBody.Max(e => e.ExamBodyID) + 1 : 1,
+                        ExamtopicID = etid,
+                       
+                    });
+                DB.SaveChanges();
+                }
+                ViewBag.DataExambodyID = (from e in DB.ExamBody where e.ExamtopicID == etid select e.ExamBodyID).FirstOrDefault();
+            }
+            using (var DB = new dbEntities())
             {
                 var SubjectData = (from s in DB.Subjects
                                    join u in DB.UserSystem on s.UserID equals u.UserID
@@ -283,7 +293,9 @@ namespace Exam_Objective.Controllers
                                        UserID = s.UserID
                                    }).ToList();
                 ViewBag.Subject = SubjectData;
-
+            }
+            using (var DB = new dbEntities())
+            {
                 var idG = (from e in DB.ExamTopic where e.ExamtopicID == etid select e.GroupID).FirstOrDefault();
 
                 var GroupData = (from g in DB.TestGroup
@@ -295,7 +307,9 @@ namespace Exam_Objective.Controllers
                                      GroupPW = g.GroupPW
                                  }).ToList();
                 ViewBag.testGroup = GroupData;
-
+            }
+            using (var DB = new dbEntities())
+            {
                 var Examto = (from e in DB.ExamTopic
                               where e.ExamtopicID == etid
                               select new ExamTopicModel
@@ -307,8 +321,178 @@ namespace Exam_Objective.Controllers
                               ).ToList();
                 ViewBag.examtopic = Examto;
             }
+            using (var DB = new dbEntities())
+            {
+                var LessonData = (from l in DB.Lesson
+                                  where user.UserID == l.UserID && l.SubjectID == subid
+                                  orderby l.LessonID
+                                  select new LessonModel
+                                  {
+                                      LessonID = l.LessonID,
+                                      LesName = l.LesName,
+                                      TextLesson = l.TextLesson
 
-            return View();
+                                  }).DistinctBy(r => r.LesName).ToList();
+                ViewBag.Lesson = LessonData;
+            }
+            using(var DB = new dbEntities())
+            {
+                var countPropo = (from l in DB.Lesson
+
+                                  let countP = (from o in DB.Objective
+                                                join p in DB.Proposition on o.ObjID equals p.ObjID
+                                                where o.ObjID == p.ObjID && o.LessonID == l.LessonID
+                                                select l).Count()
+
+                                  where user.UserID == l.UserID && l.SubjectID == subid
+                                  orderby l.LessonID
+                                  select new LessonModel
+                                  {
+                                      LessonID = l.LessonID,
+                                      LesName = l.LesName,
+                                      TextLesson = l.TextLesson,
+                                      CountProposID = countP
+                                  }).ToList();
+                ViewBag.countProposi = countPropo;
+            }
+            using(var DB = new dbEntities())
+            {
+                var DataQuiz = (from l in DB.Lesson
+                                join o in DB.Objective on l.LessonID equals o.LessonID
+                                join p in DB.Proposition on o.ObjID equals p.ObjID
+                                where user.UserID == l.UserID && l.SubjectID == subid
+                                select new PropositionModel
+                                {
+                                    ProposID = p.ProposID,
+                                    ProposName = p.ProposName,
+                                    LessonID = l.LessonID,
+                                    LesName = l.LesName,
+                                    ObjID = o.ObjID
+                                }
+                                ).ToList();
+                ViewBag.QuizData = DataQuiz;
+            }
+            using (var DB = new dbEntities())
+            {
+                ViewBag.ShowQuiz = (from g in DB.GetExam
+                                    join p in DB.Proposition on g.ProposID equals p.ProposID
+                                    join o in DB.Objective on p.ObjID equals o.ObjID
+                                    join l in DB.Lesson on o.LessonID equals l.LessonID
+                                    where g.ExamBodyID == (from e in DB.ExamBody where e.ExamtopicID == etid select e.ExamBodyID).FirstOrDefault()
+                                    select new ShowQuizModel
+                                    {
+                                        ExamBodyID = g.ExamBodyID,
+                                        ProposID = g.ProposID,
+                                        ProposName = p.ProposName,
+                                       LessonID = l.LessonID,
+                                       LesName = l.LesName
+                                    }).ToList();
+            }
+                return View();
+        }
+
+        public JsonResult AddQuiz(SelectQuizModel selectQ)
+        {
+            var jsonreturn = new JsonRespone();
+            try
+            {
+                using(var DB = new dbEntities())
+                {
+                    for(var i = 0; i < selectQ.ProposID.Length; i++)
+                    {
+                        DB.GetExam.Add(new GetExam {ExamBodyID = selectQ.ExamBodyID,ProposID = selectQ.ProposID[i] });DB.SaveChanges();
+                    }
+                    jsonreturn = new JsonRespone { status = true, message = "บันทึกเรียบร้อย" };
+                }     
+            }
+            catch (Exception ex)
+            {
+                jsonreturn = new JsonRespone { status = false, message = "เกิดข้อผิดพลาด" + ex.Message };
+            }
+            return Json(jsonreturn);
+        }
+
+        public JsonResult DeleteQuiz(int id)
+        {
+            var jsonreturn = new JsonRespone();
+            try
+            {
+                using (var DB = new dbEntities())
+                {
+                    var DeleteQuiz = DB.GetExam.Where(x => x.ProposID == id).FirstOrDefault();
+                    if (DeleteQuiz == null)
+                    {
+                        jsonreturn = new JsonRespone { status = false, message = "เกิดข้อผิดพลาด" };
+                    }
+                    else
+                    {
+                        DB.GetExam.Remove(DeleteQuiz);
+                        DB.SaveChanges();
+                        jsonreturn = new JsonRespone { status = true, message = "ลบเรียบร้อย" };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                jsonreturn = new JsonRespone { status = false, message = "เกิดข้อผิดพลาด" + ex.Message };
+            }
+            return Json(jsonreturn);
+        }
+
+        public JsonResult ViewPropos(int idp)
+        {
+            var jsonreturn = new JsonRespone();
+            try
+            {
+                using (var DB = new dbEntities())
+                {
+                    int CountChoice = DB.Choice.Where(x => x.ProposID == idp).Count();
+                    string[] TChoice = new string[6];
+                    for (int i = 1; i <= CountChoice; i++)
+                    {
+                        TChoice[i] = (from c in DB.Choice
+                                      where c.ProposID == idp && c.ChoiceID == i
+                                      select c.TextChoice
+                                     ).FirstOrDefault();
+                    }
+                    var TextChoice1 = TChoice[1];
+                    var TextChoice2 = TChoice[2];
+                    var TextChoice3 = TChoice[3];
+                    var TextChoice4 = TChoice[4];
+                    var TextChoice5 = TChoice[5];
+                    var EditPropos = (from p in DB.Proposition
+                                      join c in DB.Proposition on p.ProposID equals c.ProposID
+                                      where p.ProposID == idp
+                                      select new PropositionModel
+                                      {
+                                          ProposID = p.ProposID,
+                                          ProposName = p.ProposName,
+                                          TextPropos = p.TextPropos,
+                                          ScoreMain = p.ScoreMain,
+                                          CheckChoice = p.CheckChoice,
+                                          Choice1 = TextChoice1,
+                                          Choice2 = TextChoice2,
+                                          Choice3 = TextChoice3,
+                                          Choice4 = TextChoice4,
+                                          Choice5 = TextChoice5
+
+                                      }).FirstOrDefault();
+
+                    if (EditPropos == null)
+                    {
+                        jsonreturn = new JsonRespone { status = false, message = "เกิดข้อผิดพลาด" };
+                    }
+                    else
+                    {
+                        jsonreturn = new JsonRespone { status = true, message = "บันทึกเรียบร้อย", data = EditPropos };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                jsonreturn = new JsonRespone { status = false, message = "เกิดข้อผิดพลาด" + ex.Message };
+            }
+            return Json(jsonreturn);
         }
     }
 }

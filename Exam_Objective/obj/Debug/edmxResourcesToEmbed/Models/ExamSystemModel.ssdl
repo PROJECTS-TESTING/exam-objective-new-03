@@ -17,7 +17,6 @@
     </Key>
     <Property Name="ExamBodyID" Type="int" Nullable="false" />
     <Property Name="ExamtopicID" Type="int" Nullable="false" />
-    <Property Name="ExamSuiteID" Type="int" Nullable="false" />
     <Property Name="KR20" Type="float" />
     <Property Name="KR21" Type="float" />
   </EntityType>
