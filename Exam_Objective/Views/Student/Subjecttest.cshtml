@@ -11,6 +11,124 @@
         <h3><span>วิชา</span>@datasubject[0].SubjectName / @datasubject[0].Fname @datasubject[0].Lname</h3>
     }
     <hr />
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>แบบทดสอบ</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ var DataExamtopic = (List<ExamTopicModel>)ViewBag.DataExamtopic;
+                if (DataExamtopic.Count > 0 && DataExamtopic != null)
+                {
+                    foreach (var rows in DataExamtopic)
+                    {
+                        <tr>
+                            <td>
+                                <span title="@rows.ExamtopicName" class="link-action" data-toggle="modal" data-target="#PWtestModal">
+                                    <span class="icon icon-doc"> </span>
+                                    <span id="examtopic" data-examtopicid="@rows.ExamtopicID" data-examPW="@rows.ExamtopicPW">@rows.ExamtopicName</span>
+                                </span>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr><td><span style="color:#ff0000"> *ยังไม่มีแบบทดสอบในวิชานี้ </span></td></tr>}
+            }
+        </tbody>
+    </table>
 </div>
+<div class="modal fade" id="PWtestModal" tabindex="-1" role="dialog" aria-labelledby="User" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h5 class="modal-title"><label id="title" name="title"></label><label><span>เข้าสอบ</span></label></h5>
+            </div>
+
+            <div class="modal-body">
+
+                <form id="PWtestForm" method="post" class="form-horizontal">
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">รหัสผ่าน<span style="color:red"> *</span></label>
+                        <div class="col-md-5">
+                            <input type="password" class="form-control" name="TestPW" id="TestPW" />
+                            <input type="checkbox" onclick="CheckBlockPW('TestPW')"> ไม่ปกปิด
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-xs-10 col-xs-offset-3">
+                            <button type="button" id="btnSelect" class="btn btn-primary btnSelect">เข้าสอบ</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<span id="subj" data-subjid="@datasubject[0].SubjectID"></span>
+<span id="suser" data-userid="@datasubject[0].UserID"></span>
 @section scripts{
+    <script src="~/Scripts/Scriptss/ShowPW-HidePW-Js.js"></script>
+    <script type="text/javascript">
+        $('#btnSelect').click(function () {
+            var Data1 = {
+                ExamtopicID: $('#examtopic').data("examtopicid"),
+                SubjectID: $('#subj').data("subjid"),
+                UserID: $('#suser').data("userid"),
+                ExamtopicPW: $('#TestPW').val()
+            };
+           // alert(Data1.ExamtopicID + " " + Data1.SubjectID + " " + Data1.ExamtopicPW + "" + Data1.UserID);
+            $.ajax({
+    type: "POST",
+    cache: false,
+    url: "ViewTesting",
+    dataType: "json",
+    data: Data1,
+    traditional: true,
+    beforeSend: function () {
+
+    }, success: function (res) {
+    var status = false;
+    var message = 'ดำเนินการไม่สำเร็จ';
+    if (res != null && res != undefined) {
+    status = res.status;
+    message = res.message != '' ? res.message : message;
+    }
+    if (status == false) {
+    swal("เกิดข้อผิดพลาด", message, "error");
+    }  else {
+    swal({
+    title: message,
+    type: "success",
+    showConfirmButton: false,
+    timer: 1000,
+    closeOnConfirm: false
+    },
+        function () {
+            location.reload(true);
+            location.replace("ViewTestings" + "?subid=" + res.data.SubjectID + "&datasu=" + res.data.UserID + "&e=" + res.data.ExamtopicID);
+    });
+    }
+    },
+    error: function (xhr, ajaxOption, thrownError) {
+    swal("เกิดข้อผิดพลาด", message, "error");
+    },
+    complete: function () {
+
+    }
+
+
+    });
+        });
+   
+    </script>
 }

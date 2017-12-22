@@ -30,4 +30,11 @@ namespace Exam_Objective.Models
 
         public int isUpdateable { get; set; }
     }
+    public class ExamtopicDataModel
+    {
+        public int ExamtopicID { get; set; }
+        public string SubjectID { get; set; }
+        public string UserID { get; set; }
+        public string ExamtopicPW { get; set; }
+    }
 }

@@ -7,11 +7,11 @@
     var DataChoice = (List<ChoiceModel>)ViewBag.dataChoice;
 }
 @{
-    ViewBag.Title = "ViewTesting";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "ViewTestings";
+    Layout = "~/Views/Shared/_LayoutStudent.cshtml";
 }
 
-<div class="paddind-lr-30"  id="scollviewQ">
+<div class="paddind-lr-30" id="scollviewQ">
     <h3>วิชา @ViewBag.dataSubject @dataExamtopics[0].ExamtopicName กลุ่มเรียน: @ViewBag.dataGroup</h3>
 
     @{ for (var x = 1; x <= DataPropos.Count; x++)
@@ -22,17 +22,19 @@
                     <div style="border:solid 1px #adfacd;border-radius:3px;padding:4px;background-color:#e0fced">
                         <span class="quizion" id="@DataPropos[x - 1].ProposID">@Html.Raw(DataPropos[x - 1].TextPropos)</span>
                         @{ var i = 0;
-                            foreach(var rows in DataChoice)
+                            foreach (var rows in DataChoice)
                             {
-                                if(rows.ProposID == DataPropos[x - 1].ProposID)
+                                if (rows.ProposID == DataPropos[x - 1].ProposID)
                                 {
                                     i++;
-                                  <div class="choice"> <input type="radio" value="@rows.ChoiceID" name="@DataPropos[x - 1].ProposID"/> @i<span>.</span>
-                                    <span id="in-line"> @Html.Raw(rows.TextChoice)</span>
-                                </div>
+                                    <div class="choice">
+                                        <input type="radio" value="@rows.ChoiceID" name="@DataPropos[x - 1].ProposID" /> @i<span>.</span>
+                                        <span id="in-line"> @Html.Raw(rows.TextChoice)</span>
+                                    </div>
                                 }
-                            }i = 0;
-                         }
+                            }
+                            i = 0;
+                        }
                     </div>
                 </div>
             </div>
@@ -40,7 +42,7 @@
     }
 
     <div style="margin:30px">
-       .
+        .
     </div>
 
 

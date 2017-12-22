@@ -83,7 +83,7 @@ namespace Exam_Objective.Controllers
             {
                 var idGroup = (from m in DB.Member
                                join g in DB.TestGroup on m.GroupID equals g.GroupID
-                               where m.UserID == user.UserID && g.SubjectID == etid && g.UserID == sid select new{ g.GroupName,g.GroupPW}).ToList();
+                               where m.UserID == user.UserID && g.SubjectID == etid && g.UserID == sid select new{g.GroupID, g.GroupName,g.GroupPW}).ToList();
                 var SubjectData = (from s in DB.Subjects
                                    join u in DB.UserSystem on s.UserID equals u.UserID
                                    where s.SubjectID == etid && u.UserID == sid
@@ -100,7 +100,7 @@ namespace Exam_Objective.Controllers
                 if (idGroup.Count !=0 && idGroup != null)
                 {
                    
-                    return RedirectToAction("Subjecttest", "Student",new { subid = etid, datasu = sid });
+                    return RedirectToAction("Subjecttest", "Student",new { subid = etid, datasu = sid, g = idGroup[0].GroupID });
                 }
                 else
                 {
@@ -144,7 +144,7 @@ namespace Exam_Objective.Controllers
             return Json(jsonretern);
         }
 
-        public ActionResult Subjecttest(string subid, string datasu)
+        public ActionResult Subjecttest(string subid, string datasu, int g)
         {
             var user = Session["User"] as UserSystemModel;
             if (user == null)
@@ -170,7 +170,24 @@ namespace Exam_Objective.Controllers
                                    }).ToList();
                 ViewBag.DataSubject = SubjectData;
             }
-                return View();
+            using (var DB = new dbEntities())
+            {
+                ViewBag.DataExamtopic = (from e in DB.ExamTopic
+                                         where e.GroupID == g && e.SubjectID == subid && e.UserID == datasu
+                                         select new ExamTopicModel
+                                         {
+                                             ExamtopicID = e.ExamtopicID,
+                                             ExamtopicName = e.ExamtopicName,
+                                             DatetoBegin = e.DatetoBegin,
+                                             TimetoBegin = e.TimetoBegin,
+                                             TimetoEnd = e.TimetoEnd,
+                                             NewPage = e.NewPage,
+                                             HowtoPage = e.HowtoPage,
+                                             ExamtopicPW = e.ExamtopicPW
+
+                                         }).ToList();
+            }
+            return View();
         }
         public ActionResult MySubject()
         {
@@ -202,6 +219,98 @@ namespace Exam_Objective.Controllers
                                       Lname = u.Lname }
                                    ).ToList();
                 ViewBag.MySubject = subjectdata;
+            }
+            return View();
+        }
+
+        public JsonResult ViewTesting(ExamtopicDataModel DataEx)
+        {
+            var jsonretern = new JsonRespone();
+            var i = 0;
+            using (var DB = new dbEntities())
+            {
+                var examtopid = (from e in DB.ExamTopic
+                                 where e.ExamtopicID == DataEx.ExamtopicID
+                                 select e.ExamtopicPW).FirstOrDefault();
+                var dataexamtopic = new ExamtopicDataModel {ExamtopicID = DataEx.ExamtopicID,SubjectID = DataEx.SubjectID, UserID = DataEx.UserID };
+                if (examtopid == null)
+                { 
+                    jsonretern = new JsonRespone { status = true, message = "เข้าสอบเรียบร้อย", data = dataexamtopic };
+                }
+                else if(examtopid != null && examtopid == DataEx.ExamtopicPW)
+                {
+                    jsonretern = new JsonRespone { status = true, message = "เข้าสอบเรียบร้อย", data = dataexamtopic };
+                }
+                else
+                {
+                    jsonretern = new JsonRespone { status = false, message = "รหัสเข้าสอบไม่ถูกต้อง" };
+                }
+            }
+            
+            return Json(jsonretern);
+        }
+        public ActionResult ViewTestings(string subid, string datasu, int e)
+        {
+            var user = Session["User"] as UserSystemModel;
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
+            else if (user.Status != "student")
+            {
+                return RedirectToAction("Login", "Login");
+            }
+            using (var DB = new dbEntities())
+            {
+                ViewBag.DataExamtopic = (from e1 in DB.ExamTopic
+                                         where e1.ExamtopicID == e
+                                         select new ExamTopicModel
+                                         {
+                                             ExamtopicID = e1.ExamtopicID,
+                                             ExamtopicName = e1.ExamtopicName,
+                                             DatetoBegin = e1.DatetoBegin,
+                                             TimetoBegin = e1.TimetoBegin,
+                                             TimetoEnd = e1.TimetoEnd,
+                                             NewPage = e1.NewPage,
+                                             HowtoPage = e1.HowtoPage,
+
+                                         }).ToList();
+            }
+            using (var DB = new dbEntities())
+            {
+                ViewBag.dataGroup = (from gg in DB.TestGroup
+                                     where gg.GroupID == (from ee in DB.ExamTopic where ee.ExamtopicID == e select ee.GroupID).FirstOrDefault()
+                                     select gg.GroupName).FirstOrDefault();
+            }
+            using (var DB = new dbEntities())
+            {
+                ViewBag.dataSubject = (from s in DB.Subjects where s.SubjectID == subid && s.UserID == datasu select s.SubjectName).FirstOrDefault();
+            }
+            using (var DB = new dbEntities())
+            {
+                var dataExambody = (from ee in DB.ExamBody where ee.ExamtopicID == e select ee.ExamBodyID).FirstOrDefault();
+                ViewBag.dataProposition = (from ex in DB.GetExam
+                                           join p in DB.Proposition on ex.ProposID equals p.ProposID
+                                           where ex.ExamBodyID == dataExambody
+                                           select new PropositionModel
+                                           {
+                                               ProposID = ex.ProposID,
+                                               ProposName = p.ProposName,
+                                               TextPropos = p.TextPropos
+                                           }).ToList();
+            }
+            using (var DB = new dbEntities())
+            {
+                var dataExambody = (from ee in DB.ExamBody where ee.ExamtopicID == e select ee.ExamBodyID).FirstOrDefault();
+                ViewBag.dataChoice = (from ex in DB.GetExam
+                                      join c in DB.Choice on ex.ProposID equals c.ProposID
+                                      where ex.ExamBodyID == dataExambody
+                                      select new ChoiceModel
+                                      {
+                                          ProposID = ex.ProposID,
+                                          ChoiceID = c.ChoiceID,
+                                          TextChoice = c.TextChoice
+                                      }).ToList();
             }
             return View();
         }

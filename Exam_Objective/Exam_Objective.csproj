@@ -970,6 +970,8 @@
     <Content Include="Views\IOC\indexGroup.cshtml" />
     <Content Include="Views\Testing\ViewTesting.cshtml" />
     <Content Include="Views\Shared\_MenuTesting.cshtml" />
+    <Content Include="Views\Student\ViewTestings.cshtml" />
+    <Content Include="Views\Shared\_MenuStudentTest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

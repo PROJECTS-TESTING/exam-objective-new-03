@@ -43,7 +43,7 @@
     <link href="~/Content/Contents/menu-test.css" rel="stylesheet" />
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
 </head>
-<body @{ @a   }>
+<body @{ @a  }>
     <nav class="navbar navbar-default navbar-fixed-top bg-nav1" style="background-color:#1a1735">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -129,9 +129,22 @@
         </div>
     </nav>
     @*-------------- MenuLeft ---------------*@
-    <div class="menuL hidden-menu-left">
-        @Html.Partial("_MenuStudent")
-    </div>
+    @{ if (ViewBag.Title == "ViewTestings")
+        {
+            <div class="menuL hidden-menu-left">
+                @Html.Partial("_MenuStudentTest")
+            </div>
+        }
+        else
+        {
+            @*-------------- MenuLeft ---------------*@
+            <div class="menuL hidden-menu-left">
+                @Html.Partial("_MenuStudent")
+
+            </div>
+        }
+    }
+    
     <div class="paddings">
         <div class="padding-body">
             @RenderBody()

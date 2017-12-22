@@ -7,7 +7,8 @@
         }
     });
     $('#top').click(function () {
-        $(window).scrollTop(0);
+       // $(window).scrollTop(0);
+        $('html,body').animate({ scrollTop: 0 }, 400);
     });
     $('#top').hover(
         function () { $(this).css('opacity', 1); },

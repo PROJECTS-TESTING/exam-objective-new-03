@@ -209,3 +209,16 @@ p.border1 {
 a:hover{
     text-decoration:none;
 }
+
+#in-line > p {
+    display: inline;
+    font-size: 14px;
+}
+
+.quizion {
+    font-size: 16px;
+}
+
+.choice {
+    padding: 8px
+}

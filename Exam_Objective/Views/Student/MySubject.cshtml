@@ -23,7 +23,7 @@
                         <tr>
                             <td>
                                 <span class="fa fa-book"> </span>
-                                <a href="@Url.Action("SubjectLogin", "Student", new { etid = rows.SubjectID, sid = rows.UserID })" title="คลิ๊กเพื่อ"><span>วิชา</span>@rows.SubjectName</a>
+                                <a href="@Url.Action("SubjectLogin", "Student", new { etid = rows.SubjectID, sid = rows.UserID, g = rows.GroupID })" title="คลิ๊กเพื่อ"><span>วิชา</span>@rows.SubjectName</a>
                                 <span> | @rows.Fname @rows.Lname | </span>
                             </td>
                         </tr>
