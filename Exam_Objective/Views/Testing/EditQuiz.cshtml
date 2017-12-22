@@ -43,7 +43,7 @@
     <button id="btnAddQuiz1" class="btn btn-primary" data-toggle="modal" data-target="#EditQ1Model"><span class="fa fa-plus"></span> เพิ่มทีละข้อ</button>
     <button id="btnAddQuiz2" class="btn btn-primary" data-toggle="modal" data-target="#EditQ2Model"><span class="fa fa-plus"></span> เพิ่มจากความยากง่าย</button>
     <button id="btnAddQuiz3" class="btn btn-primary" data-toggle="modal" data-target="#EditQ3Model"><span class="fa fa-plus"></span> เพิ่มแบบสุ่ม</button>
-    <button id="btnShowQuizEx" class="btn btn-default" onclick="window.open('@Url.Action("ViewTesting","Testing",new { subjid = SubjectsEntity[0].SubjectID, exbody = ShowDataQuiz[0].ExamBodyID, extopic = examtoPic[0].ExamtopicID })')"><span class="fa fa-search"></span> ดูตัวอย่าง</button>
+    <button id="btnShowQuizEx" class="btn btn-default" onclick="window.open('@Url.Action("ViewTesting","Testing",new { subjid = SubjectsEntity[0].SubjectID, exbody = ShowDataQuiz[0].ExamBodyID, extopic = examtoPic[0].ExamtopicID, g = groupTest[0].GroupID })')"><span class="fa fa-search"></span> ดูตัวอย่าง</button>
     <hr style="margin:2px;" />
     @*----- Dialog เพิ่มที่ละข้อ -------*@
     <div class="modal fade" id="EditQ1Model" tabindex="-1" role="dialog" aria-labelledby="User" aria-hidden="true">

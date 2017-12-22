@@ -1,15 +1,56 @@
 ﻿@using Exam_Objective.Models
 @using System.Collections.Generic
+@using System;
+@using System.Net;
 @{
     var dataExamtopics = (List<ExamTopicModel>)ViewBag.DataExamtopic;
+    var DataPropos = (List<PropositionModel>)ViewBag.dataProposition;
+    var DataChoice = (List<ChoiceModel>)ViewBag.dataChoice;
 }
 @{
     ViewBag.Title = "ViewTesting";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<style>
+    #in-line > p {display:inline;font-size:14px;}
+    .quizion{font-size:16px;}
+    .choice{padding:8px}
+</style>
+<div class="paddind-lr-30">
+    <h3>วิชา @ViewBag.dataSubject @dataExamtopics[0].ExamtopicName กลุ่มเรียน: @ViewBag.dataGroup</h3>
 
-<h4>@dataExamtopics[0].ExamtopicName</h4>
+    @{ for (var x = 1; x <= DataPropos.Count; x++)
+        {
+            <div>
+                <div class="col-md-2" style="margin-bottom:4px ;padding:1px"><div style="border:solid 1px #808080;border-radius:3px;padding:4px"><span style="font-size:20px">Question  @x</span></div></div>
+                <div class="col-md-10" style="margin-bottom:4px; padding:1px">
+                    <div style="border:solid 1px #adfacd;border-radius:3px;padding:4px;background-color:#e0fced">
+                        <span class="quizion">@Html.Raw(DataPropos[x - 1].TextPropos)</span>
+                        @{ var i = 0;
+                            foreach(var rows in DataChoice)
+                            {
+                                if(rows.ProposID == DataPropos[x - 1].ProposID)
+                                {
+                                    i++;
+                                  <div class="choice"> <input type="radio" value="@rows.ChoiceID" name="@DataPropos[x - 1].ProposID"/> @i<span>.</span>
+                                    <span id="in-line"> @Html.Raw(rows.TextChoice)</span>
+                                </div>
+                                }
+                            }i = 0;
+                         }
+                    </div>
+                </div>
+            </div>
+        }
+    }
 
+    <div style="margin:60px">
+        <button style="margin-top:50px" class="btn btn-warning"><span class="fa fa-arrow-left"></span></button>
+        <button style="margin-top:50px" class="btn btn-warning"><span class="fa fa-arrow-right"></span></button>
+    </div>
+
+
+</div>
 @section scripts{
     <script type="text/javascript">
 
@@ -30,7 +71,7 @@
 
         var countDownDate = new Date(DateBegin.monthBegin + " " + DateBegin.dateBegin + ", " + DateBegin.yearBegin + " " + TimeEnd).getTime();
         var d = new Date();
-        if (d.getDate() == DateBegin.dateBegin && (d.getMonth()+1) == DateBegin.monthBegin && d.getFullYear() == DateBegin.yearBegin) {
+        if (d.getDate() == DateBegin.dateBegin && (d.getMonth() + 1) == DateBegin.monthBegin && d.getFullYear() == DateBegin.yearBegin) {
             // Update the count down every 1 second
             var x = setInterval(function () {
 
@@ -58,7 +99,11 @@
                     document.getElementById("demo").innerHTML = hours + " ชั่วโมง " + minutes + " นาที " + seconds + " วินาที ";
                 }
             }, 1000);
-        } else {
+        } else if (d.getDate() >= DateBegin.dateBegin && (d.getMonth() + 1) >= DateBegin.monthBegin && d.getFullYear() >= DateBegin.yearBegin) {
+            document.getElementById("timeEnd").innerHTML = TimeBegin + "-" + TimeEnd + " น.";
+            document.getElementById("demo").innerHTML = "หมดเวลาทำแบบทดสอบ";
+        }
+        else {
             document.getElementById("timeEnd").innerHTML = TimeBegin + "-" + TimeEnd + " น.";
             document.getElementById("demo").innerHTML = "ยังไม่ถึงเวลาทำแบบทดสอบ";
         }

@@ -2,6 +2,7 @@
 @using System.Collections.Generic
 @{
     var dataExamtopic = (List<ExamTopicModel>)ViewBag.DataExamtopic;
+    var DataPropos = (List<PropositionModel>)ViewBag.dataProposition;
 }
 <div class="menu">
     <div class="panel panel-default text-center" style="margin-bottom:2px; min-height:150px;border-radius:2px;border:solid 1px #bdbcbc">
@@ -19,7 +20,7 @@
             นำทางข้อสอบ
         </div>
         <div style="width:100%;height:250px;overflow:auto;padding:4px;">
-            @for (var i = 1; i <= 100; i++)
+            @for (var i = 1; i <= DataPropos.Count; i++)
             {
                 <input title="ข้อ @i" style="width:38px;height:20px; margin:1px;" type="button" value="@i" /> if (i % 5 == 0)
                 { <br />}

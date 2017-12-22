@@ -495,7 +495,7 @@ namespace Exam_Objective.Controllers
             return Json(jsonreturn);
         }
 
-        public ActionResult ViewTesting(string subjid, int exbody, int extopic)
+        public ActionResult ViewTesting(string subjid, int exbody, int extopic, int g)
         {
             var user = Session["User"] as UserSystemModel;
             if (user == null)
@@ -521,6 +521,40 @@ namespace Exam_Objective.Controllers
                                              HowtoPage = e.HowtoPage,
                                              
                                          }).ToList();
+            }
+            using(var DB = new dbEntities())
+            {
+                ViewBag.dataGroup = (from gg in DB.TestGroup
+                                     where gg.GroupID == g
+                                     select gg.GroupName).FirstOrDefault();
+            }
+            using(var DB = new dbEntities())
+            {
+                ViewBag.dataSubject = (from s in DB.Subjects where s.SubjectID == subjid && s.UserID == user.UserID select s.SubjectName).FirstOrDefault();
+            }
+            using(var DB = new dbEntities())
+            {
+                ViewBag.dataProposition = (from ex in DB.GetExam
+                                           join p in DB.Proposition on ex.ProposID equals p.ProposID
+                                           where ex.ExamBodyID == exbody
+                                           select new PropositionModel
+                                           {
+                                               ProposID = ex.ProposID,
+                                               ProposName = p.ProposName,
+                                               TextPropos = p.TextPropos
+                                           }).ToList();
+            }
+            using(var DB = new dbEntities())
+            {
+                ViewBag.dataChoice = (from ex in DB.GetExam
+                                      join c in DB.Choice on ex.ProposID equals c.ProposID
+                                      where ex.ExamBodyID == exbody
+                                      select new ChoiceModel
+                                      {
+                                          ProposID = ex.ProposID,
+                                          ChoiceID = c.ChoiceID,
+                                          TextChoice = c.TextChoice
+                                      }).ToList();
             }
             return View();
         }
