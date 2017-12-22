@@ -14,6 +14,6 @@ namespace Exam_Objective.Models
         public string TextObj { get; set; }
         public int PLessonID { get; set; }
         public int CountProposID { get; set; }
-        public int Content { get; set; }
+        
     }
 }

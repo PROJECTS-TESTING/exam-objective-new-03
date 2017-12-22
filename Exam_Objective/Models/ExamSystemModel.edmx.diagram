@@ -4,13 +4,13 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="56ad0dd273e349bfa2bc63cf1685ce8d" Name="Diagram1">
+      <Diagram DiagramId="d26b9f8bc8ab4517ab74153c5cad321f" Name="Diagram1">
         <EntityTypeShape EntityType="ExamSystemModel.Choice" Width="1.5" PointX="12" PointY="11" IsExpanded="true" />
         <EntityTypeShape EntityType="ExamSystemModel.ExamBody" Width="1.5" PointX="7.5" PointY="7" IsExpanded="true" />
         <EntityTypeShape EntityType="ExamSystemModel.ExamTopic" Width="1.5" PointX="5.25" PointY="6" IsExpanded="true" />
         <EntityTypeShape EntityType="ExamSystemModel.GetExam" Width="1.5" PointX="13" PointY="8.125" IsExpanded="true" />
         <EntityTypeShape EntityType="ExamSystemModel.IOC" Width="1.5" PointX="12" PointY="14" IsExpanded="true" />
-        <EntityTypeShape EntityType="ExamSystemModel.Lesson" Width="1.5" PointX="5.25" PointY="12.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExamSystemModel.Lesson" Width="1.5" PointX="5.25" PointY="12.125" IsExpanded="true" />
         <EntityTypeShape EntityType="ExamSystemModel.Member" Width="1.5" PointX="7.5" PointY="16.875" IsExpanded="true" />
         <EntityTypeShape EntityType="ExamSystemModel.Objective" Width="1.5" PointX="7.5" PointY="12.25" IsExpanded="true" />
         <EntityTypeShape EntityType="ExamSystemModel.Participant" Width="1.5" PointX="10.25" PointY="8.125" IsExpanded="true" />

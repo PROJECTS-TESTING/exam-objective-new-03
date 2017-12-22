@@ -226,7 +226,7 @@ namespace Exam_Objective.Controllers
         public JsonResult ViewTesting(ExamtopicDataModel DataEx)
         {
             var jsonretern = new JsonRespone();
-            var i = 0;
+            
             using (var DB = new dbEntities())
             {
                 var examtopid = (from e in DB.ExamTopic

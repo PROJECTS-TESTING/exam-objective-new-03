@@ -26,7 +26,7 @@ namespace Exam_Objective.Models
         public string ProposName { get; set; }
         public string TextPropos { get; set; }
         public double ScoreMain { get; set; }
-        public string Continuity { get; set; }
+        public Nullable<int> Continuity { get; set; }
         public Nullable<double> Difficulty { get; set; }
         public Nullable<double> Discimination { get; set; }
         public Nullable<double> IOC { get; set; }

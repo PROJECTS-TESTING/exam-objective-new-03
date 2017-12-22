@@ -65,6 +65,7 @@
     <Property Name="TextLesson" Type="text" />
     <Property Name="SubjectID" Type="varchar" MaxLength="20" Nullable="false" />
     <Property Name="UserID" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Contents" Type="text" />
   </EntityType>
   <EntityType Name="Member">
     <Key>
@@ -82,7 +83,6 @@
     <Property Name="ObjName" Type="varchar" MaxLength="100" Nullable="false" />
     <Property Name="TextObj" Type="text" />
     <Property Name="LessonID" Type="int" Nullable="false" />
-    <Property Name="Contents" Type="text" />
   </EntityType>
   <EntityType Name="Participant">
     <Key>
@@ -104,7 +104,7 @@
     <Property Name="ProposName" Type="varchar" MaxLength="200" Nullable="false" />
     <Property Name="TextPropos" Type="text" Nullable="false" />
     <Property Name="ScoreMain" Type="float" Nullable="false" />
-    <Property Name="Continuity" Type="varchar" MaxLength="20" />
+    <Property Name="Continuity" Type="int" />
     <Property Name="Difficulty" Type="float" />
     <Property Name="Discimination" Type="float" />
     <Property Name="IOC" Type="float" />

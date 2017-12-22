@@ -68,6 +68,7 @@
           <ScalarProperty Name="TextLesson" ColumnName="TextLesson" />
           <ScalarProperty Name="SubjectID" ColumnName="SubjectID" />
           <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Contents" ColumnName="Contents" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -86,7 +87,6 @@
           <ScalarProperty Name="ObjName" ColumnName="ObjName" />
           <ScalarProperty Name="TextObj" ColumnName="TextObj" />
           <ScalarProperty Name="LessonID" ColumnName="LessonID" />
-          <ScalarProperty Name="Contents" ColumnName="Contents" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -21,5 +21,6 @@ namespace Exam_Objective.Models
         public string SubjectName { get; set; }  //สร้างไว้สำหรับ join
         public string Fname { get; set; }  //สร้างไว้สำหรับ join
         public int CountProposID { get; set; }
+        public int Content { get; set; }
     }
 }

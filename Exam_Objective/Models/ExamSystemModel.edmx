@@ -70,6 +70,7 @@
           <Property Name="TextLesson" Type="text" />
           <Property Name="SubjectID" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="UserID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Contents" Type="text" />
         </EntityType>
         <EntityType Name="Member">
           <Key>
@@ -87,7 +88,6 @@
           <Property Name="ObjName" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="TextObj" Type="text" />
           <Property Name="LessonID" Type="int" Nullable="false" />
-          <Property Name="Contents" Type="text" />
         </EntityType>
         <EntityType Name="Participant">
           <Key>
@@ -109,7 +109,7 @@
           <Property Name="ProposName" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="TextPropos" Type="text" Nullable="false" />
           <Property Name="ScoreMain" Type="float" Nullable="false" />
-          <Property Name="Continuity" Type="varchar" MaxLength="20" />
+          <Property Name="Continuity" Type="int" />
           <Property Name="Difficulty" Type="float" />
           <Property Name="Discimination" Type="float" />
           <Property Name="IOC" Type="float" />
@@ -544,6 +544,7 @@
           <Property Name="TextLesson" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="SubjectID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="UserID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Contents" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Subjects" Relationship="Self.FK_Lesson_Subjects" FromRole="Lesson" ToRole="Subjects" />
           <NavigationProperty Name="Objective" Relationship="Self.FK_Objective_Lesson" FromRole="Lesson" ToRole="Objective" />
         </EntityType>
@@ -564,7 +565,6 @@
           <Property Name="ObjName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="TextObj" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="LessonID" Type="Int32" Nullable="false" />
-          <Property Name="Contents" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Lesson" Relationship="Self.FK_Objective_Lesson" FromRole="Objective" ToRole="Lesson" />
           <NavigationProperty Name="Proposition" Relationship="Self.FK_Proposition_Objective" FromRole="Objective" ToRole="Proposition" />
         </EntityType>
@@ -590,7 +590,7 @@
           <Property Name="ProposName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="TextPropos" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="ScoreMain" Type="Double" Nullable="false" />
-          <Property Name="Continuity" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Continuity" Type="Int32" />
           <Property Name="Difficulty" Type="Double" />
           <Property Name="Discimination" Type="Double" />
           <Property Name="IOC" Type="Double" />
@@ -1035,6 +1035,7 @@
                 <ScalarProperty Name="TextLesson" ColumnName="TextLesson" />
                 <ScalarProperty Name="SubjectID" ColumnName="SubjectID" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Contents" ColumnName="Contents" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1053,7 +1054,6 @@
                 <ScalarProperty Name="ObjName" ColumnName="ObjName" />
                 <ScalarProperty Name="TextObj" ColumnName="TextObj" />
                 <ScalarProperty Name="LessonID" ColumnName="LessonID" />
-                <ScalarProperty Name="Contents" ColumnName="Contents" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

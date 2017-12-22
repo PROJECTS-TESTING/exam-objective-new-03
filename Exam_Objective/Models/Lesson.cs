@@ -25,6 +25,7 @@ namespace Exam_Objective.Models
         public string TextLesson { get; set; }
         public string SubjectID { get; set; }
         public string UserID { get; set; }
+        public string Contents { get; set; }
     
         public virtual Subjects Subjects { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
