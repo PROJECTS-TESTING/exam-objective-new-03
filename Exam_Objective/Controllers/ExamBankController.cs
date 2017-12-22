@@ -156,6 +156,44 @@ namespace Exam_Objective.Controllers
             }
             return Json(jsonretern);
         }
+        //// Update Lesson By LessonID
+        public JsonResult EditLesson(string id)
+        {
+            var jsonreturn = new JsonRespone();
+            int Id = int.Parse(id);
+            try
+            {
+                using (var DB = new dbEntities())
+                {
+                    var EditLesson = (from le in DB.Lesson
+                                      join su in DB.Subjects on le.SubjectID equals su.SubjectID
+                                      where le.LessonID == Id
+                                      select new LessonModel
+                                      {
+                                          LessonID = le.LessonID,
+                                          LesName = le.LesName,
+                                          TextLesson = le.TextLesson,
+                                          SubjectID = le.SubjectID,
+                                          SubjectName = su.SubjectName,
+                                          UserID = le.UserID
+                                      }).FirstOrDefault();
+                    if (EditLesson == null)
+                    {
+                        jsonreturn = new JsonRespone { status = false, message = "เกิดข้อผิดพลาด" };
+                    }
+                    else
+                    {
+                        jsonreturn = new JsonRespone { status = true, message = "บันทึกเรียบร้อย", data = EditLesson };
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                jsonreturn = new JsonRespone { status = false, message = "เกิดข้อผิดพลาด" + ex.Message };
+            }
+            return Json(jsonreturn);
+        }
         // CreateObj
         public JsonResult CreateObj(ObjectiveModel Objective)
         {
@@ -332,6 +370,7 @@ namespace Exam_Objective.Controllers
                                       TextPropos = p.TextPropos,
                                       ScoreMain = p.ScoreMain,
                                       ObjName = o.ObjName,
+                                      Continuity = p.Continuity
 
                                   }).ToList();
                 ViewBag.ProposMain = ProposData;
@@ -351,10 +390,6 @@ namespace Exam_Objective.Controllers
             }
             return View();
         }
-        public ActionResult Propospreview(int ProposID)
-        {
-            return View();
-        }
         public JsonResult CreatePropos(PropositionModel propos)
         {
             var jsonreturn = new JsonRespone();
@@ -371,6 +406,7 @@ namespace Exam_Objective.Controllers
                             Propos.TextPropos = propos.TextPropos;
                             Propos.CheckChoice = propos.CheckChoice;
                             Propos.ScoreMain = propos.ScoreMain;
+                            Propos.Continuity = propos.Continuity;
                             Propos.ObjID = propos.ObjID;
                             DB.Proposition.Add(Propos);
                             DB.SaveChanges();
@@ -402,6 +438,7 @@ namespace Exam_Objective.Controllers
                                 x.ProposName = propos.ProposName;
                                 x.TextPropos = propos.TextPropos;
                                 x.ScoreMain = propos.ScoreMain;
+                                x.Continuity = propos.Continuity;
                                 x.ObjID = propos.ObjID;
                             });
                             DB.SaveChanges();
