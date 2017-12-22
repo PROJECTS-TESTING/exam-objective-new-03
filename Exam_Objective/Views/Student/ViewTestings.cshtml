@@ -17,8 +17,8 @@
     @{ for (var x = 1; x <= DataPropos.Count; x++)
         {
             <div>
-                <div class="col-md-2" style="margin-bottom:4px ;padding:1px"><div style="border:solid 1px #808080;border-radius:3px;padding:4px"><span style="font-size:20px">Question  @x</span></div></div>
-                <div class="col-md-10" style="margin-bottom:4px; padding:1px">
+                <div class="col-md-2" style="margin-bottom:8px ;padding:1px"><div style="border:solid 1px #808080;border-radius:3px;padding:4px"><span style="font-size:20px">Question  @x</span></div></div>
+                <div class="col-md-10" style="margin-bottom:8px; padding:1px">
                     <div style="border:solid 1px #adfacd;border-radius:3px;padding:4px;background-color:#e0fced">
                         <span class="quizion" id="@DataPropos[x - 1].ProposID">@Html.Raw(DataPropos[x - 1].TextPropos)</span>
                         @{ var i = 0;
