@@ -36,5 +36,6 @@ namespace Exam_Objective.Models
         public string SubjectID { get; set; }
         public string UserID { get; set; }
         public string ExamtopicPW { get; set; }
+        public int CheckDateTime { get; set; }
     }
 }

@@ -44,6 +44,8 @@
     <button id="btnAddQuiz2" class="btn btn-primary" data-toggle="modal" data-target="#EditQ2Model"><span class="fa fa-plus"></span> เพิ่มจากความยากง่าย</button>
     <button id="btnAddQuiz3" class="btn btn-primary" data-toggle="modal" data-target="#EditQ3Model"><span class="fa fa-plus"></span> เพิ่มแบบสุ่ม</button>
     <button id="btnShowQuizEx" class="btn btn-default" onclick="window.open('@Url.Action("ViewTesting","Testing",new { subjid = SubjectsEntity[0].SubjectID, exbody = ShowDataQuiz[0].ExamBodyID, extopic = examtoPic[0].ExamtopicID, g = groupTest[0].GroupID })')"><span class="fa fa-search"></span> ดูตัวอย่าง</button>
+    @if (ShowDataQuiz.Count > 0 && ShowDataQuiz != null)
+    {<span>(จำนวนข้อสอบที่เลือกทั้งหมด </span>@ShowDataQuiz.Count<span> ข้อ)</span>}
     <hr style="margin:2px;" />
     @*----- Dialog เพิ่มที่ละข้อ -------*@
     <div class="modal fade" id="EditQ1Model" tabindex="-1" role="dialog" aria-labelledby="User" aria-hidden="true">
@@ -244,21 +246,27 @@
             </div>
         </div>
     </div>
+    <h4>ข้อสอบที่เลือกทั้งหมด</h4>
     <table id="tshowCate" class="table table-striped table-bordered">
         <thead>
             <tr>
-                <th>ข้อสอบ</th>
+                <th>ลำดับ</th>
+                <th class="text-center">บทเรียน</th>
+                <th>ชื่อข้อสอบ</th>
             </tr>
         </thead>
         <tbody>
             @{
-
+                var x = 0;
                 foreach (var rows in ShowDataQuiz)
                 {
+                    x++;
                     <tr>
+                        <td class="text-center" style="width:5%">@x<span>.</span></td>
+                        <td class="text-center" style="width:15%">@rows.LesName</td>
                         <td>
-                            <span class="col-md-10">@rows.ProposName @rows.LesName</span>
-                            <span class="col-md-2 text-right">
+                            <span class="col-md-8">@rows.ProposName</span>
+                            <span class="col-md-4 text-right">
                                 <span title="รายละเอีนด" class="fa fa-search link-action btnView" data-toggle="modal" data-target="#ShowQuizModal" data-proid="@rows.ProposID"> รายละเอียด </span>
                                 <span title="ลบ" class="fa  fa-times link-action btnDelete" id="btnDelete" data-proposiid="@rows.ProposID" data-proposiname="@rows.ProposName"> ลบ</span>
                             </span>
@@ -271,7 +279,7 @@
     </table>
 </div>
 <!--form view detail-->
-<form id="formProposdetail">
+
     <div id="ShowQuizModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -280,62 +288,64 @@
                     <h4 class="modal-title">รายละเอียดข้อสอบ<label id="titlev" name="titlev"></label></h4>
                 </div>
                 <div class="modal-body">
-                    <div class="form-horizontal">
-                        <div class="panel panel-default col-md-3">
-                            <div class="panel-body">
-                                <div class="form-group">
-                                    <input type="hidden" class="form-control" id="isUpdateable" name="isUpdateable" value="1" />
-                                    <input type="hidden" class="form-control" id="ProposIDv" name="ProposIDv" value="0" />
-                                    <label class="bold">Question : </label>
-                                    <label id="ProposNamev" name="ProposNamev"></label>
+                    <form id="formProposdetail">
+                        <div class="form-horizontal">
+                            <div class="panel panel-default col-md-3">
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <input type="hidden" class="form-control" id="isUpdateable" name="isUpdateable" value="1" />
+                                        <input type="hidden" class="form-control" id="ProposIDv" name="ProposIDv" value="0" />
+                                        <label class="bold">Question : </label>
+                                        <label id="ProposNamev" name="ProposNamev"></label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label id="smainv" class="bold">Marked out of:</label>
+                                        <label id="ScoreMainv" name="ScoreMainv"></label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label id="Userv" class="bold"></label>
+                                        <label id="Nameuv" name="Nameuv"></label>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label id="smainv" class="bold">Marked out of:</label>
-                                    <label id="ScoreMainv" name="ScoreMainv"></label>
-                                </div>
-                                <div class="form-group">
-                                    <label id="Userv" class="bold"></label>
-                                    <label id="Nameuv" name="Nameuv"></label>
+                            </div>
+                            <div class="panel panel-default col-md-9">
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <label class="bold"></label>
+                                        <label id="TextProposv" name="TextProposv"></label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="bold">Select one or more : </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="bold" id="radiochoice1"><input type="radio" name="gender"> 1. </label>
+                                        <label class="bold" id="checkchoice1"><input name="check1" type="checkbox" id="check1" /> 1. </label>
+                                        <label id="Choice1v" name="Choice1v"></label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="bold" id="radiochoice2"><input type="radio" name="gender"> 2. </label>
+                                        <label class="bold" id="checkchoice2"><input name="check2" type="checkbox" id="check2" /> 2. </label>
+                                        <label id="Choice2v" name="Choice2v"></label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="bold" id="radiochoice3"><input type="radio" name="gender"> 3. </label>
+                                        <label class="bold" id="checkchoice3"><input name="check3" type="checkbox" id="check3" /> 3. </label>
+                                        <label id="Choice3v" name="Choice3v"></label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="bold" id="radiochoice4"><input type="radio" name="gender"> 4. </label>
+                                        <label class="bold" id="checkchoice4"><input name="check4" type="checkbox" id="check4" /> 4. </label>
+                                        <label id="Choice4v" name="Choice4v"></label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="bold" id="radiochoice5"><input type="radio" name="gender"> 5. </label>
+                                        <label class="bold" id="checkchoice5"><input name="check5" type="checkbox" id="check5" /> 5. </label>
+                                        <label id="Choice5v" name="Choice5v"></label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="panel panel-default col-md-9">
-                            <div class="panel-body">
-                                <div class="form-group">
-                                    <label class="bold"></label>
-                                    <label id="TextProposv" name="TextProposv"></label>
-                                </div>
-                                <div class="form-group">
-                                    <label class="bold">Select one or more : </label>
-                                </div>
-                                <div class="form-group">
-                                    <label class="bold" id="radiochoice1"><input type="radio" name="gender"> 1. </label>
-                                    <label class="bold" id="checkchoice1"><input name="check1" type="checkbox" id="check1" /> 1. </label>
-                                    <label id="Choice1v" name="Choice1v"></label>
-                                </div>
-                                <div class="form-group">
-                                    <label class="bold" id="radiochoice2"><input type="radio" name="gender"> 2. </label>
-                                    <label class="bold" id="checkchoice2"><input name="check2" type="checkbox" id="check2" /> 2. </label>
-                                    <label id="Choice2v" name="Choice2v"></label>
-                                </div>
-                                <div class="form-group">
-                                    <label class="bold" id="radiochoice3"><input type="radio" name="gender"> 3. </label>
-                                    <label class="bold" id="checkchoice3"><input name="check3" type="checkbox" id="check3" /> 3. </label>
-                                    <label id="Choice3v" name="Choice3v"></label>
-                                </div>
-                                <div class="form-group">
-                                    <label class="bold" id="radiochoice4"><input type="radio" name="gender"> 4. </label>
-                                    <label class="bold" id="checkchoice4"><input name="check4" type="checkbox" id="check4" /> 4. </label>
-                                    <label id="Choice4v" name="Choice4v"></label>
-                                </div>
-                                <div class="form-group">
-                                    <label class="bold" id="radiochoice5"><input type="radio" name="gender"> 5. </label>
-                                    <label class="bold" id="checkchoice5"><input name="check5" type="checkbox" id="check5" /> 5. </label>
-                                    <label id="Choice5v" name="Choice5v"></label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" id="btnClose" class="btn btn-danger" data-dismiss="modal" title="ปิดการแสดงรายอะเอียดข้อสอบ">ปิด</button>
@@ -343,7 +353,7 @@
             </div>
         </div>
     </div>
-</form>
+
 
 @section scripts{
     <script src="~/Scripts/jquery.validate.js"></script>

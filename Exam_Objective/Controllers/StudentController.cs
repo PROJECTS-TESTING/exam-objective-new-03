@@ -233,13 +233,20 @@ namespace Exam_Objective.Controllers
                                  where e.ExamtopicID == DataEx.ExamtopicID
                                  select e.ExamtopicPW).FirstOrDefault();
                 var dataexamtopic = new ExamtopicDataModel {ExamtopicID = DataEx.ExamtopicID,SubjectID = DataEx.SubjectID, UserID = DataEx.UserID };
-                if (examtopid == null)
+                if (examtopid == null && DataEx.CheckDateTime == 0)
                 { 
                     jsonretern = new JsonRespone { status = true, message = "เข้าสอบเรียบร้อย", data = dataexamtopic };
                 }
-                else if(examtopid != null && examtopid == DataEx.ExamtopicPW)
+                else if(examtopid != null && examtopid == DataEx.ExamtopicPW && DataEx.CheckDateTime == 0)
                 {
                     jsonretern = new JsonRespone { status = true, message = "เข้าสอบเรียบร้อย", data = dataexamtopic };
+                }else if (DataEx.CheckDateTime == 1)
+                {
+                    jsonretern = new JsonRespone { status = false, message = "เวลาในการทำแบบทดสอบหมดไปแล้ว" };
+                }
+                else if (DataEx.CheckDateTime == 2)
+                {
+                    jsonretern = new JsonRespone { status = false, message = "ยังไม่ถึงเวลาในการทำแบบทดสอบ" };
                 }
                 else
                 {
