@@ -137,7 +137,7 @@ namespace Exam_Objective.Controllers
                         {
                             DB.Lesson.Where(x => x.LessonID == lessonUpdate.LessonID).ForEach(x =>
                             {
-                                x.LessonID = lesson.LessonID;
+                                x.LessonID = lesson.LessonID; //auto increment
                                 x.LesName = lesson.LesName;
                                 x.SubjectID = lesson.SubjectID;
                                 x.TextLesson = lesson.TextLesson;
@@ -194,6 +194,32 @@ namespace Exam_Objective.Controllers
             }
             return Json(jsonreturn);
         }
+        public ActionResult DeleteLesson(int id)
+        {
+            var jsonreturn = new JsonRespone();
+            try
+            {
+                using (var DB = new dbEntities())
+                {
+                    var DeleteLes = DB.Lesson.Where(x => x.LessonID == id).FirstOrDefault();
+                    if (DeleteLes == null)
+                    {
+                        jsonreturn = new JsonRespone { status = false, message = "เกิดข้อผิดพลาด" };
+                    }
+                    else
+                    {
+                        DB.Lesson.Remove(DeleteLes);
+                        DB.SaveChanges();
+                        jsonreturn = new JsonRespone { status = true, message = "บันทึกเรียบร้อย" };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                jsonreturn = new JsonRespone { status = false, message = "เกิดข้อผิดพลาด" + ex.Message };
+            }
+            return Json(jsonreturn);
+        }
         // CreateObj
         public JsonResult CreateObj(ObjectiveModel Objective)
         {
@@ -239,6 +265,68 @@ namespace Exam_Objective.Controllers
                 jsonretern = new JsonRespone { status = false, message = "เกิดข้อผิดพลาด" + ex.Message };
             }
             return Json(jsonretern);
+        }
+        //// Update Objective By ObjID
+        public JsonResult EditObj(string id)
+        {
+            var jsonreturn = new JsonRespone();
+            int Id = int.Parse(id);
+            try
+            {
+                using (var DB = new dbEntities())
+                {
+                    var EditObj = (from ob in DB.Objective
+                                      join le in DB.Lesson on ob.LessonID equals le.LessonID
+                                      where ob.ObjID == Id
+                                      select new ObjectiveModel
+                                      {
+                                          ObjID = ob.ObjID,
+                                          ObjName = ob.ObjName,
+                                          TextObj = ob.TextObj,
+                                          PLessonID = ob.LessonID
+                                      }).FirstOrDefault();
+                    if (EditObj == null)
+                    {
+                        jsonreturn = new JsonRespone { status = false, message = "เกิดข้อผิดพลาด" };
+                    }
+                    else
+                    {
+                        jsonreturn = new JsonRespone { status = true, message = "บันทึกเรียบร้อย", data = EditObj };
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                jsonreturn = new JsonRespone { status = false, message = "เกิดข้อผิดพลาด" + ex.Message };
+            }
+            return Json(jsonreturn);
+        }
+        public ActionResult DeleteObj(int id)
+        {
+            var jsonreturn = new JsonRespone();
+            try
+            {
+                using (var DB = new dbEntities())
+                {
+                    var DeleteObj = DB.Objective.Where(x => x.ObjID == id).FirstOrDefault();
+                    if (DeleteObj == null)
+                    {
+                        jsonreturn = new JsonRespone { status = false, message = "เกิดข้อผิดพลาด" };
+                    }
+                    else
+                    {
+                        DB.Objective.Remove(DeleteObj);
+                        DB.SaveChanges();
+                        jsonreturn = new JsonRespone { status = true, message = "บันทึกเรียบร้อย" };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                jsonreturn = new JsonRespone { status = false, message = "เกิดข้อผิดพลาด" + ex.Message };
+            }
+            return Json(jsonreturn);
         }
         // GEGIN Propos
         // Index of Proposition

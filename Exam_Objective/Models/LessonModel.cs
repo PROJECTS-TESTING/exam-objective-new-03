@@ -8,9 +8,7 @@ using System.Web.Mvc;
 namespace Exam_Objective.Models
 {
     public class LessonModel
-    {
-         
-        
+    {       
         public int LessonID { get; set; }
         public string LesName { get; set; }
         [AllowHtml]
