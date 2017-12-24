@@ -283,7 +283,9 @@ namespace Exam_Objective.Controllers
                                           ObjID = ob.ObjID,
                                           ObjName = ob.ObjName,
                                           TextObj = ob.TextObj,
-                                          PLessonID = ob.LessonID
+                                          PLessonID = ob.LessonID,
+                                          PLesName = le.LesName
+                                          
                                       }).FirstOrDefault();
                     if (EditObj == null)
                     {

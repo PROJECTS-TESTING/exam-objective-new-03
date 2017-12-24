@@ -13,6 +13,7 @@ namespace Exam_Objective.Models
         public string ObjName { get; set; }
         public string TextObj { get; set; }
         public int PLessonID { get; set; }
+        public string PLesName { get; set; }
         public int CountProposID { get; set; }
         
     }

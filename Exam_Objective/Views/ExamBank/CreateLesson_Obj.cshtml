@@ -472,7 +472,6 @@
                 },
             });
         });
-
         $('.btnDeletel').click(function () {
             var id = $(this).data("lesson");
             var lname = $(this).data("lessonname");
@@ -511,7 +510,7 @@
                                 swal("เกิดข้อผิดพลาด", message,"error");
                             }else{
                                 swal({
-                                    title: "ลบรายวิชาสำเร็จ",
+                                    title: "ลบหน่วยเรียนสำเร็จ",
                                     type: "success",
                                     showConfirmButton: false,
                                     timer: 1000,
@@ -658,13 +657,14 @@
             });
         });
         $('.btnViewo').click(function () {
-            var id = $(this).data("lesson");
-            $("#titlelv").text("รายละเอียดหน่วยเรียน");
+            var id = $(this).data("objective");
+            
+            $("#titleov").text("รายละเอียดหน่วยเรียน");
             //alert(id);
             $.ajax({
                 type: "POST", // method ที่จะส่ง
                 cache: false,
-                url: '@Url.Action("EditLesson", "ExamBank")',  // ส่งไปให้ที่ได้ ระบุ
+                url: '@Url.Action("EditObj", "ExamBank")',  // ส่งไปให้ที่ได้ ระบุ
                 dataType: "json", // ชนิดข้อมูลที่ส่ง
                 data: { id: id }, // ข้อมูลที่ส่ง
                 traditional: true, // การจดจำข้อมูล
@@ -684,10 +684,11 @@
                         swal("เกิดข้อผิดพลาดที่", message, "error");
 
                     } else {
-                        $("#LesNamev").text(res.data.LesName);
-                        $("#TextLessonv").text(res.data.TextLesson);
-                        $("#LessonModalv").modal("show");
-                        $("#formLessonv").find('.form-group').removeClass('has-error');
+                        $("#ObjNamev").text(res.data.ObjName);
+                        $("#TextObjv").text(res.data.TextObj);
+                        $("#LesNameov").text(res.data.PLesName);
+                        $("#ObjModalv").modal("show");
+                        $("#formObjv").find('.form-group').removeClass('has-error');
 
                     }
                 },
@@ -700,11 +701,11 @@
             });
         });
         $('.btnDeleteo').click(function () {
-            var id = $(this).data("lesson");
-            var lname = $(this).data("lessonname");
+            var id = $(this).data("objective");
+            var Objname = $(this).data("objname");
             //alert(id);
             swal({
-                title: "ต้องการลบจุดประสงค์ : "+ lname + " ?",
+                title: "ต้องการลบจุดประสงค์ : " + Objname + " ?",
                 text: "จุดประสงค์ที่ลบจะไม่สามารถกู้คืนกลับมาได้ !",
                 type: "warning",
                 showCancelButton: true,
@@ -737,7 +738,7 @@
                                 swal("เกิดข้อผิดพลาด", message,"error");
                             }else{
                                 swal({
-                                    title: "ลบรายวิชาสำเร็จ",
+                                    title: "ลบจุดประสงค์สำเร็จ",
                                     type: "success",
                                     showConfirmButton: false,
                                     timer: 1000,
