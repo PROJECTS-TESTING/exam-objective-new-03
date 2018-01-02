@@ -1,0 +1,193 @@
+﻿@using Exam_Objective.Models
+@using System.Collections.Generic
+
+@{
+    var CateEntity = (List<LessonModel>)ViewBag.Lesson;
+    var CateEnnotdis = (List<ObjectiveModel>)ViewBag.ObjectiveNotDis;
+    var dLesson = (List<LessonModel>)ViewBag.DLesson;
+    var countPro = (List<LessonModel>)ViewBag.countP;
+}
+
+@{
+    ViewBag.Title = "Specialist";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h4 class="text-center">ประเมินความเที่ยงตรงเชิงเนื้อหา IOC /วิชา Computer Programing </h4>
+
+<div class="row">
+    @{ var i = 2;
+    <div class="col-md-5">
+    <div class="panel panel-info">
+    <div class="panel-heading">
+        <label class="control-label">เลือกเนื้อหาบทเรียน</label>
+        <select class="form-control showCate" id="showCate" name="showCate" data-cate="cateid">
+            <option value="0" selected>-- ข้อสอบตามหน่วยเรียน --</option>
+            @{
+                foreach (var rows in dLesson)
+                {
+                    <option value="@rows.LessonID">
+                        @rows.LesName
+                        @{
+                            foreach (var rows2 in countPro)
+                            {
+                                if (rows.LessonID == rows2.LessonID)
+                                {   
+                                   // i = rows.LessonID;
+                                    <span>(@rows2.CountProposID)</span>
+                                }
+                            }
+                        }
+                    </option>
+                }
+            }
+        </select>
+    </div>
+    <div class="panel-body" style="width:100%;height:350px;overflow:auto" id="showCon">
+        <br />
+        เนื้อหา
+    </div>
+    </div>
+    </div>
+    <div class="col-md-7">
+        <div class="row">
+                <div class="panel panel-warning">
+                    <div class="panel-heading">วัตถุประสงค์</div>
+                    <div class="panel-body" style="width:100%;height:150px;overflow:auto" id="showObj">
+                        <br />
+                        @foreach (var robj in CateEnnotdis)
+                        { 
+                            if (i == robj.PLessonID)
+                            {
+                                <li>
+                                    @robj.ObjName
+                                </li>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        <div style="width:630px;height:340px;overflow:auto">
+        @{
+            var test = (List<PropositionModel>)ViewBag.ProposMain;
+                    <div class="row" id="showTest">
+                        <div class="col-md-2">
+                            <h4><span class="label label-primary">ข้อที่ 1</span></h4>
+                        </div>
+                        <div class="col-md-10">
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <h5></h5>
+                                    <h5>ss</h5>
+                                    <input type="radio" name="gender" value="male"> ปรับปรุง
+                                    <input type="radio" name="gender" value="female"> พอใช้
+                                    <input type="radio" name="gender" value="other"> ดีมาก
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        }
+        </div>        
+    </div>
+    }
+</div>
+
+@section scripts{
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.inputmask.bundle.js"></script>
+<script src="~/Scripts/jquery.inputmask.bundle.min.js"></script>
+<script type="text/javascript" src="~/Scripts/tinymce/jquery.tinymce.min.js"></script>
+<script type="text/javascript" src="~/Scripts/tinymce/tinymce.min.js"></script>
+<script src="~/Scripts/tinymce/plugins/tiny_mce_wiris/wirisplugin-generic.js"></script>
+<script src="~/Scripts/tinymce/plugins/tiny_mce_wiris/core/display.js"></script>
+<script type="text/javascript">
+
+            //View Propos by id
+            $('.testView').click(function () {
+                var idp = $(this).data("proid");
+                //alert(idp);
+                //tinyMCE.activeEditor.setContent('');  //clear text in tinyeditor
+                $.ajax({
+                    type: "POST", // method ที่จะส่ง
+                    cache: false,
+                    url: "ViewPropos",  // ส่งไปให้ที่ได้ ระบุ
+                    dataType: "json", // ชนิดข้อมูลที่ส่ง
+                    data: { idp: idp },//$('#formSubject').serialize(), // ข้อมูลที่ส่ง
+                    traditional: true, // การจดจำข้อมูล
+                    beforeSend: function () { // ก่องส่ง data จะให้ทำไร
+
+                    },
+                    success: function (res) {
+                        var status = false;
+                        var message = 'ดำเนินการไม่สำเร็จ';
+                        if (res != null && res != undefined) {
+                            status = res.status;
+                            message = res.message != '' ? res.message : message;
+                        }
+                        if (status == false) {
+                            swal("เกิดข้อผิดพลาด", message, "error");
+
+                        } else {
+                            $("#ProposIDv").text(res.data.ProposID);
+                            $("#ProposNamev").text(res.data.ProposName);
+                            $("#TextProposv").html(res.data.TextPropos);
+                            $("#ScoreMainv").text(res.data.ScoreMain);
+                            $("#Choice1v").html(res.data.Choice1);
+                            if ((res.data.Choice1) != null) {
+                            } else {
+                                $("#radiochoice1").html("");
+                                $("#checkchoice1").html("");
+                            }
+                            $("#Choice2v").html(res.data.Choice2);
+                            if ((res.data.Choice2) != null) {
+                            } else {
+                                $("#radiochoice2").html("");
+                                $("#checkchoice2").html("");
+                            }
+                            $("#Choice3v").html(res.data.Choice3);
+                            if ((res.data.Choice3) != null) {
+                            } else {
+                                $("#radiochoice3").html("");
+                                $("#checkchoice3").html("");
+                            }
+                            $("#Choice4v").html(res.data.Choice4);
+                            if ((res.data.Choice4) != null) {
+                            } else {
+                                $("#radiochoice4").html("");
+                                $("#checkchoice4").html("");
+                            }
+                            $("#Choice5v").html(res.data.Choice5);
+                            if ((res.data.Choice5) != null) {
+                            } else {
+                                $("#radiochoice5").html("");
+                                $("#checkchoice5").html("");
+                            }
+                            if ((res.data.CheckChoice) == '2') {
+                                $("#radiochoice1").html("");
+                                $("#radiochoice2").html("");
+                                $("#radiochoice3").html("");
+                                $("#radiochoice4").html("");
+                                $("#radiochoice5").html("");
+                            } else {
+                                $("#checkchoice1").html("");
+                                $("#checkchoice2").html("");
+                                $("#checkchoice3").html("");
+                                $("#checkchoice4").html("");
+                                $("#checkchoice5").html("");
+                            }
+                            $("#proposdetailModal").modal("show");
+                            $("#formPropos").find('.form-group').removeClass('has-error');
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        swal("เกิดข้อผิดพลาด", message, "error");
+                    },
+                    complete: function () {
+
+                    },
+                });
+            });
+</script>
+}
