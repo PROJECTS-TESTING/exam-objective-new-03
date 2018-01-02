@@ -27,7 +27,13 @@
                             <td>
                                 <span title="@rows.ExamtopicName" class="link-action" data-toggle="modal" data-target="#PWtestModal">
                                     <span class="icon icon-doc"> </span>
-                                    <span id="examtopic" data-examtopicid="@rows.ExamtopicID" data-examPW="@rows.ExamtopicPW">@rows.ExamtopicName</span>
+                                    <span id="examtopic" 
+                                          data-examtopicid="@rows.ExamtopicID" 
+                                          data-examPW="@rows.ExamtopicPW" 
+                                          data-datebegin="@rows.DatetoBegin"
+                                          data-timebegin="@rows.TimetoBegin"
+                                          data-timeend="@rows.TimetoEnd">
+                                    @rows.ExamtopicName</span>
                                 </span>
                             </td>
                         </tr>
@@ -80,11 +86,35 @@
     <script src="~/Scripts/Scriptss/ShowPW-HidePW-Js.js"></script>
     <script type="text/javascript">
         $('#btnSelect').click(function () {
+            // Check DateTime Begin End.
+            var datein = $('#examtopic').data("datebegin");
+            var i = [];
+            i = datein.split(' ');
+            datein = i[0].split('/');
+            //alert(datein);
+            var DateBegin = {
+                dateBegin: datein[0],
+                monthBegin: datein[1],
+                yearBegin: datein[2]
+            };
+            var TimeBegin = $('#examtopic').data("timebegin");
+            var TimeEnd = $('#examtopic').data("timeend");
+            var countDownDate = new Date(DateBegin.monthBegin + " " + DateBegin.dateBegin + ", " + DateBegin.yearBegin + " " + TimeEnd).getTime();
+            var check1 = new Date(DateBegin.monthBegin + " " + DateBegin.dateBegin + ", " + DateBegin.yearBegin + " " + TimeBegin).getTime();
+            var now = new Date().getTime();
+            var checkdatetime = 0;
+            if (countDownDate - now < 0) {
+                checkdatetime = 1;
+            } else if (check1 > now) {
+                checkdatetime = 2;
+            } else { checkdatetime = 0; }
+
             var Data1 = {
                 ExamtopicID: $('#examtopic').data("examtopicid"),
                 SubjectID: $('#subj').data("subjid"),
                 UserID: $('#suser').data("userid"),
-                ExamtopicPW: $('#TestPW').val()
+                ExamtopicPW: $('#TestPW').val(),
+                CheckDateTime: checkdatetime
             };
            // alert(Data1.ExamtopicID + " " + Data1.SubjectID + " " + Data1.ExamtopicPW + "" + Data1.UserID);
             $.ajax({
@@ -104,7 +134,17 @@
     message = res.message != '' ? res.message : message;
     }
     if (status == false) {
-    swal("เกิดข้อผิดพลาด", message, "error");
+       
+        swal({
+            title: message,
+            type: "warning",
+            showConfirmButton: false,
+            timer: 2000,
+            closeOnConfirm: false
+        },
+            function () {
+                location.reload(true);
+            });
     }  else {
     swal({
     title: message,

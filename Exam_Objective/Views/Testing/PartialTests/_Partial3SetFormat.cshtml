@@ -1,28 +1,16 @@
 ﻿
-    <div class="form-group">
-        <label class="col-md-3 control-label">หน้าใหม่</label>
-        <div class="col-md-5">
-            <select style="max-width:150px;" class="form-control" id="NewPage" name="NewPage">
-                <option value="1">ทุกคำถาม</option>
-                @{
-                    for (var i = 2; i < 11; i++)
-                    {
-                        <option value="@i">ทุก @i คำถาม</option>
-                    }
-                }
-            </select>
-        </div>
+<div class="form-group">
+    <label class="col-md-3 control-label">การสลับโจทย์และคำถาม</label>
+    <div class="col-md-5">
+        <select style="max-width:150px;" class="form-control" id="Sequences" name="Sequences">
+            <option value="0">ค่าเริ่มต้น</option>
+            <option value="1">สลับโจทย์</option>
+            <option value="2">สลับคำตอบ</option>
+            <option value="3">สลับโจทย์และคำตอบ</option>
+        </select>
     </div>
+</div>
 
-    <div class="form-group">
-        <label class="col-md-3 control-label">วิธีการเปลี่ยนหน้า</label>
-        <div class="col-md-5">
-            <select style="max-width:150px;" class="form-control" id="HowtoPage" name="HowtoPage">
-                <option value="0">อิสระ</option>
-                <option value="1">ห้ามย้อนกลับ</option>
-            </select>
-        </div>
-    </div>
 
 
 

@@ -95,8 +95,8 @@
                     <div class="form-horizontal">
                         <div class="form-group">
                             <div class="col-md-10">
-                                <!--    <input type="hidden" class="form-control" id="isUpdateable" name="isUpdateable" value="1" />
-                                <input type="hidden" class="form-control" id="LessonID" name="LessonID" value="0" />       -->
+                                <input type="hidden" class="form-control" id="isUpdateable" name="isUpdateable" value="1" />
+                                <input type="hidden" class="form-control" id="LessonID" name="LessonID" value="0" />     
                                 <label>ชื่อหน่วยเรียน<span class="required">*</span></label>
                                 <input type="text" id="LesName" name="LesName" class="form-control" />
                             </div>
@@ -180,8 +180,8 @@
                     <div class="form-horizontal">
                         <div class="form-group">
                             <div class="col-md-10">
-                                <!--    <input type="hidden" class="form-control" id="isUpdateable" name="isUpdateable" value="1" />
-                                <input type="hidden" class="form-control" id="LessonID" name="LessonID" value="0" />       -->
+                                <input type="hidden" class="form-control" id="isUpdateable" name="isUpdateable" value="1" />
+                                <input type="hidden" class="form-control" id="ObjID" name="ObjID" value="0" />       
                                 <label>ชื่อวัตถุประสงค์<span class="required">*</span></label>
                                 <input type="text" id="ObjName" name="ObjName" class="form-control" />
                             </div>
@@ -300,7 +300,8 @@
     <script src="~/Scripts/jquery.inputmask.bundle.js"></script>
     <script src="~/Scripts/jquery.inputmask.bundle.min.js"></script>
     <script>
-
+        var checkEditL = 0;
+        var checkEditO = 0;
         $("#btnCrtLesson").click(function () {
             //swal("Good job!", "You clicked the button!", "success");
             $("#title").text("เพิ่มหน่วยเรียนทดสอบ");
@@ -344,16 +345,34 @@
                         if (status == false) {
                             swal("เกิดข้อผิดพลาด", message, "error");
                         } else {
-                            swal({
-                                title: "บันทึกสำเร็จ",
-                                type: "success",
-                                showConfirmButton: false,
-                                timer: 1000,
-                                closeOnConfirm: false
-                            },
-                                function () {
-                                    location.reload(true);
-                                });
+                            if (checkEditL == 0) {
+                                swal({
+                                    title: "สร้างหน่วยเรียนสำเร็จ",
+                                    type: "success",
+                                    showConfirmButton: false,
+                                    //confirmButtonColor: "#AEDEF4",
+                                    //confirmButtonText: "Ok",
+                                    timer: 1000,
+                                    closeOnConfirm: false
+                                },
+                                    function () {
+                                        location.reload(true);
+                                    });
+                            } else {
+                                checkEditL = 0;
+                                swal({
+                                    title: "แก้ไขหน่วยเรียนสำเร็จ",
+                                    type: "success",
+                                    showConfirmButton: false,
+                                    //confirmButtonColor: "#AEDEF4",
+                                    //confirmButtonText: "Ok",
+                                    timer: 1000,
+                                    closeOnConfirm: false
+                                },
+                                    function () {
+                                        location.reload(true);
+                                    });
+                            }
                         }
                     },
                     error: function (xhr, ajaxOption, thrownError) {
@@ -369,6 +388,7 @@
             var id = $(this).data("lesson");
             $("#title").text("แก้ไขหน่วยเรียน");
             //alert(id);
+            checkEditL = 1;
             $.ajax({
                 type: "POST",
                 cache: false,
@@ -389,7 +409,7 @@
                     if (status == false) {
                         swal("เกิดข้อผิดพลาด", message, "error");
                     } else {
-                        $("#LessonID").val(res.data.id);
+                        $("#LessonID").val(res.data.LessonID);
                         $("#LesName").val(res.data.LesName);
                         $("#TextLesson").val(res.data.TextLesson);
                         $("#SubjectID").val(res.data.SubjectID);
@@ -399,6 +419,7 @@
                         $("#LessonModal").modal("show");
                         $("#SubjectID").prop("readonly", true);
                         $("#Status").prop("readonly", true);
+                        $("#formLesson").find('.form-group').removeClass('has-error');
                     }
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
@@ -451,14 +472,13 @@
                 },
             });
         });
-
-        $('.btnDelete').click(function () {
-            var id = $(this).data("subject");
-            var sname = $(this).data("sname");
+        $('.btnDeletel').click(function () {
+            var id = $(this).data("lesson");
+            var lname = $(this).data("lessonname");
             //alert(id);
             swal({
-                title: "ต้องการลบรายวิชา : "+ sname + " ?",
-                text: "รายวิชาที่ลบจะไม่สามารถกู้คืนกลับมาได้ !",
+                title: "ต้องการลบหน่วยเรียน : "+ lname + " ?",
+                text: "หน่วยเรียนที่ลบจะไม่สามารถกู้คืนกลับมาได้ !",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
@@ -472,7 +492,7 @@
                     $.ajax({
                         type: "POST",
                         cache: false,
-                        url: '@Url.Action("DeleteSubject","Subjects")',
+                        url: '@Url.Action("DeleteLesson","ExamBank")',
                         dataType: "json",
                         data: {id:id},
                         traditional: true,
@@ -490,7 +510,7 @@
                                 swal("เกิดข้อผิดพลาด", message,"error");
                             }else{
                                 swal({
-                                    title: "ลบรายวิชาสำเร็จ",
+                                    title: "ลบหน่วยเรียนสำเร็จ",
                                     type: "success",
                                     showConfirmButton: false,
                                     timer: 1000,
@@ -553,16 +573,34 @@
                         if (status == false) {
                             swal("เกิดข้อผิดพลาด", message, "error");
                         } else {
-                            swal({
-                                title: "บันทึกสำเร็จ",
-                                type: "success",
-                                showConfirmButton: false,
-                                timer: 1000,
-                                closeOnConfirm: false
-                            },
-                                function () {
-                                    location.reload(true);
-                                });
+                            if (checkEditO == 0) {
+                                swal({
+                                    title: "สร้างจุดประสงค์สำเร็จ",
+                                    type: "success",
+                                    showConfirmButton: false,
+                                    //confirmButtonColor: "#AEDEF4",
+                                    //confirmButtonText: "Ok",
+                                    timer: 1000,
+                                    closeOnConfirm: false
+                                },
+                                    function () {
+                                        location.reload(true);
+                                    });
+                            } else {
+                                checkEditO = 0;
+                                swal({
+                                    title: "แก้ไขจุดประสงค์สำเร็จ",
+                                    type: "success",
+                                    showConfirmButton: false,
+                                    //confirmButtonColor: "#AEDEF4",
+                                    //confirmButtonText: "Ok",
+                                    timer: 1000,
+                                    closeOnConfirm: false
+                                },
+                                    function () {
+                                        location.reload(true);
+                                    });
+                            }
                         }
                     },
                     error: function (xhr, ajaxOption, thrownError) {
@@ -573,6 +611,157 @@
                     },
                 });
             }
+        });
+        $('.btnEdito').click(function () {
+            var id = $(this).data("objective");
+            $("#titleOjec").text("แก้ไขจุดประสงค์");
+            //alert(id);
+            checkEditO = 1;
+            $.ajax({
+                type: "POST",
+                cache: false,
+                url: '@Url.Action("EditObj","ExamBank")',
+                dataType: "json",
+                data: {id :id},
+                traditional: true,
+                beforeSend: function () {
+                },
+
+                success: function (res) {
+                    var status = false;
+                    var message = 'ดำเนินการไม่สำเร็จ';
+                    if (res != null && res != undefined) {
+                        status = res.status;
+                        message = res.message != '' ? res.message : message;
+                    }
+                    if (status == false) {
+                        swal("เกิดข้อผิดพลาด", message, "error");
+                    } else {
+                        $("#ObjID").val(res.data.ObjID);
+                        $("#ObjName").val(res.data.ObjName);
+                        $("#TextObj").val(res.data.TextObj);
+                        $("#PLessonID").val(res.data.PLessonID);
+                        //$("#PLessonID").val(res.data.LesName).prop("readonly", true);
+                        $("#ObjModal").modal("show");
+                        $("#PLessonID").prop("readonly", true);
+                        $("#Status").prop("readonly", true);
+                        $("#formObj").find('.form-group').removeClass('has-error');
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    swal("เกิดข้อผิดพลาด", message, "error");
+                },
+                complete: function () {
+
+                },
+            });
+        });
+        $('.btnViewo').click(function () {
+            var id = $(this).data("objective");
+            
+            $("#titleov").text("รายละเอียดหน่วยเรียน");
+            //alert(id);
+            $.ajax({
+                type: "POST", // method ที่จะส่ง
+                cache: false,
+                url: '@Url.Action("EditObj", "ExamBank")',  // ส่งไปให้ที่ได้ ระบุ
+                dataType: "json", // ชนิดข้อมูลที่ส่ง
+                data: { id: id }, // ข้อมูลที่ส่ง
+                traditional: true, // การจดจำข้อมูล
+                beforeSend: function () { // ก่องส่ง data จะให้ทำไร
+
+                },
+
+                success: function (res) {
+
+                    var status = false;
+                    var message = 'ดำเนินการไม่สำเร็จ';
+                    if (res != null && res != undefined) {
+                        status = res.status;
+                        message = res.message != '' ? res.message : message;
+                    }
+                    if (status == false) {
+                        swal("เกิดข้อผิดพลาดที่", message, "error");
+
+                    } else {
+                        $("#ObjNamev").text(res.data.ObjName);
+                        $("#TextObjv").text(res.data.TextObj);
+                        $("#LesNameov").text(res.data.PLesName);
+                        $("#ObjModalv").modal("show");
+                        $("#formObjv").find('.form-group').removeClass('has-error');
+
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    swal("เกิดข้อผิดพลาด", message, "error");
+                },
+                complete: function () {
+
+                },
+            });
+        });
+        $('.btnDeleteo').click(function () {
+            var id = $(this).data("objective");
+            var Objname = $(this).data("objname");
+            //alert(id);
+            swal({
+                title: "ต้องการลบจุดประสงค์ : " + Objname + " ?",
+                text: "จุดประสงค์ที่ลบจะไม่สามารถกู้คืนกลับมาได้ !",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "ใช่ ต้องการลบ",
+                cancelButtonText: "ยกเลิก !",
+                closeOnConfirm: true,
+                colseOnCancel: true
+            },
+            function(isConfirm){
+                if (isConfirm){
+                    $.ajax({
+                        type: "POST",
+                        cache: false,
+                        url: '@Url.Action("DeleteObj","ExamBank")',
+                        dataType: "json",
+                        data: {id:id},
+                        traditional: true,
+                        beforeSend: function(){
+                        },
+                        success: function (res){
+
+                            var status = false;
+                            var message = 'ดำเนินการไม่สำเร็จ';
+                            if (res != null && res != undefined){
+                                status = res.status;
+                                message = res.message != '' ? res.message :message;
+                            }
+                            if (status == false){
+                                swal("เกิดข้อผิดพลาด", message,"error");
+                            }else{
+                                swal({
+                                    title: "ลบจุดประสงค์สำเร็จ",
+                                    type: "success",
+                                    showConfirmButton: false,
+                                    timer: 1000,
+                                    closeOnConfirm: false
+                                },
+                                function(){
+                                    location.reload(true);
+                                });
+                            }
+                        },
+                        error: function (xhr, ajaxOptions, thrownError){
+                            swal("เกิดข้อผิดพลาด", message, "error");
+                        },
+                        complete: function(){
+
+                        },
+                    });
+                }
+            }
+
+
+            );
+
         });
         //check formLesson
         $("#formLesson").validate({

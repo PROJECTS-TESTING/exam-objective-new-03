@@ -33,13 +33,12 @@
           <ScalarProperty Name="DatetoBegin" ColumnName="DatetoBegin" />
           <ScalarProperty Name="TimetoBegin" ColumnName="TimetoBegin" />
           <ScalarProperty Name="TimetoEnd" ColumnName="TimetoEnd" />
-          <ScalarProperty Name="NewPage" ColumnName="NewPage" />
-          <ScalarProperty Name="HowtoPage" ColumnName="HowtoPage" />
           <ScalarProperty Name="Sequences" ColumnName="Sequences" />
           <ScalarProperty Name="GroupID" ColumnName="GroupID" />
           <ScalarProperty Name="ExamtopicPW" ColumnName="ExamtopicPW" />
           <ScalarProperty Name="NumberOfTimes" ColumnName="NumberOfTimes" />
           <ScalarProperty Name="InNetWork" ColumnName="InNetWork" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

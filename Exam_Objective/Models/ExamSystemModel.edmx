@@ -37,13 +37,12 @@
           <Property Name="DatetoBegin" Type="date" Nullable="false" />
           <Property Name="TimetoBegin" Type="time" Precision="7" Nullable="false" />
           <Property Name="TimetoEnd" Type="time" Precision="7" Nullable="false" />
-          <Property Name="NewPage" Type="int" Nullable="false" />
-          <Property Name="HowtoPage" Type="varchar" MaxLength="2" Nullable="false" />
-          <Property Name="Sequences" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="Sequences" Type="varchar" MaxLength="10" />
           <Property Name="GroupID" Type="int" Nullable="false" />
           <Property Name="ExamtopicPW" Type="varchar" MaxLength="50" />
           <Property Name="NumberOfTimes" Type="int" />
           <Property Name="InNetWork" Type="varchar" MaxLength="32" />
+          <Property Name="Status" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="GetExam">
           <Key>
@@ -157,7 +156,7 @@
           <Property Name="ExamBodyID" Type="int" Nullable="false" />
           <Property Name="ProposID" Type="int" Nullable="false" />
           <Property Name="UserID" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="AnswerStudent" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="AnswerStudent" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="NumberOfTimes" Type="int" />
         </EntityType>
         <EntityType Name="UserSystem">
@@ -505,13 +504,12 @@
           <Property Name="DatetoBegin" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="TimetoBegin" Type="Time" Nullable="false" Precision="7" />
           <Property Name="TimetoEnd" Type="Time" Nullable="false" Precision="7" />
-          <Property Name="NewPage" Type="Int32" Nullable="false" />
-          <Property Name="HowtoPage" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Sequences" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Sequences" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="GroupID" Type="Int32" Nullable="false" />
           <Property Name="ExamtopicPW" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="NumberOfTimes" Type="Int32" />
           <Property Name="InNetWork" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ExamBody" Relationship="Self.FK__ExamBody__Examto__753864A1" FromRole="ExamTopic" ToRole="ExamBody" />
           <NavigationProperty Name="Subjects" Relationship="Self.FK_ExamTopic_Subjects" FromRole="ExamTopic" ToRole="Subjects" />
         </EntityType>
@@ -649,7 +647,7 @@
           <Property Name="ExamBodyID" Type="Int32" Nullable="false" />
           <Property Name="ProposID" Type="Int32" Nullable="false" />
           <Property Name="UserID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="AnswerStudent" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="AnswerStudent" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="NumberOfTimes" Type="Int32" />
           <NavigationProperty Name="GetExam" Relationship="Self.FK_Testing_GetExam" FromRole="Testing" ToRole="GetExam" />
           <NavigationProperty Name="UserSystem" Relationship="Self.FK_Testing_UserSystem" FromRole="Testing" ToRole="UserSystem" />
@@ -1000,13 +998,12 @@
                 <ScalarProperty Name="DatetoBegin" ColumnName="DatetoBegin" />
                 <ScalarProperty Name="TimetoBegin" ColumnName="TimetoBegin" />
                 <ScalarProperty Name="TimetoEnd" ColumnName="TimetoEnd" />
-                <ScalarProperty Name="NewPage" ColumnName="NewPage" />
-                <ScalarProperty Name="HowtoPage" ColumnName="HowtoPage" />
                 <ScalarProperty Name="Sequences" ColumnName="Sequences" />
                 <ScalarProperty Name="GroupID" ColumnName="GroupID" />
                 <ScalarProperty Name="ExamtopicPW" ColumnName="ExamtopicPW" />
                 <ScalarProperty Name="NumberOfTimes" ColumnName="NumberOfTimes" />
                 <ScalarProperty Name="InNetWork" ColumnName="InNetWork" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

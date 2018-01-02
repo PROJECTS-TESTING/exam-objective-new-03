@@ -17,6 +17,7 @@ using Microsoft.Ajax.Utilities;
 using WebGrease.Css.Extensions;
 using ConsoleAppLog;
 using Networks;
+using NSystems.Collections;
 
 namespace Exam_Objective.Controllers
 {
@@ -181,8 +182,6 @@ namespace Exam_Objective.Controllers
                                              DatetoBegin = e.DatetoBegin,
                                              TimetoBegin = e.TimetoBegin,
                                              TimetoEnd = e.TimetoEnd,
-                                             NewPage = e.NewPage,
-                                             HowtoPage = e.HowtoPage,
                                              ExamtopicPW = e.ExamtopicPW
 
                                          }).ToList();
@@ -233,13 +232,20 @@ namespace Exam_Objective.Controllers
                                  where e.ExamtopicID == DataEx.ExamtopicID
                                  select e.ExamtopicPW).FirstOrDefault();
                 var dataexamtopic = new ExamtopicDataModel {ExamtopicID = DataEx.ExamtopicID,SubjectID = DataEx.SubjectID, UserID = DataEx.UserID };
-                if (examtopid == null)
+                if (examtopid == null && DataEx.CheckDateTime == 0)
                 { 
                     jsonretern = new JsonRespone { status = true, message = "เข้าสอบเรียบร้อย", data = dataexamtopic };
                 }
-                else if(examtopid != null && examtopid == DataEx.ExamtopicPW)
+                else if(examtopid != null && examtopid == DataEx.ExamtopicPW && DataEx.CheckDateTime == 0)
                 {
                     jsonretern = new JsonRespone { status = true, message = "เข้าสอบเรียบร้อย", data = dataexamtopic };
+                }else if (DataEx.CheckDateTime == 1)
+                {
+                    jsonretern = new JsonRespone { status = false, message = "เวลาในการทำแบบทดสอบหมดไปแล้ว" };
+                }
+                else if (DataEx.CheckDateTime == 2)
+                {
+                    jsonretern = new JsonRespone { status = false, message = "ยังไม่ถึงเวลาในการทำแบบทดสอบ" };
                 }
                 else
                 {
@@ -260,22 +266,7 @@ namespace Exam_Objective.Controllers
             {
                 return RedirectToAction("Login", "Login");
             }
-            using (var DB = new dbEntities())
-            {
-                ViewBag.DataExamtopic = (from e1 in DB.ExamTopic
-                                         where e1.ExamtopicID == e
-                                         select new ExamTopicModel
-                                         {
-                                             ExamtopicID = e1.ExamtopicID,
-                                             ExamtopicName = e1.ExamtopicName,
-                                             DatetoBegin = e1.DatetoBegin,
-                                             TimetoBegin = e1.TimetoBegin,
-                                             TimetoEnd = e1.TimetoEnd,
-                                             NewPage = e1.NewPage,
-                                             HowtoPage = e1.HowtoPage,
-
-                                         }).ToList();
-            }
+      
             using (var DB = new dbEntities())
             {
                 ViewBag.dataGroup = (from gg in DB.TestGroup
@@ -288,29 +279,166 @@ namespace Exam_Objective.Controllers
             }
             using (var DB = new dbEntities())
             {
+                var dataextopic = (from e1 in DB.ExamTopic
+                                   where e1.ExamtopicID == e
+                                   select new ExamTopicModel
+                                   {
+                                       ExamtopicID = e1.ExamtopicID,
+                                       ExamtopicName = e1.ExamtopicName,
+                                       DatetoBegin = e1.DatetoBegin,
+                                       TimetoBegin = e1.TimetoBegin,
+                                       TimetoEnd = e1.TimetoEnd,
+                                       Sequences = e1.Sequences
+
+                                   }).ToList();
+                ViewBag.DataExamtopic = dataextopic;
                 var dataExambody = (from ee in DB.ExamBody where ee.ExamtopicID == e select ee.ExamBodyID).FirstOrDefault();
-                ViewBag.dataProposition = (from ex in DB.GetExam
+                 var dataProp = (from ex in DB.GetExam
                                            join p in DB.Proposition on ex.ProposID equals p.ProposID
                                            where ex.ExamBodyID == dataExambody
                                            select new PropositionModel
                                            {
                                                ProposID = ex.ProposID,
                                                ProposName = p.ProposName,
-                                               TextPropos = p.TextPropos
+                                               TextPropos = p.TextPropos,
+                                               Continuity = p.Continuity
                                            }).ToList();
+
+                if (dataextopic[0].Sequences.Equals("1"))
+                {
+                    dataProp.Shuff();
+                }
+                ViewBag.dataProposition = dataProp;
             }
             using (var DB = new dbEntities())
             {
                 var dataExambody = (from ee in DB.ExamBody where ee.ExamtopicID == e select ee.ExamBodyID).FirstOrDefault();
+                ViewBag.Dataexambodyid = dataExambody;
                 ViewBag.dataChoice = (from ex in DB.GetExam
                                       join c in DB.Choice on ex.ProposID equals c.ProposID
+                                      let countans = (from ca in DB.Choice where ca.ProposID == ex.ProposID && ca.Answer > 0 select ex).Count()
                                       where ex.ExamBodyID == dataExambody
+                                      orderby c.ChoiceID
                                       select new ChoiceModel
                                       {
                                           ProposID = ex.ProposID,
                                           ChoiceID = c.ChoiceID,
-                                          TextChoice = c.TextChoice
+                                          TextChoice = c.TextChoice,
+                                          countAnswer = countans
                                       }).ToList();
+            }
+            return View();
+        }
+
+        public JsonResult AnswerStudent(TestingAnswer ta)
+        {
+            var user = Session["User"] as UserSystemModel;
+            var jsonretern = new JsonRespone();
+           
+            try
+            {
+                using (var DB = new dbEntities())
+                {
+                    for (var x = 0; x < ta.ProposID.Length; x++)
+                    {
+                        DB.Testing.Add(new Testing {
+                            ExamBodyID = ta.ExamBodyID,
+                            ProposID = ta.ProposID[x],
+                            UserID = user.UserID,
+                            AnswerStudent = ta.AnswerStudent[x],
+                            NumberOfTimes = ta.NumberOfTimes });
+                        DB.SaveChanges();
+                    }
+                    jsonretern = new JsonRespone { status = true, message = "TEST ANSWER" };
+                }
+               
+            }
+            catch(Exception ex)
+            {
+                jsonretern = new JsonRespone { status = false, message = "เกิดข้อผิดพลาด" + ex.Message };
+            }
+            
+            return Json(jsonretern);
+        }
+
+        public ActionResult ViewScore(string subid, string datasu, int e, int eb)
+        {
+            var user = Session["User"] as UserSystemModel;
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
+            else if (user.Status != "student")
+            {
+                return RedirectToAction("Login", "Login");
+            }
+            using (var DB = new dbEntities())
+            {
+                ViewBag.dataSubject = (from s in DB.Subjects where s.SubjectID == subid && s.UserID == datasu select s.SubjectName).FirstOrDefault();
+            }
+            using (var DB = new dbEntities())
+            {
+                ViewBag.dataGroup = (from gg in DB.TestGroup
+                                     where gg.GroupID == (from ee in DB.ExamTopic where ee.ExamtopicID == e select ee.GroupID).FirstOrDefault()
+                                     select gg.GroupName).FirstOrDefault();
+            }
+            using (var DB = new dbEntities())
+            {
+                ViewBag.DataExamtopic = (from e1 in DB.ExamTopic
+                                         where e1.ExamtopicID == e
+                                         select new ExamTopicModel
+                                         {
+                                             ExamtopicID = e1.ExamtopicID,
+                                             ExamtopicName = e1.ExamtopicName,
+                                             DatetoBegin = e1.DatetoBegin,
+                                             TimetoBegin = e1.TimetoBegin,
+                                             TimetoEnd = e1.TimetoEnd,
+                                             SubjectID = subid,
+                                             UserID = datasu,
+                                         }).ToList();
+            }
+            // Check Answer Score Student
+            using (var DB = new dbEntities())
+            {
+                var dataTesting = (from t in DB.Testing
+                                   join c in DB.Choice on t.ProposID equals c.ProposID
+                                   where t.ExamBodyID == eb && t.UserID == user.UserID
+                                   select new { c.Answer, t.ProposID,c.ChoiceID }).ToList();
+                var dataTestAns = DB.Testing.Where(t => t.ExamBodyID == eb && t.UserID == user.UserID).ToList();
+                float score = 0f;
+              foreach(var c in dataTestAns)
+                {
+                    if (c.AnswerStudent.Length > 1)
+                    {
+                        string[] strchoice = c.AnswerStudent.Split(',');
+                        for (var i = 0; i < strchoice.Length; i++)
+                        {
+                            foreach (var a in dataTesting)
+                            {
+                                if (c.ProposID == a.ProposID && a.ChoiceID == Int16.Parse(strchoice[i]))
+                                {
+                                    score = a.Answer > 0 ? score + (float)a.Answer : score - 0.5f;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (var a in dataTesting)
+                        {
+                            if (c.ProposID == a.ProposID && c.AnswerStudent.Equals(a.ChoiceID.ToString()))
+                            {
+                                if(a.Answer > 0)
+                                score = score + (float)a.Answer;
+                            }
+                        }
+                    }
+                }
+                float scoresper = (score * 100) / dataTestAns.Count;
+                List<ScoreStudent> DataSco = new List<ScoreStudent>();
+                DataSco.Add(new ScoreStudent {Score = score, Scoreper = scoresper, countQuiz = dataTestAns.Count });
+               
+                ViewBag.dataScore = DataSco;
             }
             return View();
         }

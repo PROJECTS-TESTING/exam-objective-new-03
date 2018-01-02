@@ -166,6 +166,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Commoncode\Log.cs" />
     <Compile Include="Commoncode\NetworkAll.cs" />
+    <Compile Include="Commoncode\NSystems.cs" />
     <Compile Include="Controllers\AnalysisController.cs" />
     <Compile Include="Controllers\ContentsController.cs" />
     <Compile Include="Controllers\ExamBankController.cs" />
@@ -967,6 +968,7 @@
     <Content Include="Views\Shared\_MenuTesting.cshtml" />
     <Content Include="Views\Student\ViewTestings.cshtml" />
     <Content Include="Views\Shared\_MenuStudentTest.cshtml" />
+<<<<<<< HEAD
     <Content Include="Views\Contents\Addcontent.cshtml" />
     <Content Include="Views\IOC\AddGroupIOC.cshtml" />
     <Content Include="Views\IOC\Contents.cshtml" />
@@ -974,6 +976,10 @@
     <Content Include="Views\IOC\indexGroup.cshtml" />
     <Content Include="Views\IOC\Specialist.cshtml" />
     <Content Include="Views\IOC\SpecialistLogin.cshtml" />
+=======
+    <Content Include="Views\Student\ViewScore.cshtml" />
+    <Content Include="Views\Testing\ScoreStudent.cshtml" />
+>>>>>>> 11db865232ada0e5603c35f9f5b18c2b688b3865
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

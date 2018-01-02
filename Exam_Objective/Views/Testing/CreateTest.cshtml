@@ -97,9 +97,9 @@
                                     <span title="แก้ไข" class="fa fa-cog link-action btnEdit" data-toggle="modal" data-target="#TestModal" data-examtopicid="@rows.ExamtopicID"> แก้ไข</span>
                                     <span title="ลบ" class="fa  fa-times link-action btnDelete" data-examtopicid="@rows.ExamtopicID" data-Exname="@rows.ExamtopicName"> ลบ</span>
                                     <span> | </span>
-                                    <a title="แก้ไขแบบทดสอบ" class="link-action" href="@Url.Action("EditQuiz", "Testing", new { etid = rows.ExamtopicID, subid = SubjectsEntity[0].SubjectID })"> แก้ไขแบบทดสอบ</a>
+                                    <span title="แก้ไขแบบทดสอบ" class="link-action btnEditTest" data-examtopicid="@rows.ExamtopicID" data-subid="@SubjectsEntity[0].SubjectID"> แก้ไขแบบทดสอบ</span>
                                     <span> | </span>
-                                    <span title="ผลการสอบ" class="link-action">ผลการสอบ</span>
+                                    <span title="ผลการสอบ" class="link-action btnScore" data-examtopicid="@rows.ExamtopicID" data-subid="@SubjectsEntity[0].SubjectID" data-groupid="@rows.GroupID"> ผลการสอบ</span>
                                     <span> | </span>
                                 </span>
                             </td>
@@ -138,11 +138,11 @@
                                     <span title="แก้ไข" class="fa fa-cog link-action btnEdit" data-toggle="modal" data-target="#TestModal" data-examtopicid="@rows.ExamtopicID"> แก้ไข</span>
                                     <span title="ลบ" class="fa  fa-times link-action btnDelete" data-examtopicid="@rows.ExamtopicID" data-Exname="@rows.ExamtopicName"> ลบ</span>
                                     <span> | </span>
-                                    <a title="แก้ไขแบบทดสอบ" class="link-action" href="@Url.Action("EditQuiz", "Testing", new { etid = rows.ExamtopicID, subid = SubjectsEntity[0].SubjectID })"> แก้ไขแบบทดสอบ</a>
+                                    <span title="แก้ไขแบบทดสอบ" class="link-action btnEditTest" data-examtopicid="@rows.ExamtopicID" data-subid="@SubjectsEntity[0].SubjectID"> แก้ไขแบบทดสอบ</span>
                                     <span> | </span>
-                                    <span title="ผลการสอบ" class="link-action">ผลการสอบ</span>
+                                    <span title="ผลการสอบ" class="link-action btnScore" data-examtopicid="@rows.ExamtopicID" data-subid="@SubjectsEntity[0].SubjectID" data-groupid="@rows.GroupID"> ผลการสอบ</span>
                                     <span> | </span>
-                                    </span>
+                                </span>
                             </td>
                         </tr>
                     }
@@ -171,15 +171,22 @@
              DatetoBegin: $("[name='DatetoBegin']").val(),
              TimetoBegin: $("[name='TimetoBegin']").val(),
              TimetoEnd: $("[name='TimetoEnd']").val(),
-             NewPage: $("[name='NewPage']").val(),
-             HowtoPage: $("[name='HowtoPage']").val(),
-             Sequences: "0",
+             Sequences: $("[name='Sequences']").val(),
              GroupID: $("[name='Groupstudy']").val(),
              ExamtopicPW: $("[name='PwTest']").val(),
              NumberOfTimes: $("[name='NumberOfTimes']").val(),
              InNetWork: "",
              isUpdateable: 0
          };
+         $('.btnEditTest').click(function () {
+             var etid = $(this).data("examtopicid");
+             //alert(etid);
+             location.replace("EditQuiz" + "?etid=" + $(this).data("examtopicid") + "&subid=" + $(this).data("subid"));
+         });
+         $('.btnScore').click(function () {
+            // alert($(this).data("examtopicid"));
+             location.replace("ScoreStudent" + "?etid=" + $(this).data("examtopicid") + "&subid=" + $(this).data("subid") + "&g=" + $(this).data("groupid"));
+         });
      </script>
 <script src="~/Scripts/Scriptss/CreateTestJs.js"></script>
 <script src="~/Scripts/Scriptss/Text-Editor-1.js"></script>
