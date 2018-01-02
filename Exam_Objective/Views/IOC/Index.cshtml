@@ -24,7 +24,7 @@
                         <tr>
                             <td>
                                 <span class="fa fa-book"> </span>
-                                <a href="@Url.Action("Specialist", "IOC", new { SubjecID = rows.SubjectID,etid = rows.SubjectID, subid = SubjectsEntity[0].SubjectID})" title="คลิ๊กเพื่อเข้าไปเพิ่มเนื้อหา"><span>วิชา</span>@rows.SubjectName</a>
+                                <a href="@Url.Action("SpecialistLogin", "IOC", new { etid = rows.SubjectID })" title="คลิ๊กเพื่อเข้าไปเพิ่มเนื้อหา"><span>วิชา</span>@rows.SubjectName</a>
                             </td>
                         </tr>
                     }

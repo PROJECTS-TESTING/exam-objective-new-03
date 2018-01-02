@@ -963,23 +963,18 @@
     <Content Include="Views\Analysis\jsonReadFile.cshtml" />
     <Content Include="Views\Analysis\ShowAnalysistest.cshtml" />
     <Content Include="Views\Analysis\TestAnalysis.cshtml" />
+    <Content Include="Views\IOC\Index.cshtml" />
+    <Content Include="Views\IOC\AddGroupIOC.cshtml" />
+    <Content Include="Views\IOC\Contents.cshtml" />
     <Content Include="Views\Contents\Index.cshtml" />
+    <Content Include="Views\IOC\SpecialistLogin.cshtml" />
+    <Content Include="Views\IOC\indexGroup.cshtml" />
     <Content Include="Views\Testing\ViewTesting.cshtml" />
     <Content Include="Views\Shared\_MenuTesting.cshtml" />
     <Content Include="Views\Student\ViewTestings.cshtml" />
     <Content Include="Views\Shared\_MenuStudentTest.cshtml" />
-<<<<<<< HEAD
-    <Content Include="Views\Contents\Addcontent.cshtml" />
-    <Content Include="Views\IOC\AddGroupIOC.cshtml" />
-    <Content Include="Views\IOC\Contents.cshtml" />
-    <Content Include="Views\IOC\Index.cshtml" />
-    <Content Include="Views\IOC\indexGroup.cshtml" />
-    <Content Include="Views\IOC\Specialist.cshtml" />
-    <Content Include="Views\IOC\SpecialistLogin.cshtml" />
-=======
     <Content Include="Views\Student\ViewScore.cshtml" />
     <Content Include="Views\Testing\ScoreStudent.cshtml" />
->>>>>>> 11db865232ada0e5603c35f9f5b18c2b688b3865
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
