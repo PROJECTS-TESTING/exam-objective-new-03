@@ -20,11 +20,28 @@
             นำทางข้อสอบ
         </div>
         <div style="width:100%;height:250px;overflow:auto;padding:4px;">
-            @for (var i = 1; i <= DataPropos.Count; i++)
+            @{ var i = 0;
+            foreach (var rows in DataPropos)
             {
-                <input title="ข้อ @i" onclick="GotoQ('@DataPropos[i - 1].ProposID')" style="width:38px;height:20px; margin:1px;" type="button" value="@i" /> if (i % 5 == 0)
-                { <br />}
-            }
+                if (rows.Continuity == null)
+                { i++;
+                <input class="@rows.ProposID" title="ข้อ @i" onclick="GotoQ('@rows.ProposID')" style="width:38px;height:20px; margin:1px;" type="button" value="@i" /> if (i % 5 == 0)
+                    { <br />}
+                    }
+                    else if (rows.Continuity == 0)
+                    {
+                        foreach (var rows1 in DataPropos)
+                        {
+                            if (rows1.Continuity == rows.ProposID)
+                            {
+                                i++;
+                             <input class="@rows1.ProposID" title="ข้อ @i" onclick="GotoQ('@rows1.ProposID')" style="width:38px;height:20px; margin:1px;" type="button" value="@i" /> if (i % 5 == 0)
+                                { <br />}
+                                }
+                            }
+                        }
+                    }
+                }
         </div>
     </div>
 
@@ -32,7 +49,7 @@
         <div class="panel-heading text-center">
             ส่งข้อสอบ
         </div>
-        <button title="ส่งข้อสอบ" style="margin:10px;margin-left:75px;" class="btn btn-primary">ส่งข้อสอบ</button>
+        <button id="btnsendQ" name="btnsendQ" title="ส่งข้อสอบ" style="margin:10px;margin-left:75px;" class="btn btn-primary">ส่งข้อสอบ</button>
     </div>
 
 </div>

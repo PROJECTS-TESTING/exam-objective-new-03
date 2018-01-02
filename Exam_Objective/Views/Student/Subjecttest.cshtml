@@ -86,6 +86,7 @@
     <script src="~/Scripts/Scriptss/ShowPW-HidePW-Js.js"></script>
     <script type="text/javascript">
         $('#btnSelect').click(function () {
+            // Check DateTime Begin End.
             var datein = $('#examtopic').data("datebegin");
             var i = [];
             i = datein.split(' ');
@@ -107,6 +108,7 @@
             } else if (check1 > now) {
                 checkdatetime = 2;
             } else { checkdatetime = 0; }
+
             var Data1 = {
                 ExamtopicID: $('#examtopic').data("examtopicid"),
                 SubjectID: $('#subj').data("subjid"),

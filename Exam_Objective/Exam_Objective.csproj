@@ -166,6 +166,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Commoncode\Log.cs" />
     <Compile Include="Commoncode\NetworkAll.cs" />
+    <Compile Include="Commoncode\NSystems.cs" />
     <Compile Include="Controllers\AnalysisController.cs" />
     <Compile Include="Controllers\ContentsController.cs" />
     <Compile Include="Controllers\ExamBankController.cs" />
@@ -972,6 +973,8 @@
     <Content Include="Views\Shared\_MenuTesting.cshtml" />
     <Content Include="Views\Student\ViewTestings.cshtml" />
     <Content Include="Views\Shared\_MenuStudentTest.cshtml" />
+    <Content Include="Views\Student\ViewScore.cshtml" />
+    <Content Include="Views\Testing\ScoreStudent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

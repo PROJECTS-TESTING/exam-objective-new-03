@@ -19,15 +19,13 @@ namespace Exam_Objective.Models
         public System.DateTime DatetoBegin { get; set; }
         public System.TimeSpan TimetoBegin { get; set; }
         public System.TimeSpan TimetoEnd { get; set; }
-        public int NewPage { get; set; }
-        public string HowtoPage { get; set; }
         public string Sequences { get; set; }
         public int GroupID { get; set; }
         public string ExamtopicPW { get; set; }
         public string StudyGroup { get; set; }
         public int NumberOfTimes { get; set; }
         public string InNetWork { get; set; }
-
+        public string Status { get; set; }
         public int isUpdateable { get; set; }
     }
     public class ExamtopicDataModel
@@ -37,5 +35,23 @@ namespace Exam_Objective.Models
         public string UserID { get; set; }
         public string ExamtopicPW { get; set; }
         public int CheckDateTime { get; set; }
+    }
+    public class TestingAnswer
+    {
+        public int ExamBodyID { get; set; }
+        public int[] ProposID { get; set; }
+        public string UserID { get; set; }
+        public string[] AnswerStudent { get; set; }
+        public int NumberOfTimes { get; set; }
+    }
+    public class ScoreStudent
+    {
+        public float Score { get; set; }
+        public float Scoreper { get; set; }
+        public int countQuiz { get; set; }
+        public string StudentID { get; set; }
+        public string UserID { get; set; }
+        public string Fname { get; set; }
+        public string Lname { get; set; }
     }
 }

@@ -16,5 +16,6 @@ namespace Exam_Objective.Models
         [UIHint("tinymce_full_compressed")]
         public double Answer { get; set; }
         public Nullable<double> Distracter { get; set; }
+        public int countAnswer { get; set; }
     }
 }

@@ -28,13 +28,12 @@ namespace Exam_Objective.Models
         public System.DateTime DatetoBegin { get; set; }
         public System.TimeSpan TimetoBegin { get; set; }
         public System.TimeSpan TimetoEnd { get; set; }
-        public int NewPage { get; set; }
-        public string HowtoPage { get; set; }
         public string Sequences { get; set; }
         public int GroupID { get; set; }
         public string ExamtopicPW { get; set; }
         public Nullable<int> NumberOfTimes { get; set; }
         public string InNetWork { get; set; }
+        public string Status { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ExamBody> ExamBody { get; set; }

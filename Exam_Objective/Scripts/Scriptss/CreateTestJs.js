@@ -9,9 +9,8 @@ $('#btnSave').click(function () {
     DataTest.SubjectID = $('#asubject').data("asubj");
     DataTest.DatetoBegin = $('#DatetoBegin').val();
     DataTest.TimetoBegin = $('#TimetoBegin').val();
+    DataTest.Sequences = $('#Sequences').val()
     DataTest.TimetoEnd = $('#TimetoEnd').val();
-    DataTest.NewPage = $('#NewPage').val();
-    DataTest.HowtoPage = $('#HowtoPage').val();
     DataTest.ExamtopicPW = $('#PwTest').val();
     DataTest.GroupID = $('#Groupstudy').val();
     DataTest.NumberOfTimes = $("[name='NumberOfTimes']").val();
@@ -134,8 +133,7 @@ $('.btnEdit').click(function () {
                 else if (chtime > "10" && cmtime < "10") Schtime += chtime + ":0" + cmtime;
                 else Schtime += chtime + ":" + cmtime;
                 $('#TimetoEnd').val(Schtime);
-                $('#NewPage').val(res.data.NewPage);
-                $('#HowtoPage').val(res.data.HowtoPage);
+                $("[name='Sequences']").val(res.data.Sequences);
                 $('#PwTest').val(res.data.ExamtopicPW);
                 $('#Groupstudy').val(res.data.GroupID);
                 $("[name='NumberOfTimes']").val(res.data.NumberOfTimes);
@@ -145,6 +143,7 @@ $('.btnEdit').click(function () {
                 $('#InNetWork2').val(arrayIP[1]);
                 $('#InNetWork3').val(arrayIP[2]);
                 $('#InNetWork4').val(arrayIP[3]);
+                $('#btnSave').show();
             }
         },
         error: function (xhr, ajaxOptions, thrownError) {
@@ -214,8 +213,7 @@ $('.btnView').click(function () {
                 else if (chtime > "10" && cmtime < "10") Schtime += chtime + ":0" + cmtime;
                 else Schtime += chtime + ":" + cmtime;
                 $('#TimetoEnd').val(Schtime);
-                $('#NewPage').val(res.data.NewPage);
-                $('#HowtoPage').val(res.data.HowtoPage);
+                $("[name='Sequences']").val(res.data.Sequences);
                 $('#PwTest').val(res.data.ExamtopicPW);
                 $('#Groupstudy').val(res.data.GroupID);
                 $("[name='NumberOfTimes']").val(res.data.NumberOfTimes);

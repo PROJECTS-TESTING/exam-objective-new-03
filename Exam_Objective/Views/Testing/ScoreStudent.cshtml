@@ -1,0 +1,51 @@
+﻿@using Exam_Objective.Models
+@using System.Collections.Generic
+@{
+    ViewBag.Title = "ScoreStudent";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    var dataExamtopics = (List<ExamTopicModel>)ViewBag.DataExamtopic;
+    var DataScore = (List<ScoreStudent>)ViewBag.dataScore;
+}
+<div class="paddind-lr-30">
+    <br />
+    <h4>ผลคะแนนการสอบวิชา @ViewBag.dataSubject @dataExamtopics[0].ExamtopicName </h4>
+    <hr />
+    <p class="text-left">
+        <button type="button" class="btn btn-default" onclick="window.history.back()"><span class="fa fa-reply"></span> ย้อนกลับ</button></p><br />
+        <table class="table table-striped table-bordered text-center">
+            <thead>
+                <tr>
+                    <th class="text-center">ลำดับ</th>
+                    <th class="text-center">รหัส</th>
+                    <th class="text-center">ชื่อ-สกุล</th>
+                    <th class="text-center">จำนวนข้อ</th>
+                    <th class="text-center">จำนวนข้อถูก</th>
+                    <th class="text-center">คะแนนเปอร์เซ็น</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ var i = 0;
+                    if (DataScore.Count > 0 && DataScore != null)
+                    {
+                        foreach (var rows in DataScore)
+                        {
+                            i++;
+                            <tr>
+                                <td>@i</td>
+                                <td>Null</td>
+                                <td>@rows.Fname @rows.Lname</td>
+                                <td>@rows.countQuiz</td>
+                                <td>@rows.Score</td>
+                                <td>@rows.Scoreper</td>
+                            </tr>
+                        }
+                        i = 0;
+                    }
+                }
+            </tbody>
+        </table>
+</div>
+
+@section scripts{}

@@ -32,13 +32,12 @@
     <Property Name="DatetoBegin" Type="date" Nullable="false" />
     <Property Name="TimetoBegin" Type="time" Precision="7" Nullable="false" />
     <Property Name="TimetoEnd" Type="time" Precision="7" Nullable="false" />
-    <Property Name="NewPage" Type="int" Nullable="false" />
-    <Property Name="HowtoPage" Type="varchar" MaxLength="2" Nullable="false" />
-    <Property Name="Sequences" Type="varchar" MaxLength="2" Nullable="false" />
+    <Property Name="Sequences" Type="varchar" MaxLength="10" />
     <Property Name="GroupID" Type="int" Nullable="false" />
     <Property Name="ExamtopicPW" Type="varchar" MaxLength="50" />
     <Property Name="NumberOfTimes" Type="int" />
     <Property Name="InNetWork" Type="varchar" MaxLength="32" />
+    <Property Name="Status" Type="varchar" MaxLength="20" />
   </EntityType>
   <EntityType Name="GetExam">
     <Key>
@@ -152,7 +151,7 @@
     <Property Name="ExamBodyID" Type="int" Nullable="false" />
     <Property Name="ProposID" Type="int" Nullable="false" />
     <Property Name="UserID" Type="varchar" MaxLength="50" Nullable="false" />
-    <Property Name="AnswerStudent" Type="varchar" MaxLength="2" Nullable="false" />
+    <Property Name="AnswerStudent" Type="varchar" MaxLength="10" Nullable="false" />
     <Property Name="NumberOfTimes" Type="int" />
   </EntityType>
   <EntityType Name="UserSystem">

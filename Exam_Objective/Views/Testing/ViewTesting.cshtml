@@ -11,42 +11,168 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="paddind-lr-30"  id="scollviewQ">
-    <h3>วิชา @ViewBag.dataSubject @dataExamtopics[0].ExamtopicName กลุ่มเรียน: @ViewBag.dataGroup</h3>
+<div class="paddind-lr-30" id="scollviewQ">
+    <h4>ตัวอย่างแบบทดสอบวิชา @ViewBag.dataSubject</h4>
+    <h4>@dataExamtopics[0].ExamtopicName กลุ่มเรียน: @ViewBag.dataGroup</h4><hr />
 
-    @{ for (var x = 1; x <= DataPropos.Count; x++)
+    @{ var x = 0;
+        foreach (var rows0 in DataPropos)
         {
-            <div>
-                <div class="col-md-2" style="margin-bottom:8px ;padding:1px"><div style="border:solid 1px #808080;border-radius:3px;padding:4px"><span style="font-size:20px">Question  @x</span></div></div>
-                <div class="col-md-10" style="margin-bottom:8px; padding:1px">
-                    <div style="border:solid 1px #adfacd;border-radius:3px;padding:4px;background-color:#e0fced">
-                        <span class="quizion" id="@DataPropos[x - 1].ProposID">@Html.Raw(DataPropos[x - 1].TextPropos)</span>
-                        @{ var i = 0;
-                            foreach(var rows in DataChoice)
-                            {
-                                if(rows.ProposID == DataPropos[x - 1].ProposID)
+            if (rows0.Continuity == null)
+            {
+                x++;
+                <div>
+                    <div class="col-md-2" style="margin-bottom:8px ;padding:1px">
+                        <div style="border:solid 1px #808080;border-radius:3px;padding:4px">
+                            <span style="font-size:20px">Question <span>@x</span></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-10" style="margin-bottom:8px; padding:1px">
+                        <div style="border:solid 1px #adfacd;border-radius:3px;padding:4px;background-color:#e0fced">
+                            <div class="quizion" id="@rows0.ProposID">@Html.Raw(rows0.TextPropos)</div>
+
+                            @{ var i = 0;
+                                foreach (var rows in DataChoice)
                                 {
-                                    i++;
-                                  <div class="choice"> <input type="radio" value="@rows.ChoiceID" name="@DataPropos[x - 1].ProposID"/> @i<span>.</span>
-                                    <span id="in-line"> @Html.Raw(rows.TextChoice)</span>
-                                </div>
+                                    if (rows.ProposID == rows0.ProposID)
+                                    {
+                                        i++;
+                                        <div class="choice">
+
+                                            @{if (rows.countAnswer > 1)
+                                                {
+                                                    <input type="checkbox" value="@rows.ChoiceID" name="@rows0.ProposID" /> @i<span>.</span>
+                                                }
+                                                else
+                                                {
+                                                    <input type="radio" value="@rows.ChoiceID" name="@rows0.ProposID" /> @i<span>.</span>
+                                                }
+                                            }
+                                            @{if (rows.Answer > 0)
+                                                {
+                                                    <span id="in-line" style="color:blue"> @Html.Raw(rows.TextChoice)</span>
+                                                }
+                                                else
+                                                { <span id="in-line"> @Html.Raw(rows.TextChoice)</span> }
+                                            }
+                                        </div>
+                                    }
                                 }
-                            }i = 0;
-                         }
+                                i = 0;
+                            }
+                        </div><br />
                     </div>
                 </div>
-            </div>
+            }                       
+             @*-----------------------------------ข้อสอบต่อเนื่อง------------------------------------*@
+    else if (rows0.Continuity == 0)
+    {
+        var countQ1 = x + 1;
+        var countQ2 = 0;
+
+        foreach(var c in DataPropos) { if (c.Continuity == rows0.ProposID) { countQ2++; } }countQ2 = (countQ2 + x);
+                <div>
+                    <div class="col-md-2" style="margin-bottom:8px ;padding:1px">
+                        <div style="border:solid 1px #808080;border-radius:3px;padding:4px">
+                            <span style="font-size:20px">Question @countQ1<span>-</span>@countQ2</span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-10" style="margin-bottom:8px; padding:1px">
+                        <div style="border:solid 1px #adfacd;border-radius:3px;padding:4px;background-color:#e4fbe8">
+                            <div class="quizion" id="XXX">@Html.Raw(rows0.TextPropos)</div>
+                        </div><br />
+                    </div>
+                </div>
+                foreach (var rows1 in DataPropos)
+                {
+                    if (rows1.Continuity == rows0.ProposID)
+                    {
+                        x++;
+                        <div>
+                            <div class="col-md-2" style="margin-bottom:8px ;padding:1px">
+                                <div style="border:solid 1px #808080;border-radius:3px;padding:4px">
+                                    <span style="font-size:20px">Question <span>@x</span></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-10" style="margin-bottom:8px; padding:1px">
+                                <div style="border:solid 1px #adfacd;border-radius:3px;padding:4px;background-color:#e4fbe8">
+                                    <div class="quizion" id="@rows1.ProposID">@Html.Raw(rows1.TextPropos)</div>
+
+                                    @{ var i = 0;
+                                        foreach (var rows in DataChoice)
+                                        {
+                                            if (rows.ProposID == rows1.ProposID)
+                                            {
+                                                i++;
+                                                <div class="choice">
+
+                                                    @{if (rows.countAnswer > 1)
+                                                        {
+                                                            <input type="checkbox" value="@rows.ChoiceID" name="@rows1.ProposID" /> @i<span>.</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <input type="radio" value="@rows.ChoiceID" name="@rows1.ProposID" /> @i<span>.</span>
+                                                        }
+                                                    }
+                                                    @{if (rows.Answer > 0)
+                                                        {
+                                                            <span id="in-line" style="color:blue"> @Html.Raw(rows.TextChoice)</span>
+                                                        }
+                                                        else
+                                                        { <span id="in-line"> @Html.Raw(rows.TextChoice)</span> }
+                                                    }
+                                                </div>
+                                            }
+                                        }
+                                        i = 0;
+                                    }
+                                </div><br />
+                            </div>
+                        </div>
+                        }
+                    }
+                }
+            }
         }
-    }
 
-    <div style="margin:30px">
-       .
+        <div style="margin:30px">
+            .
+        </div>
+
+
     </div>
-
-
-</div>
 @section scripts{
     <script type="text/javascript">
+
+        $('input[type=radio], input[type=checkbox]').each(function () {
+            if (sessionStorage.getItem($(this).attr('name') + $(this).val()) != null) {
+                $(this).attr('checked', 'checked');
+                $('input.' + $(this).attr('name')).css('border', 'solid 1px #1102DF');
+            }
+        });
+
+        $('input[type=radio], input[type=checkbox]').change(function () {
+            $(this).each(function () {
+                if ($(this).is(':checked')) {
+                    sessionStorage.setItem($(this).attr('name') + $(this).val(), "1");   
+                    $('input.' + $(this).attr('name')).css('border', 'solid 1px #1102DF');
+                } else {
+                    sessionStorage.removeItem($(this).attr('name') + $(this).val());
+                    $('input.' + $(this).attr('name')).css('border', 'none');
+                }
+            });
+            $('input[type=radio], input[type=checkbox]').each(function () {
+                if (sessionStorage.getItem($(this).attr('name') + $(this).val()) != null) {
+                    $(this).attr('checked', 'checked');
+                    $('input.' + $(this).attr('name')).css('border', 'solid 1px #1102DF');
+                }
+            });
+        });
+
 
         var datein = $('#datein').data("dates");
         var i = [];
@@ -98,7 +224,7 @@
             }, 1000);
        
         function GotoQ(n) {
-            $('html,body').animate({ scrollTop: $('span#' + n).offset().top -60}, 500);
+            $('html,body').animate({ scrollTop: $('div#' + n).offset().top -60}, 500);
         }
     </script>
 }

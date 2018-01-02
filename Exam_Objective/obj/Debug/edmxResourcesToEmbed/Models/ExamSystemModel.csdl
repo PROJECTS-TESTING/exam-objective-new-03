@@ -35,13 +35,12 @@
     <Property Name="DatetoBegin" Type="DateTime" Nullable="false" Precision="0" />
     <Property Name="TimetoBegin" Type="Time" Nullable="false" Precision="7" />
     <Property Name="TimetoEnd" Type="Time" Nullable="false" Precision="7" />
-    <Property Name="NewPage" Type="Int32" Nullable="false" />
-    <Property Name="HowtoPage" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="Sequences" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Sequences" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
     <Property Name="GroupID" Type="Int32" Nullable="false" />
     <Property Name="ExamtopicPW" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="NumberOfTimes" Type="Int32" />
     <Property Name="InNetWork" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+    <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="ExamBody" Relationship="Self.FK__ExamBody__Examto__753864A1" FromRole="ExamTopic" ToRole="ExamBody" />
     <NavigationProperty Name="Subjects" Relationship="Self.FK_ExamTopic_Subjects" FromRole="ExamTopic" ToRole="Subjects" />
   </EntityType>
@@ -179,7 +178,7 @@
     <Property Name="ExamBodyID" Type="Int32" Nullable="false" />
     <Property Name="ProposID" Type="Int32" Nullable="false" />
     <Property Name="UserID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="AnswerStudent" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="AnswerStudent" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="NumberOfTimes" Type="Int32" />
     <NavigationProperty Name="GetExam" Relationship="Self.FK_Testing_GetExam" FromRole="Testing" ToRole="GetExam" />
     <NavigationProperty Name="UserSystem" Relationship="Self.FK_Testing_UserSystem" FromRole="Testing" ToRole="UserSystem" />

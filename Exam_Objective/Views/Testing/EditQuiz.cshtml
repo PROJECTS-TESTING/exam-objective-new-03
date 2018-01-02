@@ -6,49 +6,48 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="paddind-lr-30">
+
     @{
         var SubjectsEntity = (List<SubjectsModel>)ViewBag.Subject;
         var groupTest = (List<TestGroupModel>)ViewBag.testGroup;
         var examtoPic = (List<ExamTopicModel>)ViewBag.examtopic;
         var ShowDataQuiz = (List<ShowQuizModel>)ViewBag.ShowQuiz;
-        <h4><span>แก้ไขแบบทดสอบ / วิชา</span>@SubjectsEntity[0].SubjectName <span id="subj" data-subject="@SubjectsEntity[0].SubjectID"></span></h4>
-        <h4>
-            @examtoPic[0].ExamtopicName<span> กลุ่มเรียน:</span>@{if (groupTest.Count > 0 && groupTest != null)
-                {@groupTest[0].StudyGroup}
-            else
-            {<span>ยังไม่มีกลุ่มเรียน</span>}}
-        </h4>
-        <div id="explan" data-explantion="@examtoPic[0].Explantion"></div>
     }
+
+    <h4><span>แก้ไขแบบทดสอบ / วิชา</span>@SubjectsEntity[0].SubjectName <span id="subj" data-subject="@SubjectsEntity[0].SubjectID"></span></h4>
+    <h4>
+        @examtoPic[0].ExamtopicName<span> กลุ่มเรียน:</span>@{
+            if (groupTest.Count > 0 && groupTest != null)
+            {@groupTest[0].StudyGroup}
+        else
+        {<span>ยังไม่มีกลุ่มเรียน</span>}
+        }
+    </h4>
+    @Html.Raw(examtoPic[0].Explantion)
 
     <hr />
     <form>
         <div class="form-group">
             <div class="row text-left">
                 <div class="col-md-2">
-                    <button type="button" class="btn btn-default" onclick='window.history.back()'><span class="fa fa-reply"></span> ย้อนกลับ</button>
+                    <button type="button" class="btn btn-default" onclick="window.history.back()"><span class="fa fa-reply"></span> ย้อนกลับ</button>
                 </div>
-                @*<div class="col-md-3">
-                        <select style="max-width:180px;" class="form-control" id="idsuite" name="idsuite">
-                            <option value="0">แบบทดสอบชุดที่ 1</option>
-                        </select>
-                    </div>*@
+
 
             </div>
-            <hr />@*<span style="font-size:18px;">แบบทดสอบชุดที่ 1  </span><span title="ลบ" class="fa  fa-times link-action btnDelete"></span>*@
+            <hr />
 
         </div>
     </form>
     @*--------- Button Dialog เพิ่มข้อสอบ -------------*@
-    <button id="btnAddQuiz1" class="btn btn-primary" data-toggle="modal" data-target="#EditQ1Model"><span class="fa fa-plus"></span> เพิ่มทีละข้อ</button>
-    <button id="btnAddQuiz2" class="btn btn-primary" data-toggle="modal" data-target="#EditQ2Model"><span class="fa fa-plus"></span> เพิ่มจากความยากง่าย</button>
-    <button id="btnAddQuiz3" class="btn btn-primary" data-toggle="modal" data-target="#EditQ3Model"><span class="fa fa-plus"></span> เพิ่มแบบสุ่ม</button>
-    <button id="btnShowQuizEx" class="btn btn-default" onclick="window.open('@Url.Action("ViewTesting","Testing",new { subjid = SubjectsEntity[0].SubjectID, exbody = ShowDataQuiz[0].ExamBodyID, extopic = examtoPic[0].ExamtopicID, g = groupTest[0].GroupID })')"><span class="fa fa-search"></span> ดูตัวอย่าง</button>
+    <button id="btnAddQuiz1" class="btn btn-primary" data-toggle="modal" data-target="#EditQ1Model"><span class="fa fa-plus"></span> เพิ่มข้อสอบ</button>
     @if (ShowDataQuiz.Count > 0 && ShowDataQuiz != null)
-    {<span>(จำนวนข้อสอบที่เลือกทั้งหมด </span>@ShowDataQuiz.Count<span> ข้อ)</span>}
+    {<button id="btnShowQuizEx" class="btn btn-default" onclick="window.open('@Url.Action("ViewTesting", "Testing", new { subjid = SubjectsEntity[0].SubjectID, exbody = ShowDataQuiz[0].ExamBodyID, extopic = examtoPic[0].ExamtopicID, g = groupTest[0].GroupID })')"><span class="fa fa-search"></span> ดูตัวอย่าง</button>
+        <span>(จำนวนข้อสอบที่เลือกทั้งหมด </span>@ShowDataQuiz.Count<span> ข้อ)</span>}
     <hr style="margin:2px;" />
-    @*----- Dialog เพิ่มที่ละข้อ -------*@
-    <div class="modal fade" id="EditQ1Model" tabindex="-1" role="dialog" aria-labelledby="User" aria-hidden="true">
+
+    @*----- Dialog เพิ่มข้อสอบจากคลัง โดยมีการเลือกจาก ค่าความยากง่าย เลือกด้วยตัวเอง เลือกแบบสุ่ม -------*@
+    <div class="modal fade" id="EditQ1Model" tabindex="-1" role="dialog" aria-labelledby="User" aria-hidden="true" >
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-primary">
@@ -127,151 +126,36 @@
         </div>
     </div>
 
-    @*----- Dailog เพิ่มจากค่าความยากง่าย -------*@
-    <div class="modal fade" id="EditQ2Model" tabindex="-1" role="dialog" aria-labelledby="User" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-primary">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h5 class="modal-title"><label id="title" name="title"></label><label><span>เพิ่มข้อสอบจากค่าความยากง่าย</span></label></h5>
-                </div>
-
-                <div class="modal-body">
-                    <form id="createQ2Form" method="post" class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">เลือกบทเรียน</label>
-                            <div class="col-md-5">
-                                <select style="max-width:250px;" class="form-control" id="idObjective" name="idObjective">
-                                    <option value="0">--เลือกบทเรียน--</option>
-                                    @{
-
-                                        foreach (var rows in dataLesson)
-                                        {
-                                            <option value="@rows.LessonID">
-                                                @rows.LesName
-                                                @{
-                                                    foreach (var rows2 in countP)
-                                                    {
-                                                        if (rows.LessonID == rows2.LessonID)
-                                                        {
-                                                            <span>(@rows2.CountProposID)</span>
-                                                        }
-                                                    }
-                                                }
-                                            </option>
-                                        }
-                                    }
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">เลือกระดับ</label>
-                            <div class="col-md-5">
-                                <select style="max-width:250px;" class="form-control" id="idObjective" name="idObjective">
-                                    <option value="0">ง่ายมาก</option>
-                                    <option value="1">ง่าย</option>
-                                    <option value="2">ปานกลาง</option>
-                                    <option value="3">ยาก</option>
-                                    <option value="4">ยากมาก</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-xs-10 col-xs-offset-3">
-                                <button type="button" id="btnSave" class="btn btn-primary btnSave">เพิ่ม</button>
-                                <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    @*----- Dialog เพิ่มแบบสุ่ม -------*@
-    <div class="modal fade" id="EditQ3Model" tabindex="-1" role="dialog" aria-labelledby="User" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-primary">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h5 class="modal-title"><label id="title" name="title"></label><label><span>เพิ่มข้อสอบแบบสุ่ม</span></label></h5>
-                </div>
-
-                <div class="modal-body">
-
-                    <form id="createQ3Form" method="post" class="form-horizontal">
-
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">เลือกบทเรียน</label>
-                            <div class="col-md-5">
-                                <select style="max-width:250px;" class="form-control" id="idObjective" name="idObjective">
-                                    <option value="0">--เลือกบทเรียน--</option>
-                                    @{
-                                        foreach (var rows in dataLesson)
-                                        {
-                                            <option value="@rows.LessonID">
-                                                @rows.LesName
-                                                @{
-                                                    foreach (var rows2 in countP)
-                                                    {
-                                                        if (rows.LessonID == rows2.LessonID)
-                                                        {
-                                                            <span>(@rows2.CountProposID)</span>
-                                                        }
-                                                    }
-                                                }
-                                            </option>
-                                        }
-                                    }
-                                </select>
-                            </div>
-                        </div>
-
-
-
-                        <div class="form-group">
-                            <div class="col-xs-10 col-xs-offset-3">
-                                <button type="button" id="btnSave" class="btn btn-primary btnSave">เพิ่ม</button>
-                                <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+   @*---------------------------- Show Quiz select --------------------------------------*@ 
     <h4>ข้อสอบที่เลือกทั้งหมด</h4>
     <table id="tshowCate" class="table table-striped table-bordered">
-        <thead>
+        <thead style="">
             <tr>
-                <th>ลำดับ</th>
-                <th class="text-center">บทเรียน</th>
-                <th>ชื่อข้อสอบ</th>
+                <th class="text-center" style="">ลำดับ</th>
+                <th class="text-center" style="">บทเรียน</th>
+                <th style=" display:block;">ชื่อข้อสอบ</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody style="">
             @{
                 var x = 0;
-                foreach (var rows in ShowDataQuiz)
+                if (ShowDataQuiz != null && ShowDataQuiz.Count > 0)
                 {
-                    x++;
-                    <tr>
-                        <td class="text-center" style="width:5%">@x<span>.</span></td>
-                        <td class="text-center" style="width:15%">@rows.LesName</td>
-                        <td>
-                            <span class="col-md-8">@rows.ProposName</span>
-                            <span class="col-md-4 text-right">
-                                <span title="รายละเอีนด" class="fa fa-search link-action btnView" data-toggle="modal" data-target="#ShowQuizModal" data-proid="@rows.ProposID"> รายละเอียด </span>
-                                <span title="ลบ" class="fa  fa-times link-action btnDelete" id="btnDelete" data-proposiid="@rows.ProposID" data-proposiname="@rows.ProposName"> ลบ</span>
-                            </span>
-                        </td>
-                    </tr>
+                    foreach (var rows in ShowDataQuiz)
+                    {
+                        x++;
+                        <tr style="">
+                            <td class="text-center" style="">@x<span>.</span></td>
+                            <td class="text-center" style="">@rows.LesName</td>
+                            <td style="">
+                                <span class="col-md-8">@rows.ProposName</span>
+                                <span class="col-md-4 text-right">
+                                    <span title="รายละเอีนด" class="fa fa-search link-action btnView" data-toggle="modal" data-target="#ShowQuizModal" data-proid="@rows.ProposID"> รายละเอียด </span>
+                                    <span title="ลบ" class="fa  fa-times link-action btnDelete" id="btnDelete" data-proposiid="@rows.ProposID" data-proposiname="@rows.ProposName"> ลบ</span>
+                                </span>
+                            </td>
+                        </tr>
+                    }
                 }
             }
 
@@ -279,7 +163,6 @@
     </table>
 </div>
 <!--form view detail-->
-
     <div id="ShowQuizModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -365,9 +248,7 @@
     <script src="~/Scripts/tinymce/plugins/tiny_mce_wiris/wirisplugin-generic.js"></script>
     <script src="~/Scripts/tinymce/plugins/tiny_mce_wiris/core/display.js"></script>
     <script type="text/javascript">
-    var str = $('#explan').data("explantion");
-    $('#explan').html(str);
-
+       
     //show table for option:selected
     $("#tshowCate").find('.Row').hide(); //เปิดมายังไม่ให้โชว์อะไร
     $('select.showCate').bind('change', function () {
@@ -380,9 +261,14 @@
     cAttribute += '[data-' + $(this).data('cate') + '="' + $(this).val() + '"]';
     }
     });
-    $('#tshowCate').find('.Row' + cAttribute).show();
-    $('select.showCate').removeAttr('disabled');
-    $(':checkbox').each(function () { $(this).removeAttr('checked'); });
+        if ($(this).val() != '0') {
+            $('#tshowCate').find('.Row' + cAttribute).show();
+            $('select.showCate').removeAttr('disabled');
+            $(':checkbox').each(function () { $(this).removeAttr('checked'); });
+        } else {
+            $("#tshowCate").find('.Row').hide();
+            $('select.showCate').removeAttr('disabled');
+        }
     });
 
     @* btnAddQuiz1 *@
