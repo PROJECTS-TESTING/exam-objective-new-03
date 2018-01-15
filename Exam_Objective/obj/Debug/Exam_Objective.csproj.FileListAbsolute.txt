@@ -437,4 +437,3 @@ F:\VisualStudio\exam-objective-new-03\Exam_Objective\bin\Microsoft.AI.Web.xml
 F:\VisualStudio\exam-objective-new-03\Exam_Objective\obj\Debug\Exam_Objective.csproj.CoreCompileInputs.cache
 F:\VisualStudio\exam-objective-new-03\Exam_Objective\obj\Debug\Exam_Objective.dll
 F:\VisualStudio\exam-objective-new-03\Exam_Objective\obj\Debug\Exam_Objective.pdb
-F:\VisualStudio\exam-objective-new-03\Exam_Objective\obj\Debug\Exam_Objective.csprojResolveAssemblyReference.cache

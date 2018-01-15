@@ -18,7 +18,7 @@ namespace Exam_Objective.Models
         public string UserID { get; set; }
         public string SubjectName { get; set; }  //สร้างไว้สำหรับ join
         public string Fname { get; set; }  //สร้างไว้สำหรับ join
-        public int CountProposID { get; set; }
+        public int CountObjective { get; set; }
         public int Content { get; set; }
     }
 }

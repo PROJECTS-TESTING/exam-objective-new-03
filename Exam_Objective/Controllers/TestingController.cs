@@ -325,27 +325,9 @@ namespace Exam_Objective.Controllers
             using (var DB = new dbEntities())
             {
                 var LessonData = (from l in DB.Lesson
-                                  where user.UserID == l.UserID && l.SubjectID == subid
-                                  orderby l.LessonID
-                                  select new LessonModel
-                                  {
-                                      LessonID = l.LessonID,
-                                      LesName = l.LesName,
-                                      TextLesson = l.TextLesson
-
-                                  }).DistinctBy(r => r.LesName).ToList();
-                ViewBag.Lesson = LessonData;
-            }
-            // นับจำนวนข้อสอบในแต่ละบทเรียน
-            using(var DB = new dbEntities())
-            {
-                var countPropo = (from l in DB.Lesson
-
-                                  let countP = (from o in DB.Objective
-                                                join p in DB.Proposition on o.ObjID equals p.ObjID
-                                                where o.ObjID == p.ObjID && o.LessonID == l.LessonID
+                                  let countobj = (from o in DB.Objective
+                                                where o.LessonID == l.LessonID
                                                 select l).Count()
-
                                   where user.UserID == l.UserID && l.SubjectID == subid
                                   orderby l.LessonID
                                   select new LessonModel
@@ -353,9 +335,28 @@ namespace Exam_Objective.Controllers
                                       LessonID = l.LessonID,
                                       LesName = l.LesName,
                                       TextLesson = l.TextLesson,
-                                      CountProposID = countP
-                                  }).ToList();
-                ViewBag.countProposi = countPropo;
+                                      CountObjective = countobj
+                                  }).DistinctBy(r => r.LesName).ToList();
+                ViewBag.Lesson = LessonData;
+            }
+            // วัตถุประสงค์
+            using(var DB = new dbEntities())
+            {
+                var dataObj = (from o in DB.Objective
+                               join l in DB.Lesson on o.LessonID equals l.LessonID
+                               let oPropos = (         
+                                          from p in DB.Proposition
+                                          where p.ObjID == o.ObjID
+                                          select o).Count()
+                               where l.UserID == user.UserID && l.SubjectID == subid
+                               select new ObjectiveModel {
+                                   ObjID = o.ObjID,
+                                   ObjName = o.ObjName,
+                                   TextObj = o.TextObj,
+                                   PLessonID = o.LessonID,
+                                   CountProposID = oPropos
+                               }).ToList();
+                ViewBag.DataObjective = dataObj;
             }
             // รายละเอียดข้อสอบแต่ละข้อในวิชานี้
             using(var DB = new dbEntities())
@@ -370,7 +371,8 @@ namespace Exam_Objective.Controllers
                                     ProposName = p.ProposName,
                                     LessonID = l.LessonID,
                                     LesName = l.LesName,
-                                    ObjID = o.ObjID
+                                    ObjID = p.ObjID,
+                                    Difficulty = p.Difficulty
                                 }
                                 ).ToList();
                 ViewBag.QuizData = DataQuiz;
