@@ -975,6 +975,9 @@
     <Content Include="Views\Shared\_MenuStudentTest.cshtml" />
     <Content Include="Views\Student\ViewScore.cshtml" />
     <Content Include="Views\Testing\ScoreStudent.cshtml" />
+    <Content Include="Views\ExamBank\Import.cshtml" />
+    <Content Include="Views\ExamBank\Importin.cshtml" />
+    <Content Include="Views\ExamBank\ImportMain.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
