@@ -821,8 +821,8 @@ namespace Exam_Objective.Controllers
                 return View();
             }
         }
-        /*[HttpPost]
-        public ActionResult Importin(HttpPostedFileBase xmlFile)
+        [HttpPost]
+        public ActionResult Importin(HttpPostedFileBase xmlFile,int ObjID)
         {
             if (xmlFile.ContentType.Equals("application/xml") || xmlFile.ContentType.Equals("text/xml"))
             {
@@ -833,57 +833,35 @@ namespace Exam_Objective.Controllers
                     XDocument xDoc = XDocument.Load(xmlPath);
                     List<Proposition> proposList = xDoc.Descendants("PropositionModel").Select(PropositionModel => new Proposition
                     {
-                        ObjID = Convert.ToInt32(PropositionModel.Element("ObjID").Value),
-                        Name = ProductModel.Element("Name").Value,
-                        Price = Convert.ToDecimal(ProductModel.Element("Price").Value),
-                        Quantity = Convert.ToInt32(ProductModel.Element("Quantity").Value)
+                        ObjID = ObjID,
+                        ProposName = PropositionModel.Element("ProposName").Value,
+                        TextPropos = PropositionModel.Element("TextPropos").Value,
+                        ScoreMain = Convert.ToInt32(PropositionModel.Element("ScoreMain").Value),
+                        CheckChoice = Convert.ToInt32(PropositionModel.Element("CheckChoice").Value)
                     }).ToList();
-                    using (DemoEntities de = new DemoEntities())
+                    using (dbEntities de = new dbEntities())
                     {
-                        foreach (var i in productList)
+                        foreach (var i in proposList)
                         {
-                            var v = de.ProdectImport.Where(a => a.id.Equals(i.id)).FirstOrDefault();
+                            var v = de.Proposition.Where(a => a.ProposID.Equals(i.ProposID)).FirstOrDefault();
                             if (v != null)
                             {
-                                v.id = i.id;
-                                v.Name = i.Name;
-                                v.Price = i.Price;
-                                v.Quantity = i.Quantity;
+                                v.ProposID = i.ProposID;
+                                v.ObjID = i.ObjID;
+                                v.ProposName = i.ProposName;
+                                v.ScoreMain = i.ScoreMain;
+                                v.CheckChoice = i.CheckChoice;
+                                
                             }
                             else
                             {
-                                de.ProdectImport.Add(i);
+                                de.Proposition.Add(i);
                             }
                         }
                         de.SaveChanges();
-                        ViewBag.Result = de.ProdectImport.ToList();
+                        //ViewBag.Result = de.ProdectImport.ToList();
+                        return View();
                     }
-                    List<Customer> customerList = xDoc.Descendants("CustomerModel").Select(CustomerModel => new Customer
-                    {
-                        CusFname = CustomerModel.Element("CusFname").Value,
-                        CusLname = CustomerModel.Element("CusLname").Value
-                    }).ToList();
-                    using (DemoEntities de = new DemoEntities())
-                    {
-                        foreach (var i in customerList)
-                        {
-                            var v = de.Customer.Where(a => a.Id.Equals(i.Id)).FirstOrDefault();
-                            if (v != null)
-                            {
-                                v.Id = i.Id;
-                                v.CusFname = i.CusFname;
-                                v.CusLname = i.CusLname;
-
-                            }
-                            else
-                            {
-                                de.Customer.Add(i);
-                            }
-                        }
-                        de.SaveChanges();
-                        ViewBag.ResultCustomer = de.Customer.ToList();
-                    }
-                    return View("Success");
                 }
                 catch
                 {
@@ -896,6 +874,190 @@ namespace Exam_Objective.Controllers
                 ViewBag.Error = "Can't import xml file";
                 return View("Importin");
             }
-        }*/
+        }
+        // GEGIN Export
+        // Index of Export
+        public ActionResult Export()
+        {
+            var user = Session["User"] as UserSystemModel;
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
+            else if (user.Status == "student")
+            {
+                return RedirectToAction("Index", "Student");
+            }
+            using (var DB = new dbEntities())
+            {
+                var SubjectData = (from s in DB.Subjects
+                                   join u in DB.UserSystem on s.UserID equals u.UserID
+                                   where u.UserID == user.UserID
+                                   orderby s.SubjectID
+                                   select new SubjectsModel
+                                   {
+                                       SubjectID = s.SubjectID,
+                                       SubjectName = s.SubjectName,
+                                       UserID = s.UserID
+                                   }).ToList();
+                ViewBag.Subject = SubjectData;
+            }
+            using (var DB = new dbEntities())
+            {
+                var SubjectShare = (from s in DB.Subjects
+                                    join p in DB.Participant on s.SubjectID equals p.SubjectID
+                                    where p.ParticipantID == user.UserID
+                                    orderby s.SubjectID
+                                    select new SubjectsModel
+                                    {
+                                        SubjectID = s.SubjectID,
+                                        SubjectName = s.SubjectName,
+                                        UserID = p.UserID
+                                    }).ToList();
+                ViewBag.SubjectShare = SubjectShare;
+            }
+
+            return View();
+        }
+        public ActionResult ExportMain(string SubjecID)
+        {
+            var user = Session["User"] as UserSystemModel;
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
+            else if (user.Status == "student")
+            {
+                return RedirectToAction("Index", "Student");
+            }
+            using (var DB = new dbEntities())
+            {
+                var SubjectData = (from s in DB.Subjects
+                                   join u in DB.UserSystem on s.UserID equals u.UserID
+                                   where u.UserID == user.UserID && s.SubjectID == SubjecID
+                                   orderby s.SubjectID
+                                   select new SubjectsModel
+                                   {
+                                       SubjectID = s.SubjectID,
+                                       SubjectName = s.SubjectName,
+                                       UserID = s.UserID
+                                   }).ToList();
+                ViewBag.Subject = SubjectData;
+                var SubjectShare = (from s in DB.Subjects
+                                    join p in DB.Participant on s.SubjectID equals p.SubjectID
+                                    where p.ParticipantID == user.UserID && p.SubjectID == SubjecID
+                                    orderby p.SubjectID
+                                    select new SubjectsModel
+                                    {
+                                        SubjectID = s.SubjectID,
+                                        SubjectName = s.SubjectName,
+                                        UserID = p.UserID
+                                    }).ToList();
+                ViewBag.SubjectShare = SubjectShare;
+                var UserIDData = (from u in DB.UserSystem
+                                  where u.UserID == user.UserID
+                                  orderby u.UserID
+                                  select new UserSystemModel
+                                  {
+                                      UserID = u.UserID,
+                                      Fname = u.Fname,
+                                      Lname = u.Lname,
+                                      Status = u.Status
+                                  }).ToList();
+                ViewBag.UserIDdata = UserIDData;
+                var ObjectiveDatanotDis = (from o in DB.Objective
+
+                                           let oPropos = (           //join และนับค่าที่ต้องการ
+                                           from p in DB.Proposition
+                                           where p.ObjID == o.ObjID
+                                           select o).Count()
+
+                                           select new ObjectiveModel
+                                           {
+                                               ObjID = o.ObjID,
+                                               ObjName = o.ObjName,
+                                               TextObj = o.TextObj,
+                                               PLessonID = o.LessonID,
+                                               CountProposID = oPropos
+                                           }).ToList();
+                ViewBag.ObjectiveNotDis = ObjectiveDatanotDis;
+                var ObjectiveData = (from o in DB.Objective
+                                     join l in DB.Lesson on o.LessonID equals l.LessonID
+                                     where l.SubjectID == SubjecID
+                                     orderby o.ObjID
+                                     select new ObjectiveModel
+                                     {
+                                         ObjID = o.ObjID,
+                                         ObjName = o.ObjName
+                                     }).ToList();
+                ViewBag.PObjective = ObjectiveData;
+                var ProposData = (from p in DB.Proposition
+                                  join o in DB.Objective on p.ObjID equals o.ObjID
+                                  join l in DB.Lesson on o.LessonID equals l.LessonID
+                                  // join ps in DB.PropostitionSub on p.ProposID equals ps.ProposID  where p.ProposID == ps.ProposID
+                                  where l.SubjectID == SubjecID
+                                  orderby p.ProposID
+                                  select new PropositionModel
+                                  {
+                                      ObjID = p.ObjID,
+                                      ProposID = p.ProposID,
+                                      ProposName = p.ProposName,
+                                      TextPropos = p.TextPropos,
+                                      ScoreMain = p.ScoreMain,
+                                      ObjName = o.ObjName,
+                                      Continuity = p.Continuity
+
+                                  }).ToList();
+                ViewBag.ProposMain = ProposData;
+
+                var ChoiceData = (from c in DB.Choice
+                                  join p in DB.Proposition on c.ProposID equals p.ProposID
+                                  where c.ProposID == p.ProposID
+                                  orderby c.ProposID
+                                  select new ChoiceModel
+                                  {
+                                      ChoiceID = c.ChoiceID,
+                                      ProposID = p.ProposID,
+                                      TextChoice = c.TextChoice,
+                                      Answer = c.Answer
+                                  }).ToList();
+                ViewBag.ChoiceShow = ChoiceData;
+            }
+            return View();
+        }
+        public void ExportFile(int ObjID)
+        {
+            using (var DB = new dbEntities())
+            {
+                var ObjectiveData = (from o in DB.Objective
+                                     where o.ObjID == ObjID
+                                     orderby o.ObjID
+                                     select new ObjectiveModel
+                                     {
+                                         ObjID = o.ObjID,
+                                         ObjName = o.ObjName
+                                     }).ToList();
+                ViewBag.Objective = ObjectiveData;
+                var dataPropos = (from p in DB.Proposition
+                                  where p.ObjID == ObjID
+                                  orderby p.ObjID
+                                  select new ImportExportModel
+                                  {
+                                        ProposName = p.ProposName,
+                                        TextPropos = p.TextPropos,
+                                        ScoreMain = p.ScoreMain,
+                                        CheckChoice = p.CheckChoice
+
+                                  }).ToList();
+                Response.ClearContent();
+                Response.Buffer = true;
+                Response.AddHeader("content-disposition", "attachment;filename = itfunda.xml");
+                Response.ContentType = "text/xml";
+                var serializer = new System.Xml.Serialization.XmlSerializer(dataPropos.GetType());
+                serializer.Serialize(Response.OutputStream, dataPropos);
+                
+            }
+            
+        }
     }
 }

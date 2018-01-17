@@ -10,26 +10,26 @@ using System.ComponentModel.DataAnnotations;
 namespace Exam_Objective.Models
 {
     [Serializable]
-    [XmlRoot("Propossition")]
+    [XmlRoot("Proposition")]
     public class PropositionModel
     {
-        [XmlElement("proposid")]
+        [XmlElement("ProposID")]
         public int ProposID { get; set; }
-        [XmlElement("objname")]
+        [XmlElement("ObjID")]
         public int ObjID { get; set; }
-        [XmlElement("proposname")]
+        [XmlElement("ProposName")]
         public string ProposName { get; set; }
-        [XmlElement("textpropos")]
+        [XmlElement("TextPropos")]
         [AllowHtml]
         [UIHint("tinymce_full_compressed")]
         public string TextPropos { get; set; }
-        [XmlElement("scoremain")]
+        [XmlElement("ScoreMain")]
         public double ScoreMain { get; set; }
         public Nullable<int> Continuity { get; set; }
         public Nullable<double> Difficulty { get; set; }
         public Nullable<double> Discimination { get; set; }
         public Nullable<double> IOC { get; set; }
-        [XmlElement("checkchoice")]
+        [XmlElement("CheckChoice")]
         public Nullable<int> CheckChoice { get; set; }
         //for join
         public string ObjName { get; set; }
