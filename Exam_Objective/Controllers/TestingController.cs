@@ -18,6 +18,10 @@ using WebGrease.Css.Extensions;
 using ConsoleAppLog;
 using Networks;
 using NSystems.Collections;
+using System.Web.UI.WebControls;
+using System.Xml;
+using OfficeOpenXml;
+
 
 namespace Exam_Objective.Controllers
 {
@@ -575,6 +579,9 @@ namespace Exam_Objective.Controllers
         // Check score students
         public ActionResult ScoreStudent(int etid, string subid, int g)
         {
+            ViewBag.etid = etid;
+            ViewBag.subid = subid;
+            ViewBag.groupid = g;
             var user = Session["User"] as UserSystemModel;
             if (user == null)
             {
@@ -587,6 +594,10 @@ namespace Exam_Objective.Controllers
             using (var DB = new dbEntities())
             {
                 ViewBag.dataSubject = (from s in DB.Subjects where s.SubjectID == subid && s.UserID == user.UserID select s.SubjectName).FirstOrDefault();
+            }
+            using (var DB = new dbEntities())
+            {
+                ViewBag.dataGroup = (from gr in DB.TestGroup where gr.GroupID == g select gr.GroupName).FirstOrDefault();
             }
             using (var DB = new dbEntities())
             {
@@ -656,5 +667,49 @@ namespace Exam_Objective.Controllers
             }
             return View();
         }
+        // สร้าง Excel File รายงานผลคะแนนนักศึกษา
+        public void ExportScore(int etid, string subid, int g)
+        {
+            var user = Session["User"] as UserSystemModel;
+            var subjectName = "";
+            var groupName = "";
+            var ExamtopicName = "";
+            using (var DB = new dbEntities())
+            {
+                 subjectName = (from s in DB.Subjects where s.SubjectID == subid && s.UserID == user.UserID select s.SubjectName).FirstOrDefault();
+                 groupName = (from gr in DB.TestGroup where gr.GroupID == g select gr.GroupName).FirstOrDefault();
+                ExamtopicName = (from e1 in DB.ExamTopic where e1.ExamtopicID == etid select e1.ExamtopicName).FirstOrDefault();
+            }
+           
+            ExcelPackage pck = new ExcelPackage();
+            ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Report");
+
+            ws.Cells["A1"].Value = "วิชา";
+            ws.Cells["B1"].Value = subjectName;
+            ws.Cells["A2"].Value = "ชื่อแบบทดสอบ";
+            ws.Cells["B2"].Value = ExamtopicName;
+            ws.Cells["A3"].Value = "จำนวน";
+            ws.Cells["B3"].Value = " ข้อ";
+            ws.Cells["A4"].Value = "กลุ่มเรียน";
+            ws.Cells["B4"].Value = groupName;
+            ws.Cells["A5"].Value = "อาจารย์ผู้สอน";
+            ws.Cells["B5"].Value = user.Fname + " " + user.Lname;
+            ws.Cells["A6"].Value = "วันที่";
+            ws.Cells["B6"].Value = string.Format("{0:dd MMMM yyyy} at {0:H: mm tt}", DateTimeOffset.Now);      
+            ws.Cells["A8"].Value = "รหัสนักศึกษา";
+            ws.Cells["B8"].Value = "ชื่อ-นามสกุล";
+            ws.Cells["C8"].Value = "จำนวนข้อถูก";
+            ws.Cells["D8"].Value = "คะแนนเปอร์เซ็น";
+
+            ws.Cells["A:AZ"].AutoFitColumns();
+            Response.Clear();
+            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            Response.AddHeader("content-disposition", "attachment; filename="+ ExamtopicName + "-"+subjectName+"-"+groupName+".xlsx");
+            Response.BinaryWrite(pck.GetAsByteArray());
+            Response.Flush();
+            Response.End();
+
+        }
+       
     }
 }
