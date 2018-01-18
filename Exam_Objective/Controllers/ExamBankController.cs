@@ -1027,6 +1027,12 @@ namespace Exam_Objective.Controllers
         }
         public void ExportFile(int ObjID)
         {
+            var ObjName = "";
+            using (var DB = new dbEntities())
+            {
+                ObjName = (from o in DB.Objective where o.ObjID == ObjID  select o.ObjName).FirstOrDefault();
+            }
+
             using (var DB = new dbEntities())
             {
                 var ObjectiveData = (from o in DB.Objective
@@ -1051,7 +1057,7 @@ namespace Exam_Objective.Controllers
                                   }).ToList();
                 Response.ClearContent();
                 Response.Buffer = true;
-                Response.AddHeader("content-disposition", "attachment;filename = itfunda.xml");
+                Response.AddHeader("content-disposition", "attachment;filename = " + ObjName + ".xml");
                 Response.ContentType = "text/xml";
                 var serializer = new System.Xml.Serialization.XmlSerializer(dataPropos.GetType());
                 serializer.Serialize(Response.OutputStream, dataPropos);
