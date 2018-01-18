@@ -4,22 +4,32 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
+using System.Xml.Serialization;
+using System.ComponentModel.DataAnnotations;
 
 namespace Exam_Objective.Models
 {
+    [Serializable]
+    [XmlRoot("Proposition")]
     public class PropositionModel
     {
+        [XmlElement("ProposID")]
         public int ProposID { get; set; }
+        [XmlElement("ObjID")]
         public int ObjID { get; set; }
+        [XmlElement("ProposName")]
         public string ProposName { get; set; }
+        [XmlElement("TextPropos")]
         [AllowHtml]
         [UIHint("tinymce_full_compressed")]
         public string TextPropos { get; set; }
+        [XmlElement("ScoreMain")]
         public double ScoreMain { get; set; }
         public Nullable<int> Continuity { get; set; }
         public Nullable<double> Difficulty { get; set; }
         public Nullable<double> Discimination { get; set; }
         public Nullable<double> IOC { get; set; }
+        [XmlElement("CheckChoice")]
         public Nullable<int> CheckChoice { get; set; }
         //for join
         public string ObjName { get; set; }
@@ -47,5 +57,10 @@ namespace Exam_Objective.Models
         [UIHint("tinymce_full_compressed")]
         public string Choice5 { get; set; }
         public double Answer5 { get; set; }
+    }
+    [MetadataType(typeof(PropositionModel))]
+    public partial class Proposition
+    {
+
     }
 }

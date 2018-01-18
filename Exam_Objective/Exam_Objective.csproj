@@ -220,6 +220,7 @@
     <Compile Include="Models\GetExam.cs">
       <DependentUpon>ExamSystemModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ImportExportModel.cs" />
     <Compile Include="Models\IOC.cs">
       <DependentUpon>ExamSystemModel.tt</DependentUpon>
     </Compile>
@@ -985,6 +986,12 @@
     <Content Include="Views\Shared\_MenuStudentTest.cshtml" />
     <Content Include="Views\Student\ViewScore.cshtml" />
     <Content Include="Views\Testing\ScoreStudent.cshtml" />
+    <Content Include="Views\ExamBank\Import.cshtml" />
+    <Content Include="Views\ExamBank\Importin.cshtml" />
+    <Content Include="Views\ExamBank\ImportMain.cshtml" />
+    <Content Include="Views\ExamBank\Export.cshtml" />
+    <Content Include="Views\ExamBank\ExportMain.cshtml" />
+    <Content Include="Views\ExamBank\Exportout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
