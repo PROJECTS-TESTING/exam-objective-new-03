@@ -674,32 +674,95 @@ namespace Exam_Objective.Controllers
             var subjectName = "";
             var groupName = "";
             var ExamtopicName = "";
+            List<ScoreStudent> DataScoreStudent = new List<ScoreStudent>();
             using (var DB = new dbEntities())
             {
                  subjectName = (from s in DB.Subjects where s.SubjectID == subid && s.UserID == user.UserID select s.SubjectName).FirstOrDefault();
                  groupName = (from gr in DB.TestGroup where gr.GroupID == g select gr.GroupName).FirstOrDefault();
-                ExamtopicName = (from e1 in DB.ExamTopic where e1.ExamtopicID == etid select e1.ExamtopicName).FirstOrDefault();
+                 ExamtopicName = (from e1 in DB.ExamTopic where e1.ExamtopicID == etid select e1.ExamtopicName).FirstOrDefault();
+
+                var dataUserStudent = (from t in DB.Testing
+                                       where t.ExamBodyID == (from eb in DB.ExamBody where eb.ExamtopicID == etid select eb.ExamBodyID).FirstOrDefault()
+                                       select new { t.ExamBodyID, t.UserID }).DistinctBy(e => e.UserID).ToList();
+
+                foreach (var r in dataUserStudent)
+                {
+                    var dataTesting = (from t in DB.Testing
+                                       join c in DB.Choice on t.ProposID equals c.ProposID
+                                       where t.ExamBodyID == r.ExamBodyID && t.UserID == r.UserID
+                                       select new { c.Answer, t.ProposID, c.ChoiceID }).ToList();
+                    var dataTestAns = DB.Testing.Where(t => t.ExamBodyID == r.ExamBodyID && t.UserID == r.UserID).ToList();
+                    float score = 0f;
+                    foreach (var c in dataTestAns)
+                    {
+                        if (c.AnswerStudent.Length > 1)
+                        {
+                            string[] strchoice = c.AnswerStudent.Split(',');
+                            for (var i = 0; i < strchoice.Length; i++)
+                            {
+                                foreach (var a in dataTesting)
+                                {
+                                    if (c.ProposID == a.ProposID && a.ChoiceID == Int16.Parse(strchoice[i]))
+                                    {
+                                        score = a.Answer > 0 ? score + (float)a.Answer : score - 0.5f;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            foreach (var a in dataTesting)
+                            {
+                                if (c.ProposID == a.ProposID && c.AnswerStudent.Equals(a.ChoiceID.ToString()))
+                                {
+                                    if (a.Answer > 0)
+                                        score = score + (float)a.Answer;
+                                }
+                            }
+                        }
+                    }
+                    float scoresper = (score * 100) / dataTestAns.Count;
+
+                    DataScoreStudent.Add(new ScoreStudent
+                    {
+                        Score = score,
+                        Scoreper = scoresper,
+                        countQuiz = dataTestAns.Count,
+                        Fname = (from u in DB.UserSystem where u.UserID == r.UserID select u.Fname).FirstOrDefault(),
+                        Lname = (from u in DB.UserSystem where u.UserID == r.UserID select u.Lname).FirstOrDefault()
+                    });
+                }
             }
-           
+
             ExcelPackage pck = new ExcelPackage();
             ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Report");
 
+            // Header ExCEL FILE
             ws.Cells["A1"].Value = "วิชา";
             ws.Cells["B1"].Value = subjectName;
             ws.Cells["A2"].Value = "ชื่อแบบทดสอบ";
             ws.Cells["B2"].Value = ExamtopicName;
             ws.Cells["A3"].Value = "จำนวน";
-            ws.Cells["B3"].Value = " ข้อ";
+            ws.Cells["B3"].Value = DataScoreStudent[0].countQuiz+" ข้อ";
             ws.Cells["A4"].Value = "กลุ่มเรียน";
             ws.Cells["B4"].Value = groupName;
             ws.Cells["A5"].Value = "อาจารย์ผู้สอน";
             ws.Cells["B5"].Value = user.Fname + " " + user.Lname;
             ws.Cells["A6"].Value = "วันที่";
-            ws.Cells["B6"].Value = string.Format("{0:dd MMMM yyyy} at {0:H: mm tt}", DateTimeOffset.Now);      
+            ws.Cells["B6"].Value = string.Format("{0:dd MMMM yyyy} at {0:H: mm tt}", DateTimeOffset.Now);
             ws.Cells["A8"].Value = "รหัสนักศึกษา";
             ws.Cells["B8"].Value = "ชื่อ-นามสกุล";
             ws.Cells["C8"].Value = "จำนวนข้อถูก";
             ws.Cells["D8"].Value = "คะแนนเปอร์เซ็น";
+
+            int rowNuber = 9;
+            foreach(var dataScore in DataScoreStudent)
+            {
+                ws.Cells[string.Format("A{0}", rowNuber)].Value = dataScore.StudentID;
+                ws.Cells[string.Format("B{0}", rowNuber)].Value = dataScore.Fname + " " + dataScore.Lname;
+                ws.Cells[string.Format("C{0}", rowNuber)].Value = string.Format("{0:0.00}", dataScore.Score);
+                ws.Cells[string.Format("D{0}", rowNuber)].Value = string.Format("{0:0.00}", dataScore.Scoreper);
+            }
 
             ws.Cells["A:AZ"].AutoFitColumns();
             Response.Clear();
@@ -710,6 +773,10 @@ namespace Exam_Objective.Controllers
             Response.End();
 
         }
-       
+       // Export File .CSV .xls .xlsx .dat .txt 
+        public void ExportForAnalyze(int etid, string subid, int g, string fileExtension)
+        {
+
+        }
     }
 }
