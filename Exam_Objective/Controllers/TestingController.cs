@@ -736,7 +736,7 @@ namespace Exam_Objective.Controllers
 
             ExcelPackage pck = new ExcelPackage();
             ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Report");
-
+          
             // Header ExCEL FILE
             ws.Cells["A1"].Value = "วิชา";
             ws.Cells["B1"].Value = subjectName;
@@ -774,9 +774,121 @@ namespace Exam_Objective.Controllers
 
         }
        // Export File .CSV .xls .xlsx .dat .txt 
-        public void ExportForAnalyze(int etid, string subid, int g, string fileExtension)
+        public void ExportForAnalyze(int etid, string subid, string fileExtension)
         {
+            var user = Session["User"] as UserSystemModel;
+            var subjectName = "";       
+            var ExamtopicName = "";
 
+            StringBuilder csvDefault = new StringBuilder();
+            StringBuilder txtDefault = new StringBuilder();
+            ExcelPackage xlPackage = new ExcelPackage();
+            ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add("Inventory");
+           
+            using (var DB = new dbEntities())
+            {
+                subjectName = (from s in DB.Subjects where s.SubjectID == subid && s.UserID == user.UserID select s.SubjectName).FirstOrDefault();
+                ExamtopicName = (from e1 in DB.ExamTopic where e1.ExamtopicID == etid select e1.ExamtopicName).FirstOrDefault();
+            
+                var dataUserStudent = (from t in DB.Testing
+                                       where t.ExamBodyID == (from eb in DB.ExamBody where eb.ExamtopicID == etid select eb.ExamBodyID).FirstOrDefault()
+                                       select new { t.ExamBodyID, t.UserID }).DistinctBy(e => e.UserID).ToList();
+
+                var dataAnswers = (from ge in DB.GetExam
+                                   where ge.ExamBodyID == (from eb in DB.ExamBody where eb.ExamtopicID == etid select eb.ExamBodyID).FirstOrDefault()
+                                   orderby ge.ProposID
+                                   select new {ge.ProposID}
+                                   ).ToList();
+
+                int xlRows = 1, xlCol = 1;
+                foreach(var c in dataAnswers) {
+                    csvDefault.Append("" + c.ProposID + ",");
+                    txtDefault.Append("" + c.ProposID + ",");
+                    worksheet.Cells[1, xlCol].Value = c.ProposID;
+                    xlCol++;
+                }
+
+                csvDefault.Append("\r\n");
+                txtDefault.Append("\r\n");
+                xlCol = 1;
+                foreach(var c in dataAnswers)
+                {
+                   csvDefault.Append((from ch in DB.Choice where ch.ProposID == c.ProposID && ch.Answer == 1 select ch.ChoiceID).FirstOrDefault()+","); 
+                   txtDefault.Append((from ch in DB.Choice where ch.ProposID == c.ProposID && ch.Answer == 1 select ch.ChoiceID).FirstOrDefault());
+                    worksheet.Cells[2, xlCol].Value = (from ch in DB.Choice where ch.ProposID == c.ProposID && ch.Answer == 1 select ch.ChoiceID).FirstOrDefault();
+                    xlCol++;
+                }
+
+                xlCol = 1; xlRows = 3;
+                foreach (var r in dataUserStudent)
+                {
+                    csvDefault.Append("\r\n");
+                    txtDefault.Append("\r\n");
+                    var dataTesting = (from t in DB.Testing        
+                                       where t.ExamBodyID == r.ExamBodyID && t.UserID == r.UserID
+                                       orderby t.ProposID
+                                       select new {t.ProposID, t.AnswerStudent }).ToList();
+
+
+                    foreach (var c in dataTesting)
+                    {
+                        if (c.AnswerStudent.Length > 1)
+                        {
+                            csvDefault.Append("0,");
+                            txtDefault.Append("0");
+                            worksheet.Cells[xlRows, xlCol].Value = 0;
+                        }
+                        else {
+                            csvDefault.Append(c.AnswerStudent+",");
+                            txtDefault.Append(c.AnswerStudent);
+                            worksheet.Cells[xlRows, xlCol].Value = Int32.Parse(c.AnswerStudent);
+                        }
+                        xlCol++;
+                    }
+                }
+                xlRows++;
+            }
+
+                if (fileExtension.Equals("txt"))
+            {
+                byte[] bytes = Encoding.ASCII.GetBytes(txtDefault.ToString());
+                Response.Clear();
+                Response.ContentType = "text/plain";
+                Response.AddHeader("content-disposition", "attachment; filename=" + ExamtopicName.ToString() + "-" + subjectName + ".txt");
+                Response.BinaryWrite(bytes);
+                Response.Flush();
+                Response.End();
+            }
+            else if (fileExtension.Equals("csv"))
+            {
+                byte[] bytes = Encoding.ASCII.GetBytes(csvDefault.ToString());
+                Response.Clear();
+                Response.ContentType = "text/plain";
+                Response.AddHeader("content-disposition", "attachment; filename="+ExamtopicName.ToString()+"-"+subjectName+".csv");
+                Response.BinaryWrite(bytes);
+                Response.Flush();
+                Response.End();
+            }
+            else if (fileExtension.Equals("dat"))
+            {
+                byte[] bytes = Encoding.ASCII.GetBytes(txtDefault.ToString());
+                Response.Clear();
+                Response.ContentType = "text/plain";
+                Response.AddHeader("content-disposition", "attachment; filename=" + ExamtopicName.ToString() + "-" + subjectName + ".dat");
+                Response.BinaryWrite(bytes);
+                Response.Flush();
+                Response.End();
+            }
+            else if (fileExtension.Equals("xlsx"))
+            {
+                Response.Clear();
+                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                Response.AddHeader("content-disposition", "attachment; filename=" + ExamtopicName.ToString() + "-" + subjectName + ".xlsx");
+                Response.BinaryWrite(xlPackage.GetAsByteArray());
+                Response.Flush();
+                Response.End();
+            }
+               
         }
     }
 }
