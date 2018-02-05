@@ -762,6 +762,7 @@ namespace Exam_Objective.Controllers
                 ws.Cells[string.Format("B{0}", rowNuber)].Value = dataScore.Fname + " " + dataScore.Lname;
                 ws.Cells[string.Format("C{0}", rowNuber)].Value = string.Format("{0:0.00}", dataScore.Score);
                 ws.Cells[string.Format("D{0}", rowNuber)].Value = string.Format("{0:0.00}", dataScore.Scoreper);
+                rowNuber++;
             }
 
             ws.Cells["A:AZ"].AutoFitColumns();
@@ -845,19 +846,19 @@ namespace Exam_Objective.Controllers
                         }
                         xlCol++;
                     }
+                    xlRows++;
+                    xlCol = 1;
                 }
-                xlRows++;
+               
             }
 
-                if (fileExtension.Equals("txt"))
+                if (fileExtension.Equals("txt") || fileExtension.Equals("dat"))
             {
                 byte[] bytes = Encoding.ASCII.GetBytes(txtDefault.ToString());
                 Response.Clear();
                 Response.ContentType = "text/plain";
-                Response.AddHeader("content-disposition", "attachment; filename=" + ExamtopicName.ToString() + "-" + subjectName + ".txt");
+                Response.AddHeader("content-disposition", "attachment; filename=" + ExamtopicName.ToString() + "-" + subjectName + "." + fileExtension.ToString());
                 Response.BinaryWrite(bytes);
-                Response.Flush();
-                Response.End();
             }
             else if (fileExtension.Equals("csv"))
             {
@@ -866,18 +867,6 @@ namespace Exam_Objective.Controllers
                 Response.ContentType = "text/plain";
                 Response.AddHeader("content-disposition", "attachment; filename="+ExamtopicName.ToString()+"-"+subjectName+".csv");
                 Response.BinaryWrite(bytes);
-                Response.Flush();
-                Response.End();
-            }
-            else if (fileExtension.Equals("dat"))
-            {
-                byte[] bytes = Encoding.ASCII.GetBytes(txtDefault.ToString());
-                Response.Clear();
-                Response.ContentType = "text/plain";
-                Response.AddHeader("content-disposition", "attachment; filename=" + ExamtopicName.ToString() + "-" + subjectName + ".dat");
-                Response.BinaryWrite(bytes);
-                Response.Flush();
-                Response.End();
             }
             else if (fileExtension.Equals("xlsx"))
             {
@@ -885,10 +874,9 @@ namespace Exam_Objective.Controllers
                 Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 Response.AddHeader("content-disposition", "attachment; filename=" + ExamtopicName.ToString() + "-" + subjectName + ".xlsx");
                 Response.BinaryWrite(xlPackage.GetAsByteArray());
-                Response.Flush();
-                Response.End();
             }
-               
+            Response.Flush();
+            Response.End();
         }
     }
 }
