@@ -552,15 +552,13 @@ namespace Exam_Objective.Controllers
                                                TextPropos = p.TextPropos,
                                                Continuity = p.Continuity
                                            }).ToList();
-                if (dataextopic[0].Sequences.Equals("1"))
+                if (dataextopic[0].Sequences.Equals("1") || dataextopic[0].Sequences.Equals("3"))
                 {
                     dataProp.Shuff();
                 }
                 ViewBag.dataProposition = dataProp;
-            }
-            using(var DB = new dbEntities())
-            {
-                ViewBag.dataChoice = (from ex in DB.GetExam
+           
+                var dataChoices = (from ex in DB.GetExam
                                       join c in DB.Choice on ex.ProposID equals c.ProposID
                                       let countans = (from ca in DB.Choice where ca.ProposID == ex.ProposID && ca.Answer > 0 select ex).Count()
                                       where ex.ExamBodyID == exbody
@@ -573,6 +571,36 @@ namespace Exam_Objective.Controllers
                                           Answer = c.Answer,
                                           countAnswer = countans
                                       }).ToList();
+
+            if (dataextopic[0].Sequences.Equals("2") || dataextopic[0].Sequences.Equals("3"))
+            {
+                    List<int> checkChoice = new List<int>();
+                    foreach(var datac in dataChoices)
+                    {
+                        if(datac.ChoiceID == 4)
+                        {
+                            if (datac.TextChoice.Substring(3, 7).Equals("ถูกทั้ง"))
+                            {
+                                checkChoice.Add(datac.ProposID);
+                            }
+                            else if (datac.TextChoice.Substring(3, 9).Equals("ถูกทุกข้อ")) 
+                            {
+                                checkChoice.Add(datac.ProposID);
+                            }
+                            else if (datac.TextChoice.Length>15&&datac.TextChoice.Substring(3, 13).Equals("ไม่มีข้อใดถูก"))
+                            {
+                                checkChoice.Add(datac.ProposID);
+                            }
+                            else if (datac.TextChoice.Length > 13 && datac.TextChoice.Substring(3, 11).Equals("ไม่มีข้อถูก"))
+                            {
+                                checkChoice.Add(datac.ProposID);
+                            }
+                        }
+                    }
+                    ViewBag.dataCheck = checkChoice;
+            }
+                
+                ViewBag.dataChoice = dataChoices;
             }
             return View();
         }

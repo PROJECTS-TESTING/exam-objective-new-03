@@ -173,7 +173,7 @@ namespace Exam_Objective.Controllers
             }
             using (var DB = new dbEntities())
             {
-                ViewBag.DataExamtopic = (from e in DB.ExamTopic
+               var DataEx  = (from e in DB.ExamTopic
                                          where e.GroupID == g && e.SubjectID == subid && e.UserID == datasu
                                          select new ExamTopicModel
                                          {
@@ -182,9 +182,12 @@ namespace Exam_Objective.Controllers
                                              DatetoBegin = e.DatetoBegin,
                                              TimetoBegin = e.TimetoBegin,
                                              TimetoEnd = e.TimetoEnd,
-                                             ExamtopicPW = e.ExamtopicPW
-
+                                             ExamtopicPW = e.ExamtopicPW,
+                                             InNetWork = e.InNetWork
+                                            
                                          }).ToList();
+                DataEx[0].IPsubnetClient = NetworkClient.GetIPClien();
+                ViewBag.DataExamtopic = DataEx;
             }
             return View();
         }
@@ -232,11 +235,11 @@ namespace Exam_Objective.Controllers
                                  where e.ExamtopicID == DataEx.ExamtopicID
                                  select e.ExamtopicPW).FirstOrDefault();
                 var dataexamtopic = new ExamtopicDataModel {ExamtopicID = DataEx.ExamtopicID,SubjectID = DataEx.SubjectID, UserID = DataEx.UserID };
-                if (examtopid == null && DataEx.CheckDateTime == 0)
+                if (examtopid == null && DataEx.CheckDateTime == 0 && DataEx.CheckIP)
                 { 
                     jsonretern = new JsonRespone { status = true, message = "เข้าสอบเรียบร้อย", data = dataexamtopic };
                 }
-                else if(examtopid != null && examtopid == DataEx.ExamtopicPW && DataEx.CheckDateTime == 0)
+                else if(examtopid != null && examtopid == DataEx.ExamtopicPW && DataEx.CheckDateTime == 0 && DataEx.CheckIP)
                 {
                     jsonretern = new JsonRespone { status = true, message = "เข้าสอบเรียบร้อย", data = dataexamtopic };
                 }else if (DataEx.CheckDateTime == 1)
@@ -246,6 +249,10 @@ namespace Exam_Objective.Controllers
                 else if (DataEx.CheckDateTime == 2)
                 {
                     jsonretern = new JsonRespone { status = false, message = "ยังไม่ถึงเวลาในการทำแบบทดสอบ" };
+                }
+                else if (!DataEx.CheckIP)
+                {
+                    jsonretern = new JsonRespone { status = false, message = "ท่านไม่ได้อยู่ในเครือข่ายที่กำหนด" };
                 }
                 else
                 {

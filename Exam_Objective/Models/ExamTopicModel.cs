@@ -27,6 +27,7 @@ namespace Exam_Objective.Models
         public string InNetWork { get; set; }
         public string Status { get; set; }
         public int isUpdateable { get; set; }
+        public string IPsubnetClient { get; set; }
     }
     public class ExamtopicDataModel
     {
@@ -35,6 +36,7 @@ namespace Exam_Objective.Models
         public string UserID { get; set; }
         public string ExamtopicPW { get; set; }
         public int CheckDateTime { get; set; }
+        public bool CheckIP { get; set; }
     }
     public class TestingAnswer
     {

@@ -1,7 +1,4 @@
-﻿$('#InNetWork1').inputmask("999", { placeholder: "" });
-$('#InNetWork2').inputmask("999", { placeholder: "" });
-$('#InNetWork3').inputmask("999", { placeholder: "" });
-$('#InNetWork4').inputmask("999", { placeholder: "" });
+﻿
 /* ------------------Button Save--------------------*/
 $('#btnSave').click(function () {
     DataTest.ExamtopicName = $('#TestName').val();
@@ -14,7 +11,7 @@ $('#btnSave').click(function () {
     DataTest.ExamtopicPW = $('#PwTest').val();
     DataTest.GroupID = $('#Groupstudy').val();
     DataTest.NumberOfTimes = $("[name='NumberOfTimes']").val();
-    DataTest.InNetWork = $('#InNetWork1').val() + "." + $('#InNetWork2').val() + "." + $('#InNetWork3').val() + "." + $('#InNetWork4').val();
+    DataTest.InNetWork = $('#IPsubnet').val();
     //alert($("[name='Explantion']").val());
     if ($("#TForm0").valid()) {
         $.ajax({
@@ -66,10 +63,6 @@ $('#btnCrtTest').click(function () {
     //swal("Good job!", "You clicked the button!", "success");
     $('#title').text("เพิ่มแบบทดสอบ");
     $('#TForm0').find("input").val("");
-    $('#InNetWork1').inputmask("999", { placeholder: "" });
-    $('#InNetWork2').inputmask("999", { placeholder: "" });
-    $('#InNetWork3').inputmask("999", { placeholder: "" });
-    $('#InNetWork4').inputmask("999", { placeholder: "" });
     tinyMCE.activeEditor.setContent(''); // Reset Text Editor.
     var valida = $('#TForm0').validate();
     valida.resetForm();
@@ -137,12 +130,13 @@ $('.btnEdit').click(function () {
                 $('#PwTest').val(res.data.ExamtopicPW);
                 $('#Groupstudy').val(res.data.GroupID);
                 $("[name='NumberOfTimes']").val(res.data.NumberOfTimes);
-                var arrayIP = [];
-                arrayIP = res.data.InNetWork.toString().split('.');
-                $('#InNetWork1').val(arrayIP[0]);
-                $('#InNetWork2').val(arrayIP[1]);
-                $('#InNetWork3').val(arrayIP[2]);
-                $('#InNetWork4').val(arrayIP[3]);
+                $('#IPsubnet').val(res.data.InNetWork);
+                // Set Read only
+                $('#TestName').prop("readonly", false);
+                $('#Explantion').prop("readonly", false);
+                $('#PwTest').prop("readonly", false);
+                $('NumberOfTimes').prop("readonly", false);
+                $('#IPsubnet').prop("readonly", false);
                 $('#btnSave').show();
             }
         },
@@ -217,21 +211,13 @@ $('.btnView').click(function () {
                 $('#PwTest').val(res.data.ExamtopicPW);
                 $('#Groupstudy').val(res.data.GroupID);
                 $("[name='NumberOfTimes']").val(res.data.NumberOfTimes);
-                var arrayIP = [];
-                arrayIP = res.data.InNetWork.toString().split('.');
-                $('#InNetWork1').val(arrayIP[0]);
-                $('#InNetWork2').val(arrayIP[1]);
-                $('#InNetWork3').val(arrayIP[2]);
-                $('#InNetWork4').val(arrayIP[3]);
-                // Set hide
+                $('#IPsubnet').val(res.data.InNetWork);
+                // Set Read only
                 $('#TestName').prop("readonly", true);
                 $('#Explantion').prop("readonly", true);
                 $('#PwTest').prop("readonly", true);
                 $('NumberOfTimes').prop("readonly", true);
-                $('#InNetWork1').prop("readonly", true);
-                $('#InNetWork2').prop("readonly", true);
-                $('#InNetWork3').prop("readonly", true);
-                $('#InNetWork4').prop("readonly", true);
+                $('#IPsubnet').prop("readonly", true);
                 $('#btnSave').hide();
             }
         },

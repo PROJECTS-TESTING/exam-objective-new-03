@@ -78,7 +78,7 @@
                                     <option value="0">--เลือกวัตถุประสงค์--</option>
                                     @{ var dataObj = (List<ObjectiveModel>)ViewBag.DataObjective;
                                         foreach (var rows in dataObj) {
-                                     <option value="@rows.ObjID" data-lessonid="@rows.PLessonID">@rows.ObjName <span>(@rows.CountProposID)</span></option>
+                                     <option value="@rows.ObjID" data-lessonid="@rows.PLessonID" data-spcount="@rows.CountProposID">@rows.ObjName <span>(@rows.CountProposID)</span></option>
                                             }
                                         }
                                 </select>
@@ -100,7 +100,7 @@
                         <div class="form-group">
                             <label class="col-md-4 control-label">เพิ่มข้อสอบแบบสุ่ม</label>
                             <div class="col-md-5">
-                                <select style="max-width:250px;" class="form-control show" name="" id="">
+                                <select style="max-width:250px;" class="form-control showrnd" name="showrnd" id="showrnd">
                                     <option value="0">--ค่าเริ่มต้น--</option>
                                 </select>
                             </div>
@@ -128,7 +128,7 @@
                                         {
 
                                             if (rows.Difficulty<0.21) { difficu = 1; }else if (rows.Difficulty<0.41) { difficu = 2; }else if (rows.Difficulty<0.61) { difficu = 3; }else if(rows.Difficulty<0.81){ difficu = 4; }else if (rows.Difficulty<1.01) { difficu = 5; } else {difficu=0; }
-                        <tr class="Row" data-objid="@rows.ObjID" data-difficulty="@difficu">
+                        <tr class="Row" data-objid="@rows.ObjID" data-difficulty="@difficu" data-idprop="@rows.ProposID" data-lessonid="@rows.LessonID">
                             <td>
                                 <input type="checkbox" value="@rows.ProposID" />
                                 @rows.ProposName
@@ -272,7 +272,11 @@
     <script src="~/Scripts/tinymce/plugins/tiny_mce_wiris/wirisplugin-generic.js"></script>
     <script src="~/Scripts/tinymce/plugins/tiny_mce_wiris/core/display.js"></script>
     <script type="text/javascript">
-      
+        //Check question repetitive to select
+        var pop = [];
+        var inum = 0;
+        $('.btnDelete').each(function () { pop[inum] = $(this).data("proposiid"); inum++; });
+        $(':checkbox').each(function () { for (var i = 0; i < inum; i++) { if ($(this).val() == pop[i]) { $(this).remove(); } } });
     //show table for option:selected
     $("#tshowCate").find('.Row').hide(); //เปิดมายังไม่ให้โชว์อะไร
     $('select.showobj > option').hide();
@@ -281,30 +285,113 @@
         $('select.showobj > option').hide(); 
         $('select.showobj').val(0);
         $('select.showdifficulty').val(0);
+        $('select.showrnd').val(0);
         $('select.showobj').find('option[data-lessonid=' + $(this).val() + ']').show();
         $("#tshowCate").find('.Row').hide();  
-        $(':checkbox').each(function () { $(this).removeAttr('checked'); });       
+        $(':checkbox').each(function () { $(this).removeAttr('checked'); });
+        $('select.showrnd > option').remove();
+        $('select.showrnd').append('<option value="0">--ค่าเริ่มต้น--</option>');
     });
+        $('select.showobj').bind('change', function () {
+           // alert($('select.showobj').find('option[value=' + $('select.showobj').val() + ']').data("spcount"));
+            $('select.showrnd > option').remove();
+            $('select.showrnd').append('<option value="0">--ค่าเริ่มต้น--</option>');
+            var i = $('select.showobj').find('option[value=' + $('select.showobj').val() + ']').data("spcount");
+            for (var j = 1; j <= i; j++) {
+                $('select.showrnd').append('<option value="' + j + '">' + j + '</option>');
+            }
+        });
+
+        function arr_diff(a1, a2) {
+
+            var a = [], diff = [];
+
+            for (var i = 0; i < a1.length; i++) {
+                a[a1[i]] = true;
+            }
+
+            for (var i = 0; i < a2.length; i++) {
+                if (a[a2[i]]) {
+                    delete a[a2[i]];
+                } else {
+                    a[a2[i]] = true;
+                }
+            }
+
+            for (var k in a) {
+                diff.push(k);
+            }
+
+            return diff;
+        }
+
+        function intersect(a, b) {
+            var d = {};
+            var results = [];
+            for (var i = 0; i < b.length; i++) {
+                d[b[i]] = true;
+            }
+            for (var j = 0; j < a.length; j++) {
+                if (d[a[j]])
+                    results.push(a[j]);
+            }
+            return results;
+        }
 
         $('#btnsearching').click(function () {
             $("#tshowCate").find('.Row').hide(); 
-            if ($('#difficulty').val() == 0) {
-                $('#tshowCate').find('.Row[data-objid=' + $('select.showobj').val() + ']').show();
-            }
-            else if ($('#difficulty').val() == 1) {
-                $('#tshowCate').find('.Row[data-objid=' + $('select.showobj').val() + '][data-difficulty=' + $('#difficulty').val() + ']').show();
-            }
-            else if ($('#difficulty').val() == 2) {
-                $('#tshowCate').find('.Row[data-objid=' + $('select.showobj').val() + '][data-difficulty=' + $('#difficulty').val() + ']').show();
-            }
-            else if ($('#difficulty').val() == 3) {
-                $('#tshowCate').find('.Row[data-objid=' + $('select.showobj').val() + '][data-difficulty=' + $('#difficulty').val() + ']').show();
-            }
-            else if ($('#difficulty').val() == 4) {
-                $('#tshowCate').find('.Row[data-objid=' + $('select.showobj').val() + '][data-difficulty=' + $('#difficulty').val() + ']').show();
-            }
-            else if ($('#difficulty').val() == 5) {
-                $('#tshowCate').find('.Row[data-objid=' + $('select.showobj').val() + '][data-difficulty=' + $('#difficulty').val() + ']').show();
+            if ($('select.showrnd').val() == 0) {
+                if ($('#difficulty').val() == 0) {
+                    $('#tshowCate').find('.Row[data-objid=' + $('select.showobj').val() + ']').show();
+                }
+                else if ($('#difficulty').val() == 1) {
+                    $('#tshowCate').find('.Row[data-objid=' + $('select.showobj').val() + '][data-difficulty=' + $('#difficulty').val() + ']').show();
+                }
+                else if ($('#difficulty').val() == 2) {
+                    $('#tshowCate').find('.Row[data-objid=' + $('select.showobj').val() + '][data-difficulty=' + $('#difficulty').val() + ']').show();
+                }
+                else if ($('#difficulty').val() == 3) {
+                    $('#tshowCate').find('.Row[data-objid=' + $('select.showobj').val() + '][data-difficulty=' + $('#difficulty').val() + ']').show();
+                }
+                else if ($('#difficulty').val() == 4) {
+                    $('#tshowCate').find('.Row[data-objid=' + $('select.showobj').val() + '][data-difficulty=' + $('#difficulty').val() + ']').show();
+                }
+                else if ($('#difficulty').val() == 5) {
+                    $('#tshowCate').find('.Row[data-objid=' + $('select.showobj').val() + '][data-difficulty=' + $('#difficulty').val() + ']').show();
+                }
+            } else if ($('select.showrnd').val() != 0) {
+                var pid = [];
+                var i = 0;
+               
+                $('.Row').each(function () {
+                    if ($(this).data("objid") == $('select.showobj').val() && $(this).data("lessonid") == $('select.showobj').find('option[value=' + $('select.showobj').val() + ']').data("lessonid")) {
+                    
+                                pid[i] = $(this).data("idprop");
+                                i++;
+                            
+                        }
+                });
+                var intersection = arr_diff(pid, intersect(pid, pop));
+                var np = Math.floor((Math.random() * intersection.length));
+                if ($('#difficulty').val() == 0) {
+                    $('#tshowCate').find('.Row[data-idprop=' + intersection[np] + ']').show();
+                }
+                else if ($('#difficulty').val() == 1) {
+                    $('#tshowCate').find('.Row[data-idprop=' + intersection[np] + '][data-difficulty=' + $('#difficulty').val() + ']').show();
+                }
+                else if ($('#difficulty').val() == 2) {
+                    $('#tshowCate').find('.Row[data-idprop=' + intersection[np] + '][data-difficulty=' + $('#difficulty').val() + ']').show();
+                }
+                else if ($('#difficulty').val() == 3) {
+                    $('#tshowCate').find('.Row[data-idprop=' + intersection[np] + '][data-difficulty=' + $('#difficulty').val() + ']').show();
+                }
+                else if ($('#difficulty').val() == 4) {
+                    $('#tshowCate').find('.Row[data-idprop=' + intersection[np] + '][data-difficulty=' + $('#difficulty').val() + ']').show();
+                }
+                else if ($('#difficulty').val() == 5) {
+                    $('#tshowCate').find('.Row[data-idprop=' + intersection[np] + '][data-difficulty=' + $('#difficulty').val() + ']').show();
+                }
+             
             }
         });
 
@@ -312,9 +399,12 @@
     $('#btnAddQuiz1').click(function () {
         $('select.showCate').val('0');
         $('select.showobj').val(0);
+        $('select.showrnd').val(0);
         $('select.showdifficulty').val(0);
          $("#tshowCate").find('.Row').hide();
          $(':checkbox').each(function () { $(this).removeAttr('checked'); });
+         $('select.showrnd > option').remove();
+         $('select.showrnd').append('<option value="0">--ค่าเริ่มต้น--</option>');
 
     });
 
