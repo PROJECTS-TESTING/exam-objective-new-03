@@ -21,7 +21,11 @@ using NSystems.Collections;
 using System.Web.UI.WebControls;
 using System.Xml;
 using OfficeOpenXml;
-
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
+using NotesFor.HtmlToOpenXml;
+using System.Text.RegularExpressions;
 
 namespace Exam_Objective.Controllers
 {
@@ -906,5 +910,121 @@ namespace Exam_Objective.Controllers
             Response.Flush();
             Response.End();
         }
+        // --- Hard-Copy ---
+        public void HardCopy(int exbody)
+        {
+            var user = Session["User"] as UserSystemModel;
+            var jsonreturn = new JsonRespone();
+            try
+            {
+                string filename = "StreamTest.docx";
+                string contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                StringBuilder html = new StringBuilder();
+                string htmls = "";
+                html.Append("<body>");
+                using (var DB = new dbEntities())
+                {
+                    var dataProp = (from ex in DB.GetExam
+                                    join p in DB.Proposition on ex.ProposID equals p.ProposID
+                                    where ex.ExamBodyID == exbody
+                                    select new PropositionModel
+                                    {
+                                        ProposID = ex.ProposID,
+                                        ProposName = p.ProposName,
+                                        TextPropos = p.TextPropos,
+                                        Continuity = p.Continuity
+                                    }).ToList();
+
+                    var dataChoices = (from ex in DB.GetExam
+                                       join c in DB.Choice on ex.ProposID equals c.ProposID
+                                       let countans = (from ca in DB.Choice where ca.ProposID == ex.ProposID && ca.Answer > 0 select ex).Count()
+                                       where ex.ExamBodyID == exbody
+                                       orderby c.ChoiceID
+                                       select new ChoiceModel
+                                       {
+                                           ProposID = ex.ProposID,
+                                           ChoiceID = c.ChoiceID,
+                                           TextChoice = c.TextChoice,
+                                           Answer = c.Answer,
+                                           countAnswer = countans
+                                       }).ToList();
+
+                    var i = 0;
+                    var j = 97;
+                    foreach(var row in dataProp)
+                    {
+                        i++;
+                        html.Append("<B><p>"+i+". " + Regex.Replace(row.TextPropos, "<.*?>", String.Empty)+"</p></B>");
+                        foreach(var rowc in dataChoices)
+                        {
+                            if(row.ProposID == rowc.ProposID)
+                            {
+                               
+                                html.Append("<p>"+(char)j+". " + rowc.TextChoice.Substring(3, rowc.TextChoice.Length - 3));
+                                j++;
+                            }
+                        }j = 97;
+                    }
+                    
+                }
+                              
+                html.Append("</body>");
+                using (MemoryStream generatedDocument = new MemoryStream())
+                    {
+                        using (WordprocessingDocument package = WordprocessingDocument.Create(generatedDocument, WordprocessingDocumentType.Document))
+                        {
+                            MainDocumentPart mainPart = package.MainDocumentPart;
+                            if (mainPart == null)
+                            {
+                                mainPart = package.AddMainDocumentPart();
+                                new Document(new Body()).Save(mainPart);
+                            }
+
+                            HtmlConverter converter = new HtmlConverter(mainPart);
+                            converter.BaseImageUrl = new Uri(Request.Url.Scheme + "://" + Request.Url.Authority);
+
+                            Body body = mainPart.Document.Body;
+                        
+                        
+                        
+                        var paragraphs = converter.Parse(html.ToString());
+                       
+                            for (int i = 0; i < paragraphs.Count; i++)
+                            {
+                                body.Append(paragraphs[i]);
+                            }
+
+                            mainPart.Document.Save();
+                        }
+
+                        byte[] bytesInStream = generatedDocument.ToArray(); // simpler way of converting to array
+                        generatedDocument.Close();
+
+                        Response.Clear();
+                        Response.ContentType = contentType;
+                        Response.AddHeader("content-disposition", "attachment;filename=" + filename);
+
+                        //this will generate problems
+                        Response.BinaryWrite(bytesInStream);
+                        try
+                        {
+                            Response.Flush();
+                            Response.End();
+                        }
+                        catch (Exception ex)
+                        {
+                            //Response.End(); generates an exception. if you don't use it, you get some errors when Word opens the file...
+                        }
+
+                    }
+                
+              
+            }
+            catch (Exception ex)
+            {
+               
+            }
+        }
+
     }
 }

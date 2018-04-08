@@ -17,6 +17,7 @@
     <h4>@dataExamtopics[0].ExamtopicName กลุ่มเรียน: @ViewBag.dataGroup</h4><hr />
     @{ var x = 0;
         var ckrandom = 0;
+        char choiceForm = 'a';
         foreach (var rows0 in DataPropos)
         {
             List<ChoiceModel> rndchoice = new List<ChoiceModel>();
@@ -58,21 +59,22 @@
                     <div class="col-md-10" style="margin-bottom:8px; padding:1px">
                         <div style="border:solid 1px #adfacd;border-radius:3px;padding:4px;background-color:#e0fced">
                             <div class="quizion" id="@rows0.ProposID">@Html.Raw(rows0.TextPropos)</div>
-                            @{ var i = 0;
+                            @{ var i = 96;
                                
                                 foreach (var rows in rndchoice)
                                 {
                                     if (rows.ProposID == rows0.ProposID)
                                     {
                                         i++;
+                                        choiceForm = (char)i;
                                         <div class="choice">
                                             @{if (rows.countAnswer > 1)
                                                 {
-                                                    <input type="checkbox" value="@rows.ChoiceID" name="@rows0.ProposID" /> @i<span>.</span>
+                                                    <input type="checkbox" value="@rows.ChoiceID" name="@rows0.ProposID" /> @choiceForm<span>.</span>
                                                 }
                                                 else
                                                 {
-                                                    <input type="radio" value="@rows.ChoiceID" name="@rows0.ProposID" /> @i<span>.</span>
+                                                    <input type="radio" value="@rows.ChoiceID" name="@rows0.ProposID" /> @choiceForm<span>.</span>
                                                 }
                                             }
                                             @{if (rows.Answer > 0)
@@ -85,7 +87,7 @@
                                         </div>
                                     }
                                 }
-                                i = 0;
+                                i = 96;
                             }
                         </div><br />
                     </div>
@@ -153,20 +155,21 @@
                             <div class="col-md-10" style="margin-bottom:8px; padding:1px">
                                 <div style="border:solid 1px #adfacd;border-radius:3px;padding:4px;background-color:#e4fbe8">
                                     <div class="quizion" id="@rows1.ProposID">@Html.Raw(rows1.TextPropos)</div>
-                                    @{ var i = 0;
+                                    @{ var i = 96;
                                         foreach (var rows in rndchoice)
                                         {
                                             if (rows.ProposID == rows1.ProposID)
                                             {
                                                 i++;
+                                                choiceForm = (char)i;
                                                 <div class="choice">
                                                     @{if (rows.countAnswer > 1)
                                                         {
-                                                            <input type="checkbox" value="@rows.ChoiceID" name="@rows1.ProposID" /> @i<span>.</span>
+                                                            <input type="checkbox" value="@rows.ChoiceID" name="@rows1.ProposID" /> @choiceForm<span>.</span>
                                                         }
                                                         else
                                                         {
-                                                            <input type="radio" value="@rows.ChoiceID" name="@rows1.ProposID" /> @i<span>.</span>
+                                                            <input type="radio" value="@rows.ChoiceID" name="@rows1.ProposID" /> @choiceForm<span>.</span>
                                                         }
                                                     }
                                                     @{if (rows.Answer > 0)
@@ -179,7 +182,7 @@
                                                 </div>
                                             }
                                         }
-                                        i = 0;
+                                        i = 96;
                                     }
                                 </div><br />
                             </div>

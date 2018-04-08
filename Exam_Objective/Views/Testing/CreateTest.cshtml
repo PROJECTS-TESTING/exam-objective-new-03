@@ -63,6 +63,30 @@
             </div>
         </div>
     </div>
+    @* Hard-Copy Dialog*@
+    <div class="modal fade" id="hardcopyModal" tabindex="-1" role="dialog" aria-labelledby="User" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5 class="modal-title"><label id="title" name="title"></label><label><span>Hard-Copy วิชา</span>@SubjectsEntity[0].SubjectName</label></h5>
+                </div>
+                <div class="modal-body">
+                    <form id="" method="post" class="form-horizontal">
+
+                       <br />
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <a id="btnSavehard" class="btn btn-default btnSavehardcopy" href="@Url.Action("HardCopy", "Testing", new {exbody = 1 })" title="กดเพื่อ ดาวน์โหลด" target="_blank" download><span class="fa fa-download"></span> ดาวน์โหลด</a>
+                    <!--<button type="button" id="btnSavehard" class="btn btn-primary btnSavehardcopy">บันทึก</button>-->
+                    <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
+                </div>
+                </div>
+            </div>
+    </div>
     <table class="table table-striped table-bordered">
         <thead>
             <tr>
@@ -77,12 +101,12 @@
                     {
                         <tr>
                             <td>
-                                <span class="col-md-6">
+                                <span class="col-md-5">
                                     <span class="fa  fa-caret-right"> </span>
                                     <span>@rows.ExamtopicName</span>
                                     <span>กลุ่มเรียน </span>@rows.StudyGroup
                                 </span>
-                                <span class="col-md-6 text-right">
+                                <span class="col-md-7 text-right">
                                     <span> | </span>
                                     <span title="รายละเอีนด" class="fa fa-search link-action btnView" data-toggle="modal" data-target="#TestModal" data-examtopicid="@rows.ExamtopicID"> รายละเอียด </span>
                                     <span title="แก้ไข" class="fa fa-cog link-action btnEdit" data-toggle="modal" data-target="#TestModal" data-examtopicid="@rows.ExamtopicID"> แก้ไข</span>
@@ -91,6 +115,8 @@
                                     <span title="แก้ไขแบบทดสอบ" class="link-action btnEditTest" data-examtopicid="@rows.ExamtopicID" data-subid="@SubjectsEntity[0].SubjectID"> แก้ไขแบบทดสอบ</span>
                                     <span> | </span>
                                     <span title="ผลการสอบ" class="link-action btnScore" data-examtopicid="@rows.ExamtopicID" data-subid="@SubjectsEntity[0].SubjectID" data-groupid="@rows.GroupID"> ผลการสอบ</span>
+                                    <span> | </span>
+                                    <span title="Hardcopy" class="fa fa-file-o link-action btnhardcopy" data-toggle="modal" data-target="#hardcopyModal" data-examtopicid="@rows.ExamtopicID"> Hardcopy</span>
                                     <span> | </span>
                                 </span>
                             </td>
@@ -113,38 +139,40 @@
                     </tr>
                 </thead>
                 <tbody>
-                        @foreach (var rows in TestEntitynill)
-                        {
-                            <tr>
-                                <td>
-                                    <span class="col-md-6">
-                                        <span class="fa  fa-caret-right"> </span>
-                                        <span>@rows.ExamtopicName</span>
-                                        <span>กลุ่มเรียน </span>@rows.StudyGroup
-                                    </span>
-                                    <span class="col-md-6 text-right">
-                                        <span> | </span>
-                                        <span title="รายละเอีนด" class="fa fa-search link-action btnView" data-toggle="modal" data-target="#TestModal" data-examtopicid="@rows.ExamtopicID"> รายละเอียด </span>
-                                        <span title="แก้ไข" class="fa fa-cog link-action btnEdit" data-toggle="modal" data-target="#TestModal" data-examtopicid="@rows.ExamtopicID"> แก้ไข</span>
-                                        <span title="ลบ" class="fa  fa-times link-action btnDelete" data-examtopicid="@rows.ExamtopicID" data-Exname="@rows.ExamtopicName"> ลบ</span>
-                                        <span> | </span>
-                                        <span title="แก้ไขแบบทดสอบ" class="link-action btnEditTest" data-examtopicid="@rows.ExamtopicID" data-subid="@SubjectsEntity[0].SubjectID"> แก้ไขแบบทดสอบ</span>
-                                        <span> | </span>
-                                        <span title="ผลการสอบ" class="link-action btnScore" data-examtopicid="@rows.ExamtopicID" data-subid="@SubjectsEntity[0].SubjectID" data-groupid="@rows.GroupID"> ผลการสอบ</span>
-                                        <span> | </span>
-                                    </span>
-                                </td>
-                            </tr>
-                        }
+                    @foreach (var rows in TestEntitynill)
+                    {
+                        <tr>
+                            <td>
+                                <span class="col-md-5">
+                                    <span class="fa  fa-caret-right"> </span>
+                                    <span>@rows.ExamtopicName</span>
+                                    <span>กลุ่มเรียน </span>@rows.StudyGroup
+                                </span>
+                                <span class="col-md-7 text-right">
+                                    <span> | </span>
+                                    <span title="รายละเอีนด" class="fa fa-search link-action btnView" data-toggle="modal" data-target="#TestModal" data-examtopicid="@rows.ExamtopicID"> รายละเอียด </span>
+                                    <span title="แก้ไข" class="fa fa-cog link-action btnEdit" data-toggle="modal" data-target="#TestModal" data-examtopicid="@rows.ExamtopicID"> แก้ไข</span>
+                                    <span title="ลบ" class="fa  fa-times link-action btnDelete" data-examtopicid="@rows.ExamtopicID" data-Exname="@rows.ExamtopicName"> ลบ</span>
+                                    <span> | </span>
+                                    <span title="แก้ไขแบบทดสอบ" class="link-action btnEditTest" data-examtopicid="@rows.ExamtopicID" data-subid="@SubjectsEntity[0].SubjectID"> แก้ไขแบบทดสอบ</span>
+                                    <span> | </span>
+                                    <span title="ผลการสอบ" class="link-action btnScore" data-examtopicid="@rows.ExamtopicID" data-subid="@SubjectsEntity[0].SubjectID" data-groupid="@rows.GroupID"> ผลการสอบ</span>
+                                    <span> | </span>
+                                    <span title="Hardcopy" class="fa fa-file-o link-action btnhardcopy" data-toggle="modal" data-target="#hardcopyModal" data-examtopicid="@rows.ExamtopicID"> Hardcopy</span>
+                                    <span> | </span>
+                                </span>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
-            }
-            else
-            {
-
-
-            }
         }
+        else
+        {
+
+
+        }
+    }
 
 </div>
                
@@ -179,6 +207,36 @@
          $('.btnScore').click(function () {
             // alert($(this).data("examtopicid"));
              location.replace("ScoreStudent" + "?etid=" + $(this).data("examtopicid") + "&subid=" + $(this).data("subid") + "&g=" + $(this).data("groupid"));
+         });
+         var datahardcopy = {
+             ExamtopicID: 0,
+             SubjectID: $('#asubject').data("asubj"),
+         };
+         $('.btnhardcopy').click(function () {
+             datahardcopy.ExamtopicID = $(this).data("examtopicid");
+         });
+         $('#btnSavehard').click(function () {
+             $.ajax({
+                 type: "POST",
+                 cache: false,
+                 url: "HardCopy",
+                 dataType: "json",
+                 data: datahardcopy,
+                 traditional: true,
+                 beforeSend: function () {
+
+                 },
+
+                 success: function (res) {
+                    
+                 },
+                 error: function (xhr, ajaxOption, thrownError) {
+                     swal("เกิดข้อผิดพลาด", message, "error");
+                 },
+                 complete: function () {
+
+                 },
+             });
          });
      </script>
 <script src="~/Scripts/Scriptss/CreateTestJs.js"></script>

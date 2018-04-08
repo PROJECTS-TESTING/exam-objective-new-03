@@ -56,4 +56,9 @@ namespace Exam_Objective.Models
         public string Fname { get; set; }
         public string Lname { get; set; }
     }
+    public class HardCopyModel
+    {
+        public int ExamtopicID { get; set; }
+        public string SubjectID { get; set; }
+    }
 }
