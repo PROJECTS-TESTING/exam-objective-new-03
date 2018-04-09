@@ -258,11 +258,11 @@
     </Compile>
     <Compile Include="Models\PropositionModel.cs" />
     <Compile Include="Models\SelectQuizModel.cs" />
-    <Compile Include="Models\Subjects.cs">
+    <Compile Include="Models\Subject.cs">
       <DependentUpon>ExamSystemModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SubjectsModel.cs" />
-    <Compile Include="Models\sysdiagrams.cs">
+    <Compile Include="Models\sysdiagram.cs">
       <DependentUpon>ExamSystemModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TestGroup.cs">

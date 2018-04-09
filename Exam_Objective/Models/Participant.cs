@@ -19,7 +19,7 @@ namespace Exam_Objective.Models
         public string SubjectID { get; set; }
         public string Status { get; set; }
     
-        public virtual Subjects Subjects { get; set; }
+        public virtual Subject Subject { get; set; }
         public virtual UserSystem UserSystem { get; set; }
     }
 }

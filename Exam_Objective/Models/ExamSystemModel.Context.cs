@@ -35,8 +35,8 @@ namespace Exam_Objective.Models
         public virtual DbSet<Objective> Objective { get; set; }
         public virtual DbSet<Participant> Participant { get; set; }
         public virtual DbSet<Proposition> Proposition { get; set; }
-        public virtual DbSet<Subjects> Subjects { get; set; }
-        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
+        public virtual DbSet<Subject> Subjects { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagram { get; set; }
         public virtual DbSet<TestGroup> TestGroup { get; set; }
         public virtual DbSet<Testing> Testing { get; set; }
         public virtual DbSet<UserSystem> UserSystem { get; set; }

@@ -17,9 +17,9 @@ namespace Exam_Objective.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public UserSystem()
         {
-            this.Participant = new HashSet<Participant>();
-            this.Subjects = new HashSet<Subjects>();
-            this.Testing = new HashSet<Testing>();
+            this.Participants = new HashSet<Participant>();
+            this.Subjects = new HashSet<Subject>();
+            this.Testings = new HashSet<Testing>();
         }
     
         public string UserID { get; set; }
@@ -27,12 +27,13 @@ namespace Exam_Objective.Models
         public string Lname { get; set; }
         public string PWLogin { get; set; }
         public string Status { get; set; }
+        public string StudentID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Participant> Participant { get; set; }
+        public virtual ICollection<Participant> Participants { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Subjects> Subjects { get; set; }
+        public virtual ICollection<Subject> Subjects { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Testing> Testing { get; set; }
+        public virtual ICollection<Testing> Testings { get; set; }
     }
 }

@@ -231,7 +231,7 @@ namespace Exam_Objective.Controllers
                                   where g.GroupID == etid
                                   select new MemberModel
                                   {
-                                      
+                                      StudentID = u.StudentID,
                                       Fname = u.Fname,
                                       Lname = u.Lname,
                                       StudyGroup = m.GroupName

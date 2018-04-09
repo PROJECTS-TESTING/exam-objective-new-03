@@ -17,7 +17,7 @@ namespace Exam_Objective.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ExamTopic()
         {
-            this.ExamBody = new HashSet<ExamBody>();
+            this.ExamBodies = new HashSet<ExamBody>();
         }
     
         public int ExamtopicID { get; set; }
@@ -36,7 +36,7 @@ namespace Exam_Objective.Models
         public string Status { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ExamBody> ExamBody { get; set; }
-        public virtual Subjects Subjects { get; set; }
+        public virtual ICollection<ExamBody> ExamBodies { get; set; }
+        public virtual Subject Subject { get; set; }
     }
 }

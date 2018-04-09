@@ -14,7 +14,7 @@ namespace Exam_Objective.Models
         public string PStatus { get; set; }
         public string PFname { get; set; }
 
-        public virtual Subjects Subjects { get; set; }
+        public virtual Subject Subjects { get; set; }
         public virtual UserSystem UserSystem { get; set; }
     }
 }

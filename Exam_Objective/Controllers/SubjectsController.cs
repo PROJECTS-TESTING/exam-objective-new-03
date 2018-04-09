@@ -165,7 +165,7 @@ namespace Exam_Objective.Controllers
                 {
                     if (subject.isUpdateable != 1)
                     {
-                        DB.Subjects.Add(new Subjects
+                        DB.Subjects.Add(new Subject
                         {
                             SubjectID = subject.SubjectID,
                             UserID = subject.UserID,

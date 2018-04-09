@@ -692,7 +692,8 @@ namespace Exam_Objective.Controllers
                         Scoreper = scoresper,
                         countQuiz = dataTestAns.Count,
                         Fname = (from u in DB.UserSystem where u.UserID == r.UserID select u.Fname).FirstOrDefault(),
-                        Lname = (from u in DB.UserSystem where u.UserID == r.UserID select u.Lname).FirstOrDefault()
+                        Lname = (from u in DB.UserSystem where u.UserID == r.UserID select u.Lname).FirstOrDefault(),
+                        StudentID = (from u in DB.UserSystem where u.UserID == r.UserID select u.StudentID).FirstOrDefault()
                     });
                 }
                 ViewBag.dataScore = DataScoreStudent;
@@ -761,7 +762,8 @@ namespace Exam_Objective.Controllers
                         Scoreper = scoresper,
                         countQuiz = dataTestAns.Count,
                         Fname = (from u in DB.UserSystem where u.UserID == r.UserID select u.Fname).FirstOrDefault(),
-                        Lname = (from u in DB.UserSystem where u.UserID == r.UserID select u.Lname).FirstOrDefault()
+                        Lname = (from u in DB.UserSystem where u.UserID == r.UserID select u.Lname).FirstOrDefault(),
+                        StudentID = (from u in DB.UserSystem where u.UserID == r.UserID select u.StudentID).FirstOrDefault()
                     });
                 }
             }

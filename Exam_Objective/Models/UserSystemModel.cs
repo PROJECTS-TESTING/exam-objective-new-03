@@ -13,5 +13,6 @@ namespace Exam_Objective.Models
         public string PWLogin { get; set; }
         public string Status { get; set; }
         public int check { get; set; }
+        public string StudentID { get; set; }
     }
 }

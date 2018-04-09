@@ -12,15 +12,15 @@ namespace Exam_Objective.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Subjects
+    public partial class Subject
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Subjects()
+        public Subject()
         {
-            this.ExamTopic = new HashSet<ExamTopic>();
-            this.Lesson = new HashSet<Lesson>();
-            this.Participant = new HashSet<Participant>();
-            this.TestGroup = new HashSet<TestGroup>();
+            this.ExamTopics = new HashSet<ExamTopic>();
+            this.Lessons = new HashSet<Lesson>();
+            this.Participants = new HashSet<Participant>();
+            this.TestGroups = new HashSet<TestGroup>();
         }
     
         public string SubjectID { get; set; }
@@ -32,13 +32,13 @@ namespace Exam_Objective.Models
         public string Description { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ExamTopic> ExamTopic { get; set; }
+        public virtual ICollection<ExamTopic> ExamTopics { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Lesson> Lesson { get; set; }
+        public virtual ICollection<Lesson> Lessons { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Participant> Participant { get; set; }
+        public virtual ICollection<Participant> Participants { get; set; }
         public virtual UserSystem UserSystem { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<TestGroup> TestGroup { get; set; }
+        public virtual ICollection<TestGroup> TestGroups { get; set; }
     }
 }
