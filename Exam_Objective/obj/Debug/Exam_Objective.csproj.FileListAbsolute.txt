@@ -450,3 +450,8 @@ F:\VisualStudio\exam-objective-new-03\Exam_Objective\bin\HtmlToOpenXml.xml
 F:\VisualStudio\exam-objective-new-03\Exam_Objective\bin\WordGenerator.pdb
 F:\VisualStudio\exam-objective-new-03\Exam_Objective\bin\WordGenerator.dll.config
 F:\VisualStudio\exam-objective-new-03\Exam_Objective\obj\Debug\Exam_Objective.csproj.CopyComplete
+E:\Project_17-12-2017\exam-objective-new-03\Exam_Objective\obj\Debug\Exam_Objective.csprojResolveAssemblyReference.cache
+E:\Project_17-12-2017\exam-objective-new-03\Exam_Objective\obj\Debug\Exam_Objective.csproj.ResolveComReference.cache
+E:\Project_17-12-2017\exam-objective-new-03\Exam_Objective\obj\Debug\Exam_Objective.csproj.CoreCompileInputs.cache
+E:\Project_17-12-2017\exam-objective-new-03\Exam_Objective\obj\Debug\Exam_Objective.dll
+E:\Project_17-12-2017\exam-objective-new-03\Exam_Objective\obj\Debug\Exam_Objective.pdb
