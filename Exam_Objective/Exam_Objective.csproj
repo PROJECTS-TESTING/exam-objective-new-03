@@ -1002,6 +1002,7 @@
     <Content Include="Views\ExamBank\Export.cshtml" />
     <Content Include="Views\ExamBank\ExportMain.cshtml" />
     <Content Include="Views\ExamBank\Exportout.cshtml" />
+    <Content Include="Views\Testing\HardCopys.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -913,6 +913,27 @@ namespace Exam_Objective.Controllers
             Response.End();
         }
         // --- Hard-Copy ---
+        public ActionResult HardCopys(int etid, string subid, int g)
+        {
+            var user = Session["User"] as UserSystemModel;
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
+            else if (user.Status == "student")
+            {
+                return RedirectToAction("Index", "Student");
+            }
+            using (var DB = new dbEntities())
+            {
+                ViewBag.dataSubject = (from s in DB.Subjects where s.SubjectID == subid && s.UserID == user.UserID select s.SubjectName).FirstOrDefault();
+            }
+            using (var DB = new dbEntities())
+            {
+                ViewBag.dataGroup = (from gr in DB.TestGroup where gr.GroupID == g select gr.GroupName).FirstOrDefault();
+            }
+            return View();
+        }
         public void HardCopy(int exbody)
         {
             var user = Session["User"] as UserSystemModel;
@@ -956,13 +977,20 @@ namespace Exam_Objective.Controllers
                     foreach(var row in dataProp)
                     {
                         i++;
-                        html.Append("<B><p>"+i+". " + Regex.Replace(row.TextPropos, "<.*?>", String.Empty)+"</p></B>");
+                        if (Regex.IsMatch(row.TextPropos, "<img.*?>"))
+                        {
+                            html.Append("<p>" + i + ". " + Regex.Replace(row.TextPropos, "<.*?>", String.Empty) + "</p>"+"<p>"+Regex.Match(row.TextPropos,"<img.*?/>") +"</p>");
+                        }
+                        else {
+                            html.Append("<p>" + i + ". " + Regex.Replace(row.TextPropos, "<.*?>", String.Empty) + "</p>");
+                        }
+                       
                         foreach(var rowc in dataChoices)
                         {
                             if(row.ProposID == rowc.ProposID)
                             {
                                
-                                html.Append("<p>"+(char)j+". " + rowc.TextChoice.Substring(3, rowc.TextChoice.Length - 3));
+                                html.Append("<p>" + (char)j+". " + rowc.TextChoice.Substring(3, rowc.TextChoice.Length - 3));
                                 j++;
                             }
                         }j = 97;
