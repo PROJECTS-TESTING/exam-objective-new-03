@@ -63,9 +63,15 @@ namespace Exam_Objective.Controllers
         public ActionResult jsonReadFile(AnalysisModel Ana )
         {
             List<AnalysisModel> Numlist = new List<AnalysisModel>();
-            double aL = 0, bL = 0, cL = 0, dL = 0;
-            double aM = 0, bM = 0, cM = 0, dM = 0;
-            double aH = 0, bH = 0, cH = 0, dH = 0;
+
+
+            string st = Ana.name;
+            List<string> La = new List<string>();
+            List<double> La1 = new List<double>();
+
+            int aL = 0, bL = 0, cL = 0, dL = 0;
+            int aM = 0, bM = 0, cM = 0, dM = 0;
+            int aH = 0, bH = 0, cH = 0, dH = 0;
             double p1 = 0, p2 = 0, p3 = 0, p4 = 0;
 
             if (Ana.name != null)
@@ -123,7 +129,7 @@ namespace Exam_Objective.Controllers
                             }
                         }
                         else if (i < str.Length - 27)
-                        {   //กลุ่มต่ำ
+                        {   //กลุ่มกลาง
                             if (str[i].Substring(5 + j, 1) == "1")
                             {
                                 aM++;
@@ -165,14 +171,26 @@ namespace Exam_Objective.Controllers
                     p2 = (bH + bL + bM) / (str.Length);
                     p3 = (cH + cL + cM) / (str.Length);
                     p4 = (dH + dL + dM) / (str.Length);
-                    Numlist.Add(new AnalysisModel { aHigh = aH, aMid = aM, aLow = aL, bHigh = bH, bMid = bM, bLow = bL, cHigh = cH, cMid = cM, cLow = cL, dHigh = dH, dMid = dM, dLow = dL, pA = p2, pB = p2, pC = p3, pD = p4 });
+                    //Numlist.Add(new AnalysisModel { aHigh = aH, aMid = aM, aLow = aL, bHigh = bH, bMid = bM, bLow = bL, cHigh = cH, cMid = cM, cLow = cL, dHigh = dH, dMid = dM, dLow = dL, pA = p2, pB = p2, pC = p3, pD = p4 });
+
+
+            La1.Add(444);
+
+
                     aL = 0; bL = 0; cL = 0; dL = 0;
                     aM = 0; bM = 0; cM = 0; dM = 0;
                     aH = 0; bH = 0; cH = 0; dH = 0;
                     p1 = 0; p2 = 0; p3 = 0; p4 = 0;
                 }
-                ViewBag.tesV = Numlist;
+               // ViewBag.tesV = Numlist;
             }
+
+            La.Add("sssss");
+
+            ViewBag.data2 = La;
+            ViewData["data1"] = La1;
+
+
             //TempData["Numlist"] = Numlist;
             //return PartialView();
             return View();

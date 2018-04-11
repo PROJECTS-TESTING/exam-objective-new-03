@@ -84,32 +84,35 @@
                 <th></th>
                 <th><h6 class="text-center">วิจารณ์ตามค่าสถิติ</h6></th>
             </tr>
+      
         </thead>
         <tbody>
+            @{
+                var data2 = ViewBag.data2;
+                var data1 = ViewData["data1"];
+            }
             <!--foreach (var rows in SubjectsEntity)-->
-            @{var teAna = (List<AnalysisModel>)ViewBag.tesV;
-        if (teAna == null)
-        {
-
-        }
-        else
-        {
                 <tr>
-                    <td>@teAna[0].aHigh</td>
-                    <td>@teAna[0].aLow</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>
+                        @data2
+                    <td>
+                        @foreach (var d1 in (List<double>)data1)
+                        {
+                            <p>@d1</p>
+                        }
+                    </td>
+                    <td>b</td>
+                    <td>bh</td>
+                    <td>bid</td>
+                    <td>dow</td>
+                    <td>digh</td>
+                    <td>dcMid</td>
+                    <td>cLow</td>
+                    <td>cHigh</td>
+                    <td>cid</td>
+                    <td>cow</td>
                 </tr>
-        }
-    }
+
         </tbody>
     </table>
 </div>

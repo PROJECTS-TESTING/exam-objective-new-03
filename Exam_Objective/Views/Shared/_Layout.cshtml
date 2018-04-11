@@ -141,6 +141,12 @@
                  @Html.Partial("_MenuTesting")
             </div>
         }
+        else if (ViewBag.Title == "Specialist")
+        {
+            <div class="menuL hidden-menu-left">
+                @Html.Partial("_MenuIOC")
+            </div>
+        }
         else
         {
                 @*-------------- MenuLeft ---------------*@
