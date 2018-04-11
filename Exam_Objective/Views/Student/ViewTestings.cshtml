@@ -1,10 +1,11 @@
 ﻿@using Exam_Objective.Models
 @using System.Collections.Generic
-
+@using NSystems.Collections
 @{
     var dataExamtopics = (List<ExamTopicModel>)ViewBag.DataExamtopic;
     var DataPropos = (List<PropositionModel>)ViewBag.dataProposition;
     var DataChoice = (List<ChoiceModel>)ViewBag.dataChoice;
+    var DataCheck = (List<int>)ViewBag.dataCheck;
 }
 @{
     ViewBag.Title = "ViewTestings";
@@ -18,8 +19,37 @@
     <h4>วิชา @ViewBag.dataSubject</h4>
     <h4>@dataExamtopics[0].ExamtopicName กลุ่มเรียน: @ViewBag.dataGroup</h4><hr />
     @{ var x = 0;
+        var ckrandom = 0;
+        char choiceForm = 'a';
         foreach (var rows0 in DataPropos)
         {
+            List<ChoiceModel> rndchoice = new List<ChoiceModel>();
+            foreach (var rowsc in DataChoice)
+            {
+                if (rowsc.ProposID == rows0.ProposID)
+                {
+                    rndchoice.Add(new ChoiceModel { ChoiceID = rowsc.ChoiceID, ProposID = rowsc.ProposID, TextChoice = rowsc.TextChoice, Answer = rowsc.Answer, Distracter = rowsc.Distracter, countAnswer = rowsc.countAnswer });
+                }
+            }
+            if (dataExamtopics[0].Sequences.Equals("2") || dataExamtopics[0].Sequences.Equals("3"))
+            {
+                if (DataCheck != null && DataCheck.Count != 0)
+                {
+
+                    foreach (var checkcoice in DataCheck)
+                    {
+                        if (checkcoice == rows0.ProposID)
+                        {
+                            ckrandom = 1;
+                        }
+                    }
+                }
+                if (ckrandom == 0)
+                {
+                    rndchoice.Shuff();
+                    ckrandom = 0;
+                }
+            }
             if (rows0.Continuity == null)
             {
                 x++;
@@ -29,27 +59,28 @@
                         <div style="border:solid 1px #adfacd;border-radius:3px;padding:4px;background-color:#e0fced">
                             <span class="quizion" id="@rows0.ProposID">@Html.Raw(rows0.TextPropos)</span>
                             <input type="hidden" name="@x" value="@rows0.ProposID" />
-                            @{ var i = 0;
-                                foreach (var rows in DataChoice)
+                            @{ var i = 96;
+                                foreach (var rows in rndchoice)
                                 {
                                     if (rows.ProposID == rows0.ProposID)
                                     {
                                         i++;
+                                        choiceForm = (char)i;
                                         <div class="choice">
                                             @{if (rows.countAnswer > 1)
                                                 {
-                                                    <input type="checkbox" value="@rows.ChoiceID" name="@rows0.ProposID" /> @i<span>.</span>
+                                                    <input type="checkbox" value="@rows.ChoiceID" name="@rows0.ProposID" /> @choiceForm<span>.</span>
                                                 }
                                                 else
                                                 {
-                                                    <input type="radio" value="@rows.ChoiceID" name="@rows0.ProposID" /> @i<span>.</span>
+                                                    <input type="radio" value="@rows.ChoiceID" name="@rows0.ProposID" /> @choiceForm<span>.</span>
                                                 }
                                             }
                                             <span id="in-line"> @Html.Raw(rows.TextChoice)</span>
                                         </div>
                                     }
                                 }
-                                i = 0;
+                                i = 96;
                             }
                         </div>
                     </div>
@@ -58,6 +89,7 @@
             @*-----------------------------------ข้อสอบต่อเนื่อง------------------------------------*@
             else if (rows0.Continuity == 0)
             {
+                ckrandom=0;
                 var countQ1 = x + 1;
                 var countQ2 = 0;
 
@@ -69,59 +101,84 @@
                             <span style="font-size:20px">Question @countQ1<span>-</span>@countQ2</span>
                         </div>
                     </div>
-
                     <div class="col-md-10" style="margin-bottom:8px; padding:1px">
                         <div style="border:solid 1px #adfacd;border-radius:3px;padding:4px;background-color:#e4fbe8">
                             <div class="quizion" id="XXX">@Html.Raw(rows0.TextPropos)</div>
                         </div><br />
                     </div>
                 </div>
-                foreach (var rows1 in DataPropos)
+        foreach (var rows1 in DataPropos)
+        {
+            rndchoice = new List<ChoiceModel>();
+            foreach (var rowsc in DataChoice)
+            {
+                if (rowsc.ProposID == rows1.ProposID)
                 {
-                    if (rows1.Continuity == rows0.ProposID)
+                    rndchoice.Add(new ChoiceModel { ChoiceID = rowsc.ChoiceID, ProposID = rowsc.ProposID, TextChoice = rowsc.TextChoice, Answer = rowsc.Answer, Distracter = rowsc.Distracter, countAnswer = rowsc.countAnswer });
+                }
+            }
+            if (dataExamtopics[0].Sequences.Equals("2") || dataExamtopics[0].Sequences.Equals("3"))
+            {
+                if (DataCheck != null && DataCheck.Count != 0)
+                {
+
+                    foreach (var checkcoice in DataCheck)
                     {
-                        x++;
+                        if (checkcoice == rows1.ProposID)
+                        {
+                            ckrandom = 1;
+                        }
+                    }
+                }
+                if (ckrandom == 0)
+                {
+                    rndchoice.Shuff();
+                    ckrandom = 0;
+                }
+            }
+            if (rows1.Continuity == rows0.ProposID)
+            {
+                x++;
                         <div class="content_question">
                             <div class="col-md-2" style="margin-bottom:8px ;padding:1px"><div style="border:solid 1px #808080;border-radius:3px;padding:4px"><span style="font-size:20px">Question  @x</span></div></div>
                             <div class="col-md-10" style="margin-bottom:8px; padding:1px">
                                 <div style="border:solid 1px #adfacd;border-radius:3px;padding:4px;background-color:#e0fced">
                                     <span class="quizion" id="@rows1.ProposID">@Html.Raw(rows1.TextPropos)</span>
                                     <input type="hidden" name="@x" value="@rows1.ProposID" />
-                                    @{ var i = 0;
-                                        foreach (var rows in DataChoice)
+                                    @{ var i = 96;
+                                        foreach (var rows in rndchoice)
                                         {
                                             if (rows.ProposID == rows1.ProposID)
                                             {
                                                 i++;
+                                                choiceForm = (char)i;
                                                 <div class="choice">
                                                     @{if (rows.countAnswer > 1)
                                                         {
-                                                            <input type="checkbox" value="@rows.ChoiceID" name="@rows1.ProposID" /> @i<span>.</span>
+                                                            <input type="checkbox" value="@rows.ChoiceID" name="@rows1.ProposID" /> @choiceForm<span>.</span>
                                                         }
                                                         else
                                                         {
-                                                            <input type="radio" value="@rows.ChoiceID" name="@rows1.ProposID" /> @i<span>.</span>
+                                                            <input type="radio" value="@rows.ChoiceID" name="@rows1.ProposID" /> @choiceForm<span>.</span>
                                                         }
                                                     }
                                                     <span id="in-line"> @Html.Raw(rows.TextChoice)</span>
                                                 </div>
                                             }
                                         }
-                                        i = 0;
+                                        i = 96;
                                     }
                                 </div>
                             </div>
                         </div>
-                    }
+                    }ckrandom=0;
                 }
-            }
+            }ckrandom=0;
         }
     }
-
     <div style="margin:30px">
         .
     </div>
-
 
 </div>
 @section scripts{
@@ -150,7 +207,7 @@
                 }
             });
         });
-      
+
         $('#btnsendQ').click(function () {
             var AnswerStudenQ = [];
             var AnswerStudenC = [];
@@ -164,16 +221,16 @@
                     $(inputs).each(function () {
                         if ($(this).is(':checked')) {
                             if (cansw.toString().length >= 1 && cansw != 0) {
-                                cansw += ","+$(this).val();
-                            } else { cansw = $(this).val();}
+                                cansw += "," + $(this).val();
+                            } else { cansw = $(this).val(); }
                         }
                     });
                     AnswerStudenC.push(cansw);
                 }
-            });     
+            });
             sessionStorage.clear();
-        //alert(AnswerStudenC);
-       // alert(AnswerStudenQ);
+            //alert(AnswerStudenC);
+            // alert(AnswerStudenQ);
             var DataAnswer = {
                 ExamBodyID: $('input[type=hidden]#idexambody').val(),
                 ProposID: AnswerStudenQ,
@@ -231,7 +288,7 @@
 
             });
         });
-       
+
         var datein = $('#datein').data("dates");
         var i = [];
         i = datein.split(' ');
@@ -246,7 +303,7 @@
         var TimeBegin = $('#datein1').data("dates");
 
         var TimeEnd = $('#datein2').data("dates");
-        
+
         var countDownDate = new Date(DateBegin.monthBegin + " " + DateBegin.dateBegin + ", " + DateBegin.yearBegin + " " + TimeEnd).getTime();
         var check1 = new Date(DateBegin.monthBegin + " " + DateBegin.dateBegin + ", " + DateBegin.yearBegin + " " + TimeBegin).getTime();
         // Update the count down every 1 second
@@ -280,9 +337,9 @@
             }
 
         }, 1000);
-       
+
         function GotoQ(n) {
-            $('html,body').animate({ scrollTop: $('span#' + n).offset().top -60}, 500);
+            $('html,body').animate({ scrollTop: $('span#' + n).offset().top - 60 }, 500);
         }
     </script>
 }

@@ -17,7 +17,7 @@ namespace Exam_Objective.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public TestGroup()
         {
-            this.Member = new HashSet<Member>();
+            this.Members = new HashSet<Member>();
         }
     
         public int GroupID { get; set; }
@@ -27,7 +27,7 @@ namespace Exam_Objective.Models
         public string GroupPW { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Member> Member { get; set; }
-        public virtual Subjects Subjects { get; set; }
+        public virtual ICollection<Member> Members { get; set; }
+        public virtual Subject Subject { get; set; }
     }
 }

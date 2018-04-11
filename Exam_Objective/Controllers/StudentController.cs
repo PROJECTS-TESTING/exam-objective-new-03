@@ -173,7 +173,7 @@ namespace Exam_Objective.Controllers
             }
             using (var DB = new dbEntities())
             {
-                ViewBag.DataExamtopic = (from e in DB.ExamTopic
+               var DataEx  = (from e in DB.ExamTopic
                                          where e.GroupID == g && e.SubjectID == subid && e.UserID == datasu
                                          select new ExamTopicModel
                                          {
@@ -182,9 +182,12 @@ namespace Exam_Objective.Controllers
                                              DatetoBegin = e.DatetoBegin,
                                              TimetoBegin = e.TimetoBegin,
                                              TimetoEnd = e.TimetoEnd,
-                                             ExamtopicPW = e.ExamtopicPW
-
+                                             ExamtopicPW = e.ExamtopicPW,
+                                             InNetWork = e.InNetWork
+                                            
                                          }).ToList();
+                DataEx[0].IPsubnetClient = NetworkClient.GetIPClien();
+                ViewBag.DataExamtopic = DataEx;
             }
             return View();
         }
@@ -232,11 +235,11 @@ namespace Exam_Objective.Controllers
                                  where e.ExamtopicID == DataEx.ExamtopicID
                                  select e.ExamtopicPW).FirstOrDefault();
                 var dataexamtopic = new ExamtopicDataModel {ExamtopicID = DataEx.ExamtopicID,SubjectID = DataEx.SubjectID, UserID = DataEx.UserID };
-                if (examtopid == null && DataEx.CheckDateTime == 0)
+                if (examtopid == null && DataEx.CheckDateTime == 0 && DataEx.CheckIP)
                 { 
                     jsonretern = new JsonRespone { status = true, message = "เข้าสอบเรียบร้อย", data = dataexamtopic };
                 }
-                else if(examtopid != null && examtopid == DataEx.ExamtopicPW && DataEx.CheckDateTime == 0)
+                else if(examtopid != null && examtopid == DataEx.ExamtopicPW && DataEx.CheckDateTime == 0 && DataEx.CheckIP)
                 {
                     jsonretern = new JsonRespone { status = true, message = "เข้าสอบเรียบร้อย", data = dataexamtopic };
                 }else if (DataEx.CheckDateTime == 1)
@@ -246,6 +249,10 @@ namespace Exam_Objective.Controllers
                 else if (DataEx.CheckDateTime == 2)
                 {
                     jsonretern = new JsonRespone { status = false, message = "ยังไม่ถึงเวลาในการทำแบบทดสอบ" };
+                }
+                else if (!DataEx.CheckIP)
+                {
+                    jsonretern = new JsonRespone { status = false, message = "ท่านไม่ได้อยู่ในเครือข่ายที่กำหนด" };
                 }
                 else
                 {
@@ -304,20 +311,18 @@ namespace Exam_Objective.Controllers
                                                Continuity = p.Continuity
                                            }).ToList();
 
-                if (dataextopic[0].Sequences.Equals("1"))
+                if (dataextopic[0].Sequences.Equals("1")|| dataextopic[0].Sequences.Equals("3"))
                 {
                     dataProp.Shuff();
                 }
                 ViewBag.dataProposition = dataProp;
-            }
-            using (var DB = new dbEntities())
-            {
-                var dataExambody = (from ee in DB.ExamBody where ee.ExamtopicID == e select ee.ExamBodyID).FirstOrDefault();
-                ViewBag.Dataexambodyid = dataExambody;
-                ViewBag.dataChoice = (from ex in DB.GetExam
+            
+                var dataExambody1 = (from ee in DB.ExamBody where ee.ExamtopicID == e select ee.ExamBodyID).FirstOrDefault();
+                ViewBag.Dataexambodyid = dataExambody1;
+                var dataChoices = (from ex in DB.GetExam
                                       join c in DB.Choice on ex.ProposID equals c.ProposID
                                       let countans = (from ca in DB.Choice where ca.ProposID == ex.ProposID && ca.Answer > 0 select ex).Count()
-                                      where ex.ExamBodyID == dataExambody
+                                      where ex.ExamBodyID == dataExambody1
                                       orderby c.ChoiceID
                                       select new ChoiceModel
                                       {
@@ -326,6 +331,36 @@ namespace Exam_Objective.Controllers
                                           TextChoice = c.TextChoice,
                                           countAnswer = countans
                                       }).ToList();
+
+                if (dataextopic[0].Sequences.Equals("2") || dataextopic[0].Sequences.Equals("3"))
+                {
+                    List<int> checkChoice = new List<int>();
+                    foreach (var datac in dataChoices)
+                    {
+                        if (datac.ChoiceID == 4)
+                        {
+                            if (datac.TextChoice.Substring(3, 7).Equals("ถูกทั้ง"))
+                            {
+                                checkChoice.Add(datac.ProposID);
+                            }
+                            else if (datac.TextChoice.Substring(3, 9).Equals("ถูกทุกข้อ"))
+                            {
+                                checkChoice.Add(datac.ProposID);
+                            }
+                            else if (datac.TextChoice.Length > 15 && datac.TextChoice.Substring(3, 13).Equals("ไม่มีข้อใดถูก"))
+                            {
+                                checkChoice.Add(datac.ProposID);
+                            }
+                            else if (datac.TextChoice.Length > 13 && datac.TextChoice.Substring(3, 11).Equals("ไม่มีข้อถูก"))
+                            {
+                                checkChoice.Add(datac.ProposID);
+                            }
+                        }
+                    }
+                    ViewBag.dataCheck = checkChoice;
+                }
+
+                    ViewBag.dataChoice = dataChoices;
             }
             return View();
         }

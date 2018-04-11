@@ -222,3 +222,34 @@ a:hover{
 .choice {
     padding: 8px
 }
+.table-fixed {
+    width: 100%;
+    background-color: #ffffff;
+}
+
+    .table-fixed tbody {
+        height: 230px;
+        overflow-y: auto;
+        width: 100%;
+    }
+
+    .table-fixed thead, .table-fixed tbody, .table-fixed tr, .table-fixed td, .table-fixed th {
+        display: block;
+        width: 100%;
+    }
+
+        .table-fixed tbody td {
+            float: left;
+        }
+
+        .table-fixed tbody tr {
+            float: left;
+            background-color: #f3f3f3;
+        }
+
+        .table-fixed thead tr th {
+            float: left;
+            background-color: #6979f8;
+            border-color: #3b50fc;
+            width: 100%;
+        }

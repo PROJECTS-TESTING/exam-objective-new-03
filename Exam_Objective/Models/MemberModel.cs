@@ -13,6 +13,7 @@ namespace Exam_Objective.Models
         public string Lname { get; set; }
         public string StudyGroup { get; set; }
         public int isUpdateable { get; set; }
+        public string StudentID { get; set; }
     }
 
     public class AddGroupStudent

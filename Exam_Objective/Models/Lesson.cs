@@ -17,7 +17,7 @@ namespace Exam_Objective.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Lesson()
         {
-            this.Objective = new HashSet<Objective>();
+            this.Objectives = new HashSet<Objective>();
         }
     
         public int LessonID { get; set; }
@@ -27,8 +27,8 @@ namespace Exam_Objective.Models
         public string UserID { get; set; }
         public string Contents { get; set; }
     
-        public virtual Subjects Subjects { get; set; }
+        public virtual Subject Subject { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Objective> Objective { get; set; }
+        public virtual ICollection<Objective> Objectives { get; set; }
     }
 }

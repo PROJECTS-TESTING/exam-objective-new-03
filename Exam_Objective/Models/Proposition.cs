@@ -17,8 +17,8 @@ namespace Exam_Objective.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Proposition()
         {
-            this.Choice = new HashSet<Choice>();
-            this.GetExam = new HashSet<GetExam>();
+            this.Choices = new HashSet<Choice>();
+            this.GetExams = new HashSet<GetExam>();
         }
     
         public int ProposID { get; set; }
@@ -33,9 +33,9 @@ namespace Exam_Objective.Models
         public Nullable<int> CheckChoice { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Choice> Choice { get; set; }
+        public virtual ICollection<Choice> Choices { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GetExam> GetExam { get; set; }
+        public virtual ICollection<GetExam> GetExams { get; set; }
         public virtual IOC IOC1 { get; set; }
         public virtual Objective Objective { get; set; }
     }

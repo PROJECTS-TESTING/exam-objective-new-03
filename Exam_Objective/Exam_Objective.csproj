@@ -46,11 +46,21 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.0.5022.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\C#\WordGenerator\WordGenerator\bin\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus, Version=4.1.1.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.1.1\lib\net40\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlToOpenXml">
+      <HintPath>..\..\..\C#\WordGenerator\WordGenerator\_lib\HtmlToOpenXml.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.7\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
@@ -68,6 +78,12 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.FileSystem.Primitives.4.0.1\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Packaging, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Packaging.4.0.0\lib\net46\System.IO.Packaging.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
@@ -128,6 +144,7 @@
       <Private>True</Private>
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="WindowsBase" />
     <Reference Include="WIRIScommon, Version=0.0.0.0, Culture=neutral, PublicKeyToken=e6c25a2806ef6977, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Users\TEERASAKNT\Downloads\aspx-tiny_mce_wiris-4.10.0.1383\tiny_mce_wiris\bin\WIRIScommon.dll</HintPath>
@@ -135,6 +152,9 @@
     <Reference Include="WIRISplugin, Version=4.10.0.1383, Culture=neutral, PublicKeyToken=e6c25a2806ef6977, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Users\TEERASAKNT\Downloads\aspx-tiny_mce_wiris-4.10.0.1383\tiny_mce_wiris\bin\WIRISplugin.dll</HintPath>
+    </Reference>
+    <Reference Include="WordGenerator">
+      <HintPath>..\..\..\C#\WordGenerator\WordGenerator\bin\WordGenerator.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -210,6 +230,7 @@
     <Compile Include="Models\GetExam.cs">
       <DependentUpon>ExamSystemModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ImportExportModel.cs" />
     <Compile Include="Models\IOC.cs">
       <DependentUpon>ExamSystemModel.tt</DependentUpon>
     </Compile>
@@ -237,11 +258,11 @@
     </Compile>
     <Compile Include="Models\PropositionModel.cs" />
     <Compile Include="Models\SelectQuizModel.cs" />
-    <Compile Include="Models\Subjects.cs">
+    <Compile Include="Models\Subject.cs">
       <DependentUpon>ExamSystemModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SubjectsModel.cs" />
-    <Compile Include="Models\sysdiagrams.cs">
+    <Compile Include="Models\sysdiagram.cs">
       <DependentUpon>ExamSystemModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TestGroup.cs">
@@ -969,6 +990,7 @@
     <Content Include="Views\Shared\_MenuStudentTest.cshtml" />
     <Content Include="Views\Student\ViewScore.cshtml" />
     <Content Include="Views\Testing\ScoreStudent.cshtml" />
+<<<<<<< HEAD
     <Content Include="Views\Contents\Addcontent.cshtml" />
     <Content Include="Views\Contents\Index.cshtml" />
     <Content Include="Views\IOC\AddGroupIOC.cshtml" />
@@ -978,6 +1000,15 @@
     <Content Include="Views\IOC\Specialist.cshtml" />
     <Content Include="Views\IOC\SpecialistLogin.cshtml" />
     <Content Include="Views\Shared\_MenuIOC.cshtml" />
+=======
+    <Content Include="Views\ExamBank\Import.cshtml" />
+    <Content Include="Views\ExamBank\Importin.cshtml" />
+    <Content Include="Views\ExamBank\ImportMain.cshtml" />
+    <Content Include="Views\ExamBank\Export.cshtml" />
+    <Content Include="Views\ExamBank\ExportMain.cshtml" />
+    <Content Include="Views\ExamBank\Exportout.cshtml" />
+    <Content Include="Views\Testing\HardCopys.cshtml" />
+>>>>>>> 4543c8e40192342d8133acccf0d7f6897431f5a0
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -987,6 +1018,26 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>7</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

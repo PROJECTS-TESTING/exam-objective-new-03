@@ -27,16 +27,19 @@
                             <td>
                                 <span title="@rows.ExamtopicName" class="link-action" data-toggle="modal" data-target="#PWtestModal">
                                     <span class="icon icon-doc"> </span>
-                                    <span id="examtopic" 
-                                          data-examtopicid="@rows.ExamtopicID" 
-                                          data-examPW="@rows.ExamtopicPW" 
+                                    <span id="examtopic"
+                                          data-examtopicid="@rows.ExamtopicID"
+                                          data-examPW="@rows.ExamtopicPW"
                                           data-datebegin="@rows.DatetoBegin"
                                           data-timebegin="@rows.TimetoBegin"
                                           data-timeend="@rows.TimetoEnd">
-                                    @rows.ExamtopicName</span>
+                                        @rows.ExamtopicName
+                                    </span>
                                 </span>
+                                <span id="ipall" data-ipsubnet="@rows.InNetWork" data-ipsubnetclient="@rows.IPsubnetClient"></span>
                             </td>
                         </tr>
+                       
                     }
                 }
                 else
@@ -85,7 +88,39 @@
 @section scripts{
     <script src="~/Scripts/Scriptss/ShowPW-HidePW-Js.js"></script>
     <script type="text/javascript">
+      
+        
         $('#btnSelect').click(function () {
+            var ipsub = $('#ipall').data("ipsubnet");
+            var ipclient = $('#ipall').data("ipsubnetclient");
+            var ip2long = function (ip) {
+                var components;
+                if (components = ip.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/)) {
+                    var iplong = 0;
+                    var power = 1;
+                    for (var i = 4; i >= 1; i -= 1) {
+                        iplong += power * parseInt(components[i]);
+                        power *= 256;
+                    }
+                    return iplong;
+                }
+                else return -1;
+            };
+
+            var inSubNet = function (ip, subnet) {
+                var mask, base_ip, long_ip = ip2long(ip);
+                if ((mask = subnet.match(/^(.*?)\/(\d{1,2})$/)) && ((base_ip = ip2long(mask[1])) >= 0)) {
+                    var freedom = Math.pow(2, 32 - parseInt(mask[2]));
+                    return (long_ip > base_ip) && (long_ip < base_ip + freedom - 1);
+                }
+                else return false;
+            };
+            
+            var checkip = true;
+            if (ipsub != "") {
+                checkip = inSubNet(ipclient, ipsub);
+            }
+           // alert(checkip);
             // Check DateTime Begin End.
             var datein = $('#examtopic').data("datebegin");
             var i = [];
@@ -114,7 +149,8 @@
                 SubjectID: $('#subj').data("subjid"),
                 UserID: $('#suser').data("userid"),
                 ExamtopicPW: $('#TestPW').val(),
-                CheckDateTime: checkdatetime
+                CheckDateTime: checkdatetime,
+                CheckIP: checkip
             };
            // alert(Data1.ExamtopicID + " " + Data1.SubjectID + " " + Data1.ExamtopicPW + "" + Data1.UserID);
             $.ajax({

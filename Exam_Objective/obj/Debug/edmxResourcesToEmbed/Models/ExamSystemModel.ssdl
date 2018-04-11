@@ -163,6 +163,7 @@
     <Property Name="Lname" Type="varchar" MaxLength="100" Nullable="false" />
     <Property Name="PWLogin" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="Status" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="StudentID" Type="varchar" MaxLength="50" />
   </EntityType>
   <Association Name="FK__ExamBody__Examto__753864A1">
     <End Role="ExamTopic" Type="Self.ExamTopic" Multiplicity="1">
@@ -231,7 +232,9 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_GetExam_ExamBody">
-    <End Role="ExamBody" Type="Self.ExamBody" Multiplicity="1" />
+    <End Role="ExamBody" Type="Self.ExamBody" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
     <End Role="GetExam" Type="Self.GetExam" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="ExamBody">
@@ -353,7 +356,9 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_Testing_GetExam">
-    <End Role="GetExam" Type="Self.GetExam" Multiplicity="1" />
+    <End Role="GetExam" Type="Self.GetExam" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
     <End Role="Testing" Type="Self.Testing" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="GetExam">

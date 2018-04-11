@@ -18,6 +18,14 @@ using WebGrease.Css.Extensions;
 using ConsoleAppLog;
 using Networks;
 using NSystems.Collections;
+using System.Web.UI.WebControls;
+using System.Xml;
+using OfficeOpenXml;
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
+using NotesFor.HtmlToOpenXml;
+using System.Text.RegularExpressions;
 
 namespace Exam_Objective.Controllers
 {
@@ -325,27 +333,9 @@ namespace Exam_Objective.Controllers
             using (var DB = new dbEntities())
             {
                 var LessonData = (from l in DB.Lesson
-                                  where user.UserID == l.UserID && l.SubjectID == subid
-                                  orderby l.LessonID
-                                  select new LessonModel
-                                  {
-                                      LessonID = l.LessonID,
-                                      LesName = l.LesName,
-                                      TextLesson = l.TextLesson
-
-                                  }).DistinctBy(r => r.LesName).ToList();
-                ViewBag.Lesson = LessonData;
-            }
-            // นับจำนวนข้อสอบในแต่ละบทเรียน
-            using(var DB = new dbEntities())
-            {
-                var countPropo = (from l in DB.Lesson
-
-                                  let countP = (from o in DB.Objective
-                                                join p in DB.Proposition on o.ObjID equals p.ObjID
-                                                where o.ObjID == p.ObjID && o.LessonID == l.LessonID
+                                  let countobj = (from o in DB.Objective
+                                                where o.LessonID == l.LessonID
                                                 select l).Count()
-
                                   where user.UserID == l.UserID && l.SubjectID == subid
                                   orderby l.LessonID
                                   select new LessonModel
@@ -353,9 +343,28 @@ namespace Exam_Objective.Controllers
                                       LessonID = l.LessonID,
                                       LesName = l.LesName,
                                       TextLesson = l.TextLesson,
-                                      CountProposID = countP
-                                  }).ToList();
-                ViewBag.countProposi = countPropo;
+                                      CountObjective = countobj
+                                  }).DistinctBy(r => r.LesName).ToList();
+                ViewBag.Lesson = LessonData;
+            }
+            // วัตถุประสงค์
+            using(var DB = new dbEntities())
+            {
+                var dataObj = (from o in DB.Objective
+                               join l in DB.Lesson on o.LessonID equals l.LessonID
+                               let oPropos = (         
+                                          from p in DB.Proposition
+                                          where p.ObjID == o.ObjID
+                                          select o).Count()
+                               where l.UserID == user.UserID && l.SubjectID == subid
+                               select new ObjectiveModel {
+                                   ObjID = o.ObjID,
+                                   ObjName = o.ObjName,
+                                   TextObj = o.TextObj,
+                                   PLessonID = o.LessonID,
+                                   CountProposID = oPropos
+                               }).ToList();
+                ViewBag.DataObjective = dataObj;
             }
             // รายละเอียดข้อสอบแต่ละข้อในวิชานี้
             using(var DB = new dbEntities())
@@ -370,7 +379,8 @@ namespace Exam_Objective.Controllers
                                     ProposName = p.ProposName,
                                     LessonID = l.LessonID,
                                     LesName = l.LesName,
-                                    ObjID = o.ObjID
+                                    ObjID = p.ObjID,
+                                    Difficulty = p.Difficulty
                                 }
                                 ).ToList();
                 ViewBag.QuizData = DataQuiz;
@@ -546,15 +556,13 @@ namespace Exam_Objective.Controllers
                                                TextPropos = p.TextPropos,
                                                Continuity = p.Continuity
                                            }).ToList();
-                if (dataextopic[0].Sequences.Equals("1"))
+                if (dataextopic[0].Sequences.Equals("1") || dataextopic[0].Sequences.Equals("3"))
                 {
                     dataProp.Shuff();
                 }
                 ViewBag.dataProposition = dataProp;
-            }
-            using(var DB = new dbEntities())
-            {
-                ViewBag.dataChoice = (from ex in DB.GetExam
+           
+                var dataChoices = (from ex in DB.GetExam
                                       join c in DB.Choice on ex.ProposID equals c.ProposID
                                       let countans = (from ca in DB.Choice where ca.ProposID == ex.ProposID && ca.Answer > 0 select ex).Count()
                                       where ex.ExamBodyID == exbody
@@ -567,12 +575,45 @@ namespace Exam_Objective.Controllers
                                           Answer = c.Answer,
                                           countAnswer = countans
                                       }).ToList();
+
+            if (dataextopic[0].Sequences.Equals("2") || dataextopic[0].Sequences.Equals("3"))
+            {
+                    List<int> checkChoice = new List<int>();
+                    foreach(var datac in dataChoices)
+                    {
+                        if(datac.ChoiceID == 4)
+                        {
+                            if (datac.TextChoice.Substring(3, 7).Equals("ถูกทั้ง"))
+                            {
+                                checkChoice.Add(datac.ProposID);
+                            }
+                            else if (datac.TextChoice.Substring(3, 9).Equals("ถูกทุกข้อ")) 
+                            {
+                                checkChoice.Add(datac.ProposID);
+                            }
+                            else if (datac.TextChoice.Length>15&&datac.TextChoice.Substring(3, 13).Equals("ไม่มีข้อใดถูก"))
+                            {
+                                checkChoice.Add(datac.ProposID);
+                            }
+                            else if (datac.TextChoice.Length > 13 && datac.TextChoice.Substring(3, 11).Equals("ไม่มีข้อถูก"))
+                            {
+                                checkChoice.Add(datac.ProposID);
+                            }
+                        }
+                    }
+                    ViewBag.dataCheck = checkChoice;
+            }
+                
+                ViewBag.dataChoice = dataChoices;
             }
             return View();
         }
         // Check score students
         public ActionResult ScoreStudent(int etid, string subid, int g)
         {
+            ViewBag.etid = etid;
+            ViewBag.subid = subid;
+            ViewBag.groupid = g;
             var user = Session["User"] as UserSystemModel;
             if (user == null)
             {
@@ -585,6 +626,10 @@ namespace Exam_Objective.Controllers
             using (var DB = new dbEntities())
             {
                 ViewBag.dataSubject = (from s in DB.Subjects where s.SubjectID == subid && s.UserID == user.UserID select s.SubjectName).FirstOrDefault();
+            }
+            using (var DB = new dbEntities())
+            {
+                ViewBag.dataGroup = (from gr in DB.TestGroup where gr.GroupID == g select gr.GroupName).FirstOrDefault();
             }
             using (var DB = new dbEntities())
             {
@@ -647,12 +692,369 @@ namespace Exam_Objective.Controllers
                         Scoreper = scoresper,
                         countQuiz = dataTestAns.Count,
                         Fname = (from u in DB.UserSystem where u.UserID == r.UserID select u.Fname).FirstOrDefault(),
-                        Lname = (from u in DB.UserSystem where u.UserID == r.UserID select u.Lname).FirstOrDefault()
+                        Lname = (from u in DB.UserSystem where u.UserID == r.UserID select u.Lname).FirstOrDefault(),
+                        StudentID = (from u in DB.UserSystem where u.UserID == r.UserID select u.StudentID).FirstOrDefault()
                     });
                 }
                 ViewBag.dataScore = DataScoreStudent;
             }
             return View();
         }
+        // สร้าง Excel File รายงานผลคะแนนนักศึกษา
+        public void ExportScore(int etid, string subid, int g)
+        {
+            var user = Session["User"] as UserSystemModel;
+            var subjectName = "";
+            var groupName = "";
+            var ExamtopicName = "";
+            List<ScoreStudent> DataScoreStudent = new List<ScoreStudent>();
+            using (var DB = new dbEntities())
+            {
+                 subjectName = (from s in DB.Subjects where s.SubjectID == subid && s.UserID == user.UserID select s.SubjectName).FirstOrDefault();
+                 groupName = (from gr in DB.TestGroup where gr.GroupID == g select gr.GroupName).FirstOrDefault();
+                 ExamtopicName = (from e1 in DB.ExamTopic where e1.ExamtopicID == etid select e1.ExamtopicName).FirstOrDefault();
+
+                var dataUserStudent = (from t in DB.Testing
+                                       where t.ExamBodyID == (from eb in DB.ExamBody where eb.ExamtopicID == etid select eb.ExamBodyID).FirstOrDefault()
+                                       select new { t.ExamBodyID, t.UserID }).DistinctBy(e => e.UserID).ToList();
+
+                foreach (var r in dataUserStudent)
+                {
+                    var dataTesting = (from t in DB.Testing
+                                       join c in DB.Choice on t.ProposID equals c.ProposID
+                                       where t.ExamBodyID == r.ExamBodyID && t.UserID == r.UserID
+                                       select new { c.Answer, t.ProposID, c.ChoiceID }).ToList();
+                    var dataTestAns = DB.Testing.Where(t => t.ExamBodyID == r.ExamBodyID && t.UserID == r.UserID).ToList();
+                    float score = 0f;
+                    foreach (var c in dataTestAns)
+                    {
+                        if (c.AnswerStudent.Length > 1)
+                        {
+                            string[] strchoice = c.AnswerStudent.Split(',');
+                            for (var i = 0; i < strchoice.Length; i++)
+                            {
+                                foreach (var a in dataTesting)
+                                {
+                                    if (c.ProposID == a.ProposID && a.ChoiceID == Int16.Parse(strchoice[i]))
+                                    {
+                                        score = a.Answer > 0 ? score + (float)a.Answer : score - 0.5f;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            foreach (var a in dataTesting)
+                            {
+                                if (c.ProposID == a.ProposID && c.AnswerStudent.Equals(a.ChoiceID.ToString()))
+                                {
+                                    if (a.Answer > 0)
+                                        score = score + (float)a.Answer;
+                                }
+                            }
+                        }
+                    }
+                    float scoresper = (score * 100) / dataTestAns.Count;
+
+                    DataScoreStudent.Add(new ScoreStudent
+                    {
+                        Score = score,
+                        Scoreper = scoresper,
+                        countQuiz = dataTestAns.Count,
+                        Fname = (from u in DB.UserSystem where u.UserID == r.UserID select u.Fname).FirstOrDefault(),
+                        Lname = (from u in DB.UserSystem where u.UserID == r.UserID select u.Lname).FirstOrDefault(),
+                        StudentID = (from u in DB.UserSystem where u.UserID == r.UserID select u.StudentID).FirstOrDefault()
+                    });
+                }
+            }
+
+            ExcelPackage pck = new ExcelPackage();
+            ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Report");
+          
+            // Header ExCEL FILE
+            ws.Cells["A1"].Value = "วิชา";
+            ws.Cells["B1"].Value = subjectName;
+            ws.Cells["A2"].Value = "ชื่อแบบทดสอบ";
+            ws.Cells["B2"].Value = ExamtopicName;
+            ws.Cells["A3"].Value = "จำนวน";
+            ws.Cells["B3"].Value = DataScoreStudent[0].countQuiz+" ข้อ";
+            ws.Cells["A4"].Value = "กลุ่มเรียน";
+            ws.Cells["B4"].Value = groupName;
+            ws.Cells["A5"].Value = "อาจารย์ผู้สอน";
+            ws.Cells["B5"].Value = user.Fname + " " + user.Lname;
+            ws.Cells["A6"].Value = "วันที่";
+            ws.Cells["B6"].Value = string.Format("{0:dd MMMM yyyy} at {0:H: mm tt}", DateTimeOffset.Now);
+            ws.Cells["A8"].Value = "รหัสนักศึกษา";
+            ws.Cells["B8"].Value = "ชื่อ-นามสกุล";
+            ws.Cells["C8"].Value = "จำนวนข้อถูก";
+            ws.Cells["D8"].Value = "คะแนนเปอร์เซ็น";
+
+            int rowNuber = 9;
+            foreach(var dataScore in DataScoreStudent)
+            {
+                ws.Cells[string.Format("A{0}", rowNuber)].Value = dataScore.StudentID;
+                ws.Cells[string.Format("B{0}", rowNuber)].Value = dataScore.Fname + " " + dataScore.Lname;
+                ws.Cells[string.Format("C{0}", rowNuber)].Value = string.Format("{0:0.00}", dataScore.Score);
+                ws.Cells[string.Format("D{0}", rowNuber)].Value = string.Format("{0:0.00}", dataScore.Scoreper);
+                rowNuber++;
+            }
+
+            ws.Cells["A:AZ"].AutoFitColumns();
+            Response.Clear();
+            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            Response.AddHeader("content-disposition", "attachment; filename="+ ExamtopicName + "-"+subjectName+"-"+groupName+".xlsx");
+            Response.BinaryWrite(pck.GetAsByteArray());
+            Response.Flush();
+            Response.End();
+
+        }
+       // Export File .CSV .xls .xlsx .dat .txt 
+        public void ExportForAnalyze(int etid, string subid, string fileExtension)
+        {
+            var user = Session["User"] as UserSystemModel;
+            var subjectName = "";       
+            var ExamtopicName = "";
+
+            StringBuilder csvDefault = new StringBuilder();
+            StringBuilder txtDefault = new StringBuilder();
+            ExcelPackage xlPackage = new ExcelPackage();
+            ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add("Inventory");
+           
+            using (var DB = new dbEntities())
+            {
+                subjectName = (from s in DB.Subjects where s.SubjectID == subid && s.UserID == user.UserID select s.SubjectName).FirstOrDefault();
+                ExamtopicName = (from e1 in DB.ExamTopic where e1.ExamtopicID == etid select e1.ExamtopicName).FirstOrDefault();
+            
+                var dataUserStudent = (from t in DB.Testing
+                                       where t.ExamBodyID == (from eb in DB.ExamBody where eb.ExamtopicID == etid select eb.ExamBodyID).FirstOrDefault()
+                                       select new { t.ExamBodyID, t.UserID }).DistinctBy(e => e.UserID).ToList();
+
+                var dataAnswers = (from ge in DB.GetExam
+                                   where ge.ExamBodyID == (from eb in DB.ExamBody where eb.ExamtopicID == etid select eb.ExamBodyID).FirstOrDefault()
+                                   orderby ge.ProposID
+                                   select new {ge.ProposID}
+                                   ).ToList();
+
+                int xlRows = 1, xlCol = 1;
+                foreach(var c in dataAnswers) {
+                    csvDefault.Append("" + c.ProposID + ",");
+                    txtDefault.Append("" + c.ProposID + ",");
+                    worksheet.Cells[1, xlCol].Value = c.ProposID;
+                    xlCol++;
+                }
+
+                csvDefault.Append("\r\n");
+                txtDefault.Append("\r\n");
+                xlCol = 1;
+                foreach(var c in dataAnswers)
+                {
+                   csvDefault.Append((from ch in DB.Choice where ch.ProposID == c.ProposID && ch.Answer == 1 select ch.ChoiceID).FirstOrDefault()+","); 
+                   txtDefault.Append((from ch in DB.Choice where ch.ProposID == c.ProposID && ch.Answer == 1 select ch.ChoiceID).FirstOrDefault());
+                    worksheet.Cells[2, xlCol].Value = (from ch in DB.Choice where ch.ProposID == c.ProposID && ch.Answer == 1 select ch.ChoiceID).FirstOrDefault();
+                    xlCol++;
+                }
+
+                xlCol = 1; xlRows = 3;
+                foreach (var r in dataUserStudent)
+                {
+                    csvDefault.Append("\r\n");
+                    txtDefault.Append("\r\n");
+                    var dataTesting = (from t in DB.Testing        
+                                       where t.ExamBodyID == r.ExamBodyID && t.UserID == r.UserID
+                                       orderby t.ProposID
+                                       select new {t.ProposID, t.AnswerStudent }).ToList();
+
+
+                    foreach (var c in dataTesting)
+                    {
+                        if (c.AnswerStudent.Length > 1)
+                        {
+                            csvDefault.Append("0,");
+                            txtDefault.Append("0");
+                            worksheet.Cells[xlRows, xlCol].Value = 0;
+                        }
+                        else {
+                            csvDefault.Append(c.AnswerStudent+",");
+                            txtDefault.Append(c.AnswerStudent);
+                            worksheet.Cells[xlRows, xlCol].Value = Int32.Parse(c.AnswerStudent);
+                        }
+                        xlCol++;
+                    }
+                    xlRows++;
+                    xlCol = 1;
+                }
+               
+            }
+
+                if (fileExtension.Equals("txt") || fileExtension.Equals("dat"))
+            {
+                byte[] bytes = Encoding.ASCII.GetBytes(txtDefault.ToString());
+                Response.Clear();
+                Response.ContentType = "text/plain";
+                Response.AddHeader("content-disposition", "attachment; filename=" + ExamtopicName.ToString() + "-" + subjectName + "." + fileExtension.ToString());
+                Response.BinaryWrite(bytes);
+            }
+            else if (fileExtension.Equals("csv"))
+            {
+                byte[] bytes = Encoding.ASCII.GetBytes(csvDefault.ToString());
+                Response.Clear();
+                Response.ContentType = "text/plain";
+                Response.AddHeader("content-disposition", "attachment; filename="+ExamtopicName.ToString()+"-"+subjectName+".csv");
+                Response.BinaryWrite(bytes);
+            }
+            else if (fileExtension.Equals("xlsx"))
+            {
+                Response.Clear();
+                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                Response.AddHeader("content-disposition", "attachment; filename=" + ExamtopicName.ToString() + "-" + subjectName + ".xlsx");
+                Response.BinaryWrite(xlPackage.GetAsByteArray());
+            }
+            Response.Flush();
+            Response.End();
+        }
+        // --- Hard-Copy ---
+        public ActionResult HardCopys(int etid, string subid, int g)
+        {
+            var user = Session["User"] as UserSystemModel;
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
+            else if (user.Status == "student")
+            {
+                return RedirectToAction("Index", "Student");
+            }
+            using (var DB = new dbEntities())
+            {
+                ViewBag.dataSubject = (from s in DB.Subjects where s.SubjectID == subid && s.UserID == user.UserID select s.SubjectName).FirstOrDefault();
+            }
+            using (var DB = new dbEntities())
+            {
+                ViewBag.dataGroup = (from gr in DB.TestGroup where gr.GroupID == g select gr.GroupName).FirstOrDefault();
+            }
+            return View();
+        }
+        public void HardCopy(int exbody)
+        {
+            var user = Session["User"] as UserSystemModel;
+            var jsonreturn = new JsonRespone();
+            try
+            {
+                string filename = "StreamTest.docx";
+                string contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                StringBuilder html = new StringBuilder();
+                string htmls = "";
+                html.Append("<body>");
+                using (var DB = new dbEntities())
+                {
+                    var dataProp = (from ex in DB.GetExam
+                                    join p in DB.Proposition on ex.ProposID equals p.ProposID
+                                    where ex.ExamBodyID == exbody
+                                    select new PropositionModel
+                                    {
+                                        ProposID = ex.ProposID,
+                                        ProposName = p.ProposName,
+                                        TextPropos = p.TextPropos,
+                                        Continuity = p.Continuity
+                                    }).ToList();
+
+                    var dataChoices = (from ex in DB.GetExam
+                                       join c in DB.Choice on ex.ProposID equals c.ProposID
+                                       let countans = (from ca in DB.Choice where ca.ProposID == ex.ProposID && ca.Answer > 0 select ex).Count()
+                                       where ex.ExamBodyID == exbody
+                                       orderby c.ChoiceID
+                                       select new ChoiceModel
+                                       {
+                                           ProposID = ex.ProposID,
+                                           ChoiceID = c.ChoiceID,
+                                           TextChoice = c.TextChoice,
+                                           Answer = c.Answer,
+                                           countAnswer = countans
+                                       }).ToList();
+
+                    var i = 0;
+                    var j = 97;
+                    foreach(var row in dataProp)
+                    {
+                        i++;
+                        if (Regex.IsMatch(row.TextPropos, "<img.*?>"))
+                        {
+                            html.Append("<p>" + i + ". " + Regex.Replace(row.TextPropos, "<.*?>", String.Empty) + "</p>"+"<p>"+Regex.Match(row.TextPropos,"<img.*?/>") +"</p>");
+                        }
+                        else {
+                            html.Append("<p>" + i + ". " + Regex.Replace(row.TextPropos, "<.*?>", String.Empty) + "</p>");
+                        }
+                       
+                        foreach(var rowc in dataChoices)
+                        {
+                            if(row.ProposID == rowc.ProposID)
+                            {
+                               
+                                html.Append("<p>" + (char)j+". " + rowc.TextChoice.Substring(3, rowc.TextChoice.Length - 3));
+                                j++;
+                            }
+                        }j = 97;
+                    }
+                    
+                }
+                              
+                html.Append("</body>");
+                using (MemoryStream generatedDocument = new MemoryStream())
+                    {
+                        using (WordprocessingDocument package = WordprocessingDocument.Create(generatedDocument, WordprocessingDocumentType.Document))
+                        {
+                            MainDocumentPart mainPart = package.MainDocumentPart;
+                            if (mainPart == null)
+                            {
+                                mainPart = package.AddMainDocumentPart();
+                                new Document(new Body()).Save(mainPart);
+                            }
+
+                            HtmlConverter converter = new HtmlConverter(mainPart);
+                            converter.BaseImageUrl = new Uri(Request.Url.Scheme + "://" + Request.Url.Authority);
+
+                            Body body = mainPart.Document.Body;
+                        
+                        
+                        
+                        var paragraphs = converter.Parse(html.ToString());
+                       
+                            for (int i = 0; i < paragraphs.Count; i++)
+                            {
+                                body.Append(paragraphs[i]);
+                            }
+
+                            mainPart.Document.Save();
+                        }
+
+                        byte[] bytesInStream = generatedDocument.ToArray(); // simpler way of converting to array
+                        generatedDocument.Close();
+
+                        Response.Clear();
+                        Response.ContentType = contentType;
+                        Response.AddHeader("content-disposition", "attachment;filename=" + filename);
+
+                        //this will generate problems
+                        Response.BinaryWrite(bytesInStream);
+                        try
+                        {
+                            Response.Flush();
+                            Response.End();
+                        }
+                        catch (Exception ex)
+                        {
+                            //Response.End(); generates an exception. if you don't use it, you get some errors when Word opens the file...
+                        }
+
+                    }
+                
+              
+            }
+            catch (Exception ex)
+            {
+               
+            }
+        }
+
     }
 }

@@ -9,6 +9,7 @@ namespace Exam_Objective.Models
 {
     public class PropositionModel
     {
+       
         public int ProposID { get; set; }
         public int ObjID { get; set; }
         public string ProposName { get; set; }
@@ -48,4 +49,5 @@ namespace Exam_Objective.Models
         public string Choice5 { get; set; }
         public double Answer5 { get; set; }
     }
+
 }

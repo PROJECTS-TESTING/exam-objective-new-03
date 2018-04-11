@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="ExamSystemModelStoreContainer" CdmEntityContainer="dbEntities">
-    <EntitySetMapping Name="Choice">
+    <EntitySetMapping Name="Choices">
       <EntityTypeMapping TypeName="ExamSystemModel.Choice">
         <MappingFragment StoreEntitySet="Choice">
           <ScalarProperty Name="ChoiceID" ColumnName="ChoiceID" />
@@ -12,7 +12,7 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="ExamBody">
+    <EntitySetMapping Name="ExamBodies">
       <EntityTypeMapping TypeName="ExamSystemModel.ExamBody">
         <MappingFragment StoreEntitySet="ExamBody">
           <ScalarProperty Name="ExamBodyID" ColumnName="ExamBodyID" />
@@ -22,7 +22,7 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="ExamTopic">
+    <EntitySetMapping Name="ExamTopics">
       <EntityTypeMapping TypeName="ExamSystemModel.ExamTopic">
         <MappingFragment StoreEntitySet="ExamTopic">
           <ScalarProperty Name="ExamtopicID" ColumnName="ExamtopicID" />
@@ -42,7 +42,7 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="GetExam">
+    <EntitySetMapping Name="GetExams">
       <EntityTypeMapping TypeName="ExamSystemModel.GetExam">
         <MappingFragment StoreEntitySet="GetExam">
           <ScalarProperty Name="ExamBodyID" ColumnName="ExamBodyID" />
@@ -50,7 +50,7 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="IOC">
+    <EntitySetMapping Name="IOCs">
       <EntityTypeMapping TypeName="ExamSystemModel.IOC">
         <MappingFragment StoreEntitySet="IOC">
           <ScalarProperty Name="ProposID" ColumnName="ProposID" />
@@ -59,7 +59,7 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Lesson">
+    <EntitySetMapping Name="Lessons">
       <EntityTypeMapping TypeName="ExamSystemModel.Lesson">
         <MappingFragment StoreEntitySet="Lesson">
           <ScalarProperty Name="LessonID" ColumnName="LessonID" />
@@ -71,7 +71,7 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Member">
+    <EntitySetMapping Name="Members">
       <EntityTypeMapping TypeName="ExamSystemModel.Member">
         <MappingFragment StoreEntitySet="Member">
           <ScalarProperty Name="GroupID" ColumnName="GroupID" />
@@ -79,7 +79,7 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Objective">
+    <EntitySetMapping Name="Objectives">
       <EntityTypeMapping TypeName="ExamSystemModel.Objective">
         <MappingFragment StoreEntitySet="Objective">
           <ScalarProperty Name="ObjID" ColumnName="ObjID" />
@@ -89,7 +89,7 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Participant">
+    <EntitySetMapping Name="Participants">
       <EntityTypeMapping TypeName="ExamSystemModel.Participant">
         <MappingFragment StoreEntitySet="Participant">
           <ScalarProperty Name="ParticipantID" ColumnName="ParticipantID" />
@@ -99,7 +99,7 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Proposition">
+    <EntitySetMapping Name="Propositions">
       <EntityTypeMapping TypeName="ExamSystemModel.Proposition">
         <MappingFragment StoreEntitySet="Proposition">
           <ScalarProperty Name="ProposID" ColumnName="ProposID" />
@@ -116,7 +116,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Subjects">
-      <EntityTypeMapping TypeName="ExamSystemModel.Subjects">
+      <EntityTypeMapping TypeName="ExamSystemModel.Subject">
         <MappingFragment StoreEntitySet="Subjects">
           <ScalarProperty Name="SubjectID" ColumnName="SubjectID" />
           <ScalarProperty Name="UserID" ColumnName="UserID" />
@@ -129,7 +129,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="sysdiagrams">
-      <EntityTypeMapping TypeName="ExamSystemModel.sysdiagrams">
+      <EntityTypeMapping TypeName="ExamSystemModel.sysdiagram">
         <MappingFragment StoreEntitySet="sysdiagrams">
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="principal_id" ColumnName="principal_id" />
@@ -139,7 +139,7 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="TestGroup">
+    <EntitySetMapping Name="TestGroups">
       <EntityTypeMapping TypeName="ExamSystemModel.TestGroup">
         <MappingFragment StoreEntitySet="TestGroup">
           <ScalarProperty Name="GroupID" ColumnName="GroupID" />
@@ -150,7 +150,7 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Testing">
+    <EntitySetMapping Name="Testings">
       <EntityTypeMapping TypeName="ExamSystemModel.Testing">
         <MappingFragment StoreEntitySet="Testing">
           <ScalarProperty Name="ExamBodyID" ColumnName="ExamBodyID" />
@@ -161,7 +161,7 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="UserSystem">
+    <EntitySetMapping Name="UserSystems">
       <EntityTypeMapping TypeName="ExamSystemModel.UserSystem">
         <MappingFragment StoreEntitySet="UserSystem">
           <ScalarProperty Name="UserID" ColumnName="UserID" />
@@ -169,6 +169,7 @@
           <ScalarProperty Name="Lname" ColumnName="Lname" />
           <ScalarProperty Name="PWLogin" ColumnName="PWLogin" />
           <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="StudentID" ColumnName="StudentID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

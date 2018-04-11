@@ -11,14 +11,11 @@
         <h3><span>จัดการแบบทดสอบ / วิชา</span><span id="asubject" data-asubj="@SubjectsEntity[0].SubjectID"></span>@SubjectsEntity[0].SubjectName</h3>
 
     }
-
     <hr />
-
     <p class="text-left">
         <button type="button" class="btn btn-default" onclick="window.history.back()"><span class="fa fa-reply"></span> ย้อนกลับ</button>
         <button id="btnCrtTest" name="btnCrtTest" class="btn btn-primary" data-toggle="modal" data-target="#TestModal"><span class="fa fa-plus"></span> เพิ่มแบบทดสอบ</button>
     </p><hr style="margin:2px;" />
-
     <div class="modal fade" id="TestModal" tabindex="-1" role="dialog" aria-labelledby="User" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -28,7 +25,6 @@
                     </button>
                     <h5 class="modal-title"><label id="title" name="title"></label><label><span>วิชา</span>@SubjectsEntity[0].SubjectName</label></h5>
                 </div>
-
                 <div class="modal-body">
                     <form id="TForm0" method="post" class="form-horizontal">
                         <p class="show-chevron-rightdown text-left collapsed menu-slidet" data-toggle="collapse" data-target="#demo0"> ทั่วไป</p>
@@ -36,28 +32,24 @@
                             <br />
                             @Html.Partial("/Views/Testing/PartialTests/_Partial1SetGenerals.cshtml")
                         </div>
-
                         <hr style="margin:0px;" />
                         <p class="show-chevron-rightdown text-left collapsed menu-slidet" data-toggle="collapse" data-target="#demo1"> กำหนดเวลา</p>
                         <div id="demo1" class="collapse">
                             <br />
                             @Html.Partial("/Views/Testing/PartialTests/_Partial2SetTime.cshtml")
                         </div>
-
                         <hr style="margin:0px;" />
                         <p class="show-chevron-rightdown text-left collapsed menu-slidet" data-toggle="collapse" data-target="#demo3"> รูปแบบ</p>
                         <div id="demo3" class="collapse">
                             <br />
                             @Html.Partial("/Views/Testing/PartialTests/_Partial3SetFormat.cshtml")
                         </div>
-
                         <hr style="margin:0px;" />
                         <p class="show-chevron-rightdown text-left collapsed menu-slidet" data-toggle="collapse" data-target="#demo4"> จำกัดการเข้าถึง</p>
                         <div id="demo4" class="collapse">
                             <br />
                             @Html.Partial("/Views/Testing/PartialTests/_Partial4RestrictAccess.cshtml")
                         </div>
-
                         <hr style="margin:0px;" />
                         <br />
                         <div class="form-group">
@@ -71,7 +63,7 @@
             </div>
         </div>
     </div>
-
+   
     <table class="table table-striped table-bordered">
         <thead>
             <tr>
@@ -86,12 +78,12 @@
                     {
                         <tr>
                             <td>
-                                <span class="col-md-6">
+                                <span class="col-md-5">
                                     <span class="fa  fa-caret-right"> </span>
                                     <span>@rows.ExamtopicName</span>
                                     <span>กลุ่มเรียน </span>@rows.StudyGroup
                                 </span>
-                                <span class="col-md-6 text-right">
+                                <span class="col-md-7 text-right">
                                     <span> | </span>
                                     <span title="รายละเอีนด" class="fa fa-search link-action btnView" data-toggle="modal" data-target="#TestModal" data-examtopicid="@rows.ExamtopicID"> รายละเอียด </span>
                                     <span title="แก้ไข" class="fa fa-cog link-action btnEdit" data-toggle="modal" data-target="#TestModal" data-examtopicid="@rows.ExamtopicID"> แก้ไข</span>
@@ -100,6 +92,8 @@
                                     <span title="แก้ไขแบบทดสอบ" class="link-action btnEditTest" data-examtopicid="@rows.ExamtopicID" data-subid="@SubjectsEntity[0].SubjectID"> แก้ไขแบบทดสอบ</span>
                                     <span> | </span>
                                     <span title="ผลการสอบ" class="link-action btnScore" data-examtopicid="@rows.ExamtopicID" data-subid="@SubjectsEntity[0].SubjectID" data-groupid="@rows.GroupID"> ผลการสอบ</span>
+                                    <span> | </span>
+                                    <span title="Hardcopy" class="fa fa-file-o link-action btnhardcopy" data-examtopicid="@rows.ExamtopicID" data-subid="@SubjectsEntity[0].SubjectID" data-groupid="@rows.GroupID"> Hardcopy</span>
                                     <span> | </span>
                                 </span>
                             </td>
@@ -112,27 +106,26 @@
             }
         </tbody>
     </table>
-
-    <table class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>แบบทดสอบวิชา @SubjectsEntity[0].SubjectName ที่ยังไม่มีกลุ่มเรียน</th>
-            </tr>
-        </thead>
-        <tbody>
-            @{var TestEntitynill = (List<ExamTopicModel>)ViewBag.DataNullGroup;
-                if (TestEntitynill.Count > 0 && TestEntitynill != null)
-                {
-                    foreach (var rows in TestEntitynill)
+    @{ var TestEntitynill = (List<ExamTopicModel>)ViewBag.DataNullGroup;
+        if (TestEntitynill.Count > 0 && TestEntitynill != null)
+        {
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>แบบทดสอบวิชา @SubjectsEntity[0].SubjectName ที่ยังไม่มีกลุ่มเรียน</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var rows in TestEntitynill)
                     {
                         <tr>
                             <td>
-                                <span class="col-md-6">
+                                <span class="col-md-5">
                                     <span class="fa  fa-caret-right"> </span>
                                     <span>@rows.ExamtopicName</span>
                                     <span>กลุ่มเรียน </span>@rows.StudyGroup
                                 </span>
-                                <span class="col-md-6 text-right">
+                                <span class="col-md-7 text-right">
                                     <span> | </span>
                                     <span title="รายละเอีนด" class="fa fa-search link-action btnView" data-toggle="modal" data-target="#TestModal" data-examtopicid="@rows.ExamtopicID"> รายละเอียด </span>
                                     <span title="แก้ไข" class="fa fa-cog link-action btnEdit" data-toggle="modal" data-target="#TestModal" data-examtopicid="@rows.ExamtopicID"> แก้ไข</span>
@@ -142,17 +135,22 @@
                                     <span> | </span>
                                     <span title="ผลการสอบ" class="link-action btnScore" data-examtopicid="@rows.ExamtopicID" data-subid="@SubjectsEntity[0].SubjectID" data-groupid="@rows.GroupID"> ผลการสอบ</span>
                                     <span> | </span>
+                                    <span title="Hardcopy" class="fa fa-file-o link-action btnhardcopy" data-examtopicid="@rows.ExamtopicID" data-subid="@SubjectsEntity[0].SubjectID" data-groupid="@rows.GroupID"> Hardcopy</span>
+                                    <span> | </span>
                                 </span>
                             </td>
                         </tr>
                     }
-                }
-                else
-                {
-                    <tr><td><span style="color:#ff0000">*ยังไม่มีแบบทดสอบในนี้</span></td></tr>}
-            }
-        </tbody>
-    </table>
+                </tbody>
+            </table>
+        }
+        else
+        {
+
+
+        }
+    }
+
 </div>
                
  @section scripts{
@@ -175,7 +173,7 @@
              GroupID: $("[name='Groupstudy']").val(),
              ExamtopicPW: $("[name='PwTest']").val(),
              NumberOfTimes: $("[name='NumberOfTimes']").val(),
-             InNetWork: "",
+             InNetWork: $("[name='IPsubnet']").val(),
              isUpdateable: 0
          };
          $('.btnEditTest').click(function () {
@@ -186,6 +184,10 @@
          $('.btnScore').click(function () {
             // alert($(this).data("examtopicid"));
              location.replace("ScoreStudent" + "?etid=" + $(this).data("examtopicid") + "&subid=" + $(this).data("subid") + "&g=" + $(this).data("groupid"));
+         });
+        
+         $('.btnhardcopy').click(function () {
+             location.replace("HardCopys" + "?etid=" + $(this).data("examtopicid") + "&subid=" + $(this).data("subid") + "&g=" + $(this).data("groupid"));
          });
      </script>
 <script src="~/Scripts/Scriptss/CreateTestJs.js"></script>

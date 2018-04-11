@@ -1,0 +1,206 @@
+﻿@using Exam_Objective.Models
+@using System.Text.RegularExpressions;
+@{
+    ViewBag.Title = "ImportMain";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="panel-heading">
+    @{var SubjectsEntity = (List<SubjectsModel>)ViewBag.Subject;
+
+            foreach (var rows in SubjectsEntity)
+            {
+            <h3><span class="icon icon-login" > นำเข้าข้อสอบ / วิชา </span>@rows.SubjectName</h3>
+        }
+    }
+    @{var SubjectShareEntity = (List<SubjectsModel>)ViewBag.SubjectShare;
+
+            foreach (var rows in SubjectShareEntity)
+            {
+            <h3><span class="icon icon-login"> นำเข้าข้อสอบ / วิชา </span>@rows.SubjectName</h3>
+        }
+    }
+</div>
+<div class="panel panel-default">
+
+    <div class="panel-heading">
+        เลือกจุดประสงค์เพื่อนำเข้าข้อสอบ
+    </div>
+    <div class="panel-body">
+        <div class="panel-body">
+            @{
+                var o2Entitycon = (List<ObjectiveModel>)ViewBag.PObjective;
+                if (o2Entitycon.Count > 0 && o2Entitycon != null)
+                {
+                    foreach (var rows in o2Entitycon)
+                    {
+                        <a href="@Url.Action("Importin", "ExamBank", new { ObjID = rows.ObjID })" class="nav-link" title="คลิ๊กเพื่อนำเข้าข้อสอบเก็บไว้ในคลัง">
+                            <!-- target="_blank" //สำหรับเปิดแล้วขึ้นหน้าใหม่-->
+                            <span style="padding-left:60px;" class="icon-login"> @rows.ObjName </span><br />
+                        </a>
+                    }
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<form id="formImport">
+    <div id="ImportModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"><label id="title" name="title"></label></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4>นำเข้าข้อสอบ</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="col-md-10 form-group Row" id="divcate">
+                                    <label>จุดประสงค์<span class="required">*</span></label>
+                                    <select id="ObjID" name="ObjID" class="form-control">
+                                        <option selected value="">-- กรุณาเลือกจุดประสงค์ --</option>
+
+
+                                    </select>
+                                </div>
+                                <div class="col-md-10 form-group">
+                                    <label>XML File<span class="required">*</span></label>
+                                    <input type="file" id="xmlFile" name="xmlFile"  class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" value="Import"  id="btnImport" class="btn btn-primary" title="นำเข้าข้อสอบ">Import</button>
+                        <button type="button" id="btnCloseCon" class="btn btn-danger" data-dismiss="modal" title="ยกเลิกการนำเข้าข้อสอบ">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.inputmask.bundle.js"></script>
+    <script src="~/Scripts/jquery.inputmask.bundle.min.js"></script>
+
+    <script type="text/javascript">
+        $("#btnImportPropos").click(function () {
+
+            $("#title").text("นำเข้าข้อมูลข้อสอบ");
+            $("#ImportModal").modal("show");
+            $("#ProposName").prop("readonly", false);
+            var valida = $("#formImport").validate();
+            valida.resetForm();
+            $("#formImport").find('.form-group').removeClass('has-error');
+        });
+        $("#btnImport").click(function () {
+            if ($("#formImport").valid()) {
+
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: '@Url.Action("ImportXML", "ExamBank")',
+                    dataType: "json",
+                    data: $('#formImport').serialize(),
+                    traditional: true,
+                    beforeSend: function () {
+
+                    },
+
+                    success: function (res) {
+                        var status = false;
+                        var message = 'ดำเนินการไม่สำเร็จ';
+                        if (res != null && res != undefined) {
+                            status = res.status;
+                            message = res.message != '' ? res.message : message;
+                        }
+                        if (status == false) {
+                            swal("เกิดข้อผิดพลาด", message, "error");
+                        } else {
+                            swal({
+                                title: "บันทึกสำเร็จ",
+                                type: "success",
+                                showConfirmButton: false,
+                                timer: 1000,
+                                closeOnConfirm: false
+                            },
+                                function () {
+                                    location.reload(true);
+                                });
+                        }
+                    },
+                    error: function (xhr, ajaxOption, thrownError) {
+                        swal("เกิดข้อผิดพลาด", message, "error");
+                    },
+                    complete: function () {
+
+                    },
+                });
+
+            }
+        });
+        //check formImport
+        $("#formImport").validate({
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            rules: {
+                ObjID: {
+                    required: true
+                },
+                xmlFile: {
+                    required: true
+                },
+                
+            },
+
+            messages: {
+                ObjID: {
+                    required: "กรุณาเลือกชื่อจุดประสงค์"
+                },
+                xmlFile: {
+                    required: "กรุณาเลือกไฟล์ข้อสอบที่ต้องการนำเข้า"
+                },
+            },
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                $('.alert-danger', $("#formImport")).show();
+            },
+            highlight: function (element) { // hightlight error inputs
+                $(element)
+                    .closest('.form-group').addClass('has-error'); // set error class to the control group
+            },
+            unhighlight: function (element) {
+                $(element)
+                    .closest('.form-group')
+                    .removeClass('has-error');
+            },
+            success: function (label) {
+                label.closest('.form-group').removeClass('has-error');
+                label.remove();
+            },
+            errorPlacement: function (error, element) {
+                if (element.parent(".input-group").size() > 0) {
+                    error.insertAfter(element.parent(".input-group"));
+                } else if (element.attr("data-error-container")) {
+                    error.appendTo(element.attr("data-error-container"));
+                } else {
+                    error.insertAfter(element); // for other inputs, just perform default behavior
+                }
+            },
+            submitHandler: function (form) {
+                submit($("#formImport"));
+                return false;
+                form.submit();
+            }
+        });
+
+
+    </script>
+}
