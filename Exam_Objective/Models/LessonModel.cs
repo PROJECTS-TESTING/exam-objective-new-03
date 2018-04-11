@@ -8,7 +8,7 @@ using System.Web.Mvc;
 namespace Exam_Objective.Models
 {
     public class LessonModel
-    {
+    {       
         public int LessonID { get; set; }
         public string LesName { get; set; }
         [AllowHtml]
@@ -18,14 +18,9 @@ namespace Exam_Objective.Models
         public string UserID { get; set; }
         public string SubjectName { get; set; }  //สร้างไว้สำหรับ join
         public string Fname { get; set; }  //สร้างไว้สำหรับ join
-<<<<<<< HEAD
-        public int CountProposID { get; set; }
+        public int CountObjective { get; set; }
         [AllowHtml]
         [UIHint("tinymce_full_compressed")]
         public string Contents { get; set; }
-=======
-        public int CountObjective { get; set; }
-        public int Content { get; set; }
->>>>>>> 4543c8e40192342d8133acccf0d7f6897431f5a0
     }
 }

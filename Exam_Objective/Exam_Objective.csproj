@@ -990,6 +990,15 @@
     <Content Include="Views\Shared\_MenuStudentTest.cshtml" />
     <Content Include="Views\Student\ViewScore.cshtml" />
     <Content Include="Views\Testing\ScoreStudent.cshtml" />
+    <Content Include="Views\Testing\HardCopys.cshtml" />
+    <Content Include="Views\IOC\AddGroupIOC.cshtml" />
+    <Content Include="Views\IOC\Contents.cshtml" />
+    <Content Include="Views\IOC\Index.cshtml" />
+    <Content Include="Views\IOC\indexGroup.cshtml" />
+    <Content Include="Views\IOC\Specialist.cshtml" />
+    <Content Include="Views\IOC\SpecialistLogin.cshtml" />
+    <Content Include="Views\Contents\Addcontent.cshtml" />
+    <Content Include="Views\Contents\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

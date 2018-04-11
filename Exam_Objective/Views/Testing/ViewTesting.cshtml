@@ -110,7 +110,7 @@
                     </div>
                     <div class="col-md-10" style="margin-bottom:8px; padding:1px">
                         <div style="border:solid 1px #adfacd;border-radius:3px;padding:4px;background-color:#e4fbe8">
-                            <div class="quizion" id="XXX">@Html.Raw(rows0.TextPropos)</div>
+                            <div class="quizion container" id="XXX">@Html.Raw(rows0.TextPropos)</div>
                         </div><br />
                     </div>
                 </div>
@@ -154,7 +154,7 @@
                             </div>
                             <div class="col-md-10" style="margin-bottom:8px; padding:1px">
                                 <div style="border:solid 1px #adfacd;border-radius:3px;padding:4px;background-color:#e4fbe8">
-                                    <div class="quizion" id="@rows1.ProposID">@Html.Raw(rows1.TextPropos)</div>
+                                    <div class="quizion container" id="@rows1.ProposID">@Html.Raw(rows1.TextPropos)</div>
                                     @{ var i = 96;
                                         foreach (var rows in rndchoice)
                                         {
@@ -162,7 +162,7 @@
                                             {
                                                 i++;
                                                 choiceForm = (char)i;
-                                                <div class="choice">
+                                                <div class="choice container">
                                                     @{if (rows.countAnswer > 1)
                                                         {
                                                             <input type="checkbox" value="@rows.ChoiceID" name="@rows1.ProposID" /> @choiceForm<span>.</span>
