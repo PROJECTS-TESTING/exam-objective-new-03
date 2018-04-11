@@ -504,3 +504,4 @@ F:\VisualStudio\exam-objective-new-03\Exam_Objective\bin\WordGenerator.pdb
 F:\VisualStudio\exam-objective-new-03\Exam_Objective\bin\WordGenerator.dll.config
 F:\VisualStudio\exam-objective-new-03\Exam_Objective\obj\Debug\Exam_Objective.csproj.CopyComplete
 >>>>>>> 4543c8e40192342d8133acccf0d7f6897431f5a0
+E:\Project_17-12-2017\exam-objective-new-03\Exam_Objective\obj\Debug\Exam_Objective.csproj.ResolveComReference.cache

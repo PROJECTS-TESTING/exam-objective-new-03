@@ -990,25 +990,6 @@
     <Content Include="Views\Shared\_MenuStudentTest.cshtml" />
     <Content Include="Views\Student\ViewScore.cshtml" />
     <Content Include="Views\Testing\ScoreStudent.cshtml" />
-<<<<<<< HEAD
-    <Content Include="Views\Contents\Addcontent.cshtml" />
-    <Content Include="Views\Contents\Index.cshtml" />
-    <Content Include="Views\IOC\AddGroupIOC.cshtml" />
-    <Content Include="Views\IOC\Contents.cshtml" />
-    <Content Include="Views\IOC\Index.cshtml" />
-    <Content Include="Views\IOC\indexGroup.cshtml" />
-    <Content Include="Views\IOC\Specialist.cshtml" />
-    <Content Include="Views\IOC\SpecialistLogin.cshtml" />
-    <Content Include="Views\Shared\_MenuIOC.cshtml" />
-=======
-    <Content Include="Views\ExamBank\Import.cshtml" />
-    <Content Include="Views\ExamBank\Importin.cshtml" />
-    <Content Include="Views\ExamBank\ImportMain.cshtml" />
-    <Content Include="Views\ExamBank\Export.cshtml" />
-    <Content Include="Views\ExamBank\ExportMain.cshtml" />
-    <Content Include="Views\ExamBank\Exportout.cshtml" />
-    <Content Include="Views\Testing\HardCopys.cshtml" />
->>>>>>> 4543c8e40192342d8133acccf0d7f6897431f5a0
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
