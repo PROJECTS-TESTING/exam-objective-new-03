@@ -29,7 +29,7 @@ namespace Exam_Objective.Models
         public virtual DbSet<ExamBody> ExamBody { get; set; }
         public virtual DbSet<ExamTopic> ExamTopic { get; set; }
         public virtual DbSet<GetExam> GetExam { get; set; }
-        public virtual DbSet<IOC> IOC { get; set; }
+        public virtual DbSet<IOC> IOCs { get; set; }
         public virtual DbSet<Lesson> Lesson { get; set; }
         public virtual DbSet<Member> Member { get; set; }
         public virtual DbSet<Objective> Objective { get; set; }

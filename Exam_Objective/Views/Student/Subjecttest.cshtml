@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Subjecttest";
     Layout = "~/Views/Shared/_LayoutStudent.cshtml";
+    var DataExbody = (List<ExamBodyModel>)ViewBag.exambody;
 }
 <div class="paddind-lr-30">
     @{
@@ -19,24 +20,32 @@
         </thead>
         <tbody>
             @{ var DataExamtopic = (List<ExamTopicModel>)ViewBag.DataExamtopic;
+                
                 if (DataExamtopic.Count > 0 && DataExamtopic != null)
                 {
                     foreach (var rows in DataExamtopic)
                     {
                         <tr>
                             <td>
-                                <span title="@rows.ExamtopicName" class="link-action" data-toggle="modal" data-target="#PWtestModal">
+                                <span title="@rows.ExamtopicName" id="examtopic" class="link-action examtopic" data-toggle="modal" data-target="#PWtestModal"
+                                      data-examtopicid="@rows.ExamtopicID"
+                                      data-exampw="@rows.ExamtopicPW"
+                                      data-datebegin="@rows.DatetoBegin"
+                                      data-timebegin="@rows.TimetoBegin"
+                                      data-timeend="@rows.TimetoEnd"
+                                      data-ipsubnet="@rows.InNetWork"
+                                      data-ipsubnetclient="@rows.IPsubnetClient">
                                     <span class="icon icon-doc"> </span>
-                                    <span id="examtopic"
-                                          data-examtopicid="@rows.ExamtopicID"
-                                          data-examPW="@rows.ExamtopicPW"
-                                          data-datebegin="@rows.DatetoBegin"
-                                          data-timebegin="@rows.TimetoBegin"
-                                          data-timeend="@rows.TimetoEnd">
-                                        @rows.ExamtopicName
-                                    </span>
+                                    <span> @rows.ExamtopicName</span> | 
                                 </span>
-                                <span id="ipall" data-ipsubnet="@rows.InNetWork" data-ipsubnetclient="@rows.IPsubnetClient"></span>
+                                @if(DataExbody.Count != 0 && DataExbody != null){
+                                    foreach(var exb in DataExbody) {
+                                        if (rows.ExamtopicID == exb.ExamtopicID)
+                                        {
+                                        <span id="viewscore" class="link-action viewscore" data-examtopicid="@rows.ExamtopicID" data-exbody="@exb.ExamBodyID"> ผลสอบ</span>
+                                        }
+                                    }
+                                }
                             </td>
                         </tr>
                        
@@ -88,11 +97,18 @@
 @section scripts{
     <script src="~/Scripts/Scriptss/ShowPW-HidePW-Js.js"></script>
     <script type="text/javascript">
-      
-        
-        $('#btnSelect').click(function () {
-            var ipsub = $('#ipall').data("ipsubnet");
-            var ipclient = $('#ipall').data("ipsubnetclient");
+        var Data1 = {
+            ExamtopicID: 0,
+            SubjectID: $('#subj').data("subjid"),
+            UserID: $('#suser').data("userid"),
+            ExamtopicPW: "",
+            CheckDateTime: 0,
+            CheckIP: true
+        };
+        $('.examtopic').click(function () {
+            $('#TestPW').val("");
+            var ipsub = $(this).data("ipsubnet");
+            var ipclient = $(this).data("ipsubnetclient");
             var ip2long = function (ip) {
                 var components;
                 if (components = ip.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/)) {
@@ -115,14 +131,14 @@
                 }
                 else return false;
             };
-            
+
             var checkip = true;
             if (ipsub != "") {
                 checkip = inSubNet(ipclient, ipsub);
             }
-           // alert(checkip);
+            // alert(checkip);
             // Check DateTime Begin End.
-            var datein = $('#examtopic').data("datebegin");
+            var datein = $(this).data("datebegin");
             var i = [];
             i = datein.split(' ');
             datein = i[0].split('/');
@@ -132,8 +148,8 @@
                 monthBegin: datein[1],
                 yearBegin: datein[2]
             };
-            var TimeBegin = $('#examtopic').data("timebegin");
-            var TimeEnd = $('#examtopic').data("timeend");
+            var TimeBegin = $(this).data("timebegin");
+            var TimeEnd = $(this).data("timeend");
             var countDownDate = new Date(DateBegin.monthBegin + " " + DateBegin.dateBegin + ", " + DateBegin.yearBegin + " " + TimeEnd).getTime();
             var check1 = new Date(DateBegin.monthBegin + " " + DateBegin.dateBegin + ", " + DateBegin.yearBegin + " " + TimeBegin).getTime();
             var now = new Date().getTime();
@@ -143,35 +159,37 @@
             } else if (check1 > now) {
                 checkdatetime = 2;
             } else { checkdatetime = 0; }
-
-            var Data1 = {
-                ExamtopicID: $('#examtopic').data("examtopicid"),
-                SubjectID: $('#subj').data("subjid"),
-                UserID: $('#suser').data("userid"),
-                ExamtopicPW: $('#TestPW').val(),
-                CheckDateTime: checkdatetime,
-                CheckIP: checkip
-            };
-           // alert(Data1.ExamtopicID + " " + Data1.SubjectID + " " + Data1.ExamtopicPW + "" + Data1.UserID);
+            var exid = $(this).data("examtopicid");           
+            var subid = $('#subj').data("subjid");
+            Data1.ExamtopicID = exid;
+            Data1.SubjectID = subid;          
+            Data1.CheckDateTime = checkdatetime;
+            Data1.CheckIP = checkip;
+           // alert(Data1.ExamtopicID + "  " + Data1.SubjectID + "  " + Data1.ExamtopicPW + " " + Data1.UserID);
+           
+        });
+        $('#btnSelect').click(function () {  
+            var expw = $('#TestPW').val();
+            Data1.ExamtopicPW = expw;
             $.ajax({
-    type: "POST",
-    cache: false,
-    url: "ViewTesting",
-    dataType: "json",
-    data: Data1,
-    traditional: true,
-    beforeSend: function () {
+                type: "POST",
+                cache: false,
+                url: "ViewTesting",
+                 dataType: "json",
+                data: Data1,
+                traditional: true,
+                beforeSend: function () {
 
-    }, success: function (res) {
-    var status = false;
-    var message = 'ดำเนินการไม่สำเร็จ';
-    if (res != null && res != undefined) {
-    status = res.status;
-    message = res.message != '' ? res.message : message;
-    }
-    if (status == false) {
+                }, success: function (res) {
+                var status = false;
+                var message = 'ดำเนินการไม่สำเร็จ';
+                if (res != null && res != undefined) {
+                status = res.status;
+                message = res.message != '' ? res.message : message;
+                }
+                if (status == false) {
        
-        swal({
+                swal({
             title: message,
             type: "warning",
             showConfirmButton: false,
@@ -182,29 +200,32 @@
                 location.reload(true);
             });
     }  else {
-    swal({
-    title: message,
-    type: "success",
-    showConfirmButton: false,
-    timer: 1000,
-    closeOnConfirm: false
-    },
-        function () {
-            location.reload(true);
-            location.replace("ViewTestings" + "?subid=" + res.data.SubjectID + "&datasu=" + res.data.UserID + "&e=" + res.data.ExamtopicID);
-    });
-    }
-    },
-    error: function (xhr, ajaxOption, thrownError) {
-    swal("เกิดข้อผิดพลาด", message, "error");
-    },
-    complete: function () {
+             swal({
+                title: message,
+                type: "success",
+                showConfirmButton: false,
+                timer: 1000,
+                 closeOnConfirm: false
+                },
+                function () {
+                     location.reload(true);                    
+                     window.location.href = "ViewTestings" + "?subid=" + res.data.SubjectID + "&datasu=" + res.data.UserID + "&e=" + res.data.ExamtopicID;
+                 });
+                }
+                },
+                error: function (xhr, ajaxOption, thrownError) {
+                swal("เกิดข้อผิดพลาด", message, "error");
+                },
+                 complete: function () {
 
-    }
+            }
 
 
-    });
+            });
         });
-   
+
+        $('.viewscore').click(function () {           
+            window.location.href = "ViewScore" + "?subid=" + $('#subj').data("subjid") + "&datasu=" + $('#suser').data("userid") + "&e=" + $(this).data("examtopicid") + "&eb=" + $(this).data("exbody");
+        });
     </script>
 }

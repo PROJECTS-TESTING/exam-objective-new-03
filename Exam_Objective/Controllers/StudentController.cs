@@ -183,11 +183,19 @@ namespace Exam_Objective.Controllers
                                              TimetoBegin = e.TimetoBegin,
                                              TimetoEnd = e.TimetoEnd,
                                              ExamtopicPW = e.ExamtopicPW,
-                                             InNetWork = e.InNetWork
-                                            
+                                             InNetWork = e.InNetWork,
+                                             NumberOfTimes = (int)e.NumberOfTimes                                           
                                          }).ToList();
-                DataEx[0].IPsubnetClient = NetworkClient.GetIPClien();
+                List<ExamBodyModel> exb = new List<ExamBodyModel>();
+                foreach(var ex in DataEx)
+                {
+                    ex.IPsubnetClient = NetworkClient.GetIPClien();
+                    exb.Add(new ExamBodyModel {ExamtopicID = ex.ExamtopicID, ExamBodyID = (from eb in DB.ExamBody where eb.ExamtopicID == ex.ExamtopicID select eb.ExamBodyID).FirstOrDefault()});
+                }
+                ViewBag.exambody = exb.ToList();
                 ViewBag.DataExamtopic = DataEx;
+
+               
             }
             return View();
         }
@@ -231,15 +239,15 @@ namespace Exam_Objective.Controllers
             
             using (var DB = new dbEntities())
             {
-                var examtopid = (from e in DB.ExamTopic
+                var examtoppw = (from e in DB.ExamTopic
                                  where e.ExamtopicID == DataEx.ExamtopicID
                                  select e.ExamtopicPW).FirstOrDefault();
-                var dataexamtopic = new ExamtopicDataModel {ExamtopicID = DataEx.ExamtopicID,SubjectID = DataEx.SubjectID, UserID = DataEx.UserID };
-                if (examtopid == null && DataEx.CheckDateTime == 0 && DataEx.CheckIP)
+                var dataexamtopic = new ExamtopicDataModel {ExamtopicID = DataEx.ExamtopicID,SubjectID = DataEx.SubjectID, UserID = DataEx.UserID};
+                if (examtoppw == null && DataEx.CheckDateTime == 0 && DataEx.CheckIP)
                 { 
                     jsonretern = new JsonRespone { status = true, message = "เข้าสอบเรียบร้อย", data = dataexamtopic };
                 }
-                else if(examtopid != null && examtopid == DataEx.ExamtopicPW && DataEx.CheckDateTime == 0 && DataEx.CheckIP)
+                else if(examtoppw != null && examtoppw == DataEx.ExamtopicPW && DataEx.CheckDateTime == 0 && DataEx.CheckIP)
                 {
                     jsonretern = new JsonRespone { status = true, message = "เข้าสอบเรียบร้อย", data = dataexamtopic };
                 }else if (DataEx.CheckDateTime == 1)
@@ -374,6 +382,18 @@ namespace Exam_Objective.Controllers
             {
                 using (var DB = new dbEntities())
                 {
+                    int numberoftime = 0;
+                    var checkNull = (from t in DB.Testing
+                                     where t.ExamBodyID == ta.ExamBodyID && t.UserID == user.UserID
+                                     select t.NumberOfTimes).ToList();
+                    if(checkNull.Count != 0 && checkNull != null)
+                    {
+                        numberoftime = (from t in DB.Testing
+                                        where t.ExamBodyID == ta.ExamBodyID && t.UserID == user.UserID
+                                        select t.NumberOfTimes).Max();
+                        numberoftime = numberoftime + 1;
+                    }
+                     
                     for (var x = 0; x < ta.ProposID.Length; x++)
                     {
                         DB.Testing.Add(new Testing {
@@ -381,10 +401,11 @@ namespace Exam_Objective.Controllers
                             ProposID = ta.ProposID[x],
                             UserID = user.UserID,
                             AnswerStudent = ta.AnswerStudent[x],
-                            NumberOfTimes = ta.NumberOfTimes });
+                            NumberOfTimes = numberoftime
+                        });
                         DB.SaveChanges();
                     }
-                    jsonretern = new JsonRespone { status = true, message = "TEST ANSWER" };
+                    jsonretern = new JsonRespone { status = true, message = "ส่งคำตอบเรียบร้อย" };
                 }
                
             }
@@ -435,45 +456,54 @@ namespace Exam_Objective.Controllers
             // Check Answer Score Student
             using (var DB = new dbEntities())
             {
-                var dataTesting = (from t in DB.Testing
-                                   join c in DB.Choice on t.ProposID equals c.ProposID
-                                   where t.ExamBodyID == eb && t.UserID == user.UserID
-                                   select new { c.Answer, t.ProposID,c.ChoiceID }).ToList();
-                var dataTestAns = DB.Testing.Where(t => t.ExamBodyID == eb && t.UserID == user.UserID).ToList();
-                float score = 0f;
-              foreach(var c in dataTestAns)
+                var checkTest = (from t in DB.Testing
+                                 where t.ExamBodyID == eb && t.UserID == user.UserID
+                                 select t.UserID).FirstOrDefault();
+                if (checkTest != null)
                 {
-                    if (c.AnswerStudent.Length > 1)
+                    int numberoftime = (from t in DB.Testing
+                                        where t.ExamBodyID == eb && t.UserID == user.UserID
+                                        select t.NumberOfTimes).Max();
+                    var dataTesting = (from t in DB.Testing
+                                       join c in DB.Choice on t.ProposID equals c.ProposID
+                                       where t.ExamBodyID == eb && t.UserID == user.UserID && t.NumberOfTimes == numberoftime
+                                       select new { c.Answer, t.ProposID, c.ChoiceID }).ToList();
+                    var dataTestAns = DB.Testing.Where(t => t.ExamBodyID == eb && t.UserID == user.UserID && t.NumberOfTimes == numberoftime).ToList();
+                    float score = 0f;
+                    foreach (var c in dataTestAns)
                     {
-                        string[] strchoice = c.AnswerStudent.Split(',');
-                        for (var i = 0; i < strchoice.Length; i++)
+                        if (c.AnswerStudent.Length > 1)
+                        {
+                            string[] strchoice = c.AnswerStudent.Split(',');
+                            for (var i = 0; i < strchoice.Length; i++)
+                            {
+                                foreach (var a in dataTesting)
+                                {
+                                    if (c.ProposID == a.ProposID && a.ChoiceID == Int16.Parse(strchoice[i]))
+                                    {
+                                        score = a.Answer > 0 ? score + (float)a.Answer : score - 0.5f;
+                                    }
+                                }
+                            }
+                        }
+                        else
                         {
                             foreach (var a in dataTesting)
                             {
-                                if (c.ProposID == a.ProposID && a.ChoiceID == Int16.Parse(strchoice[i]))
+                                if (c.ProposID == a.ProposID && c.AnswerStudent.Equals(a.ChoiceID.ToString()))
                                 {
-                                    score = a.Answer > 0 ? score + (float)a.Answer : score - 0.5f;
+                                    if (a.Answer > 0)
+                                        score = score + (float)a.Answer;
                                 }
                             }
                         }
                     }
-                    else
-                    {
-                        foreach (var a in dataTesting)
-                        {
-                            if (c.ProposID == a.ProposID && c.AnswerStudent.Equals(a.ChoiceID.ToString()))
-                            {
-                                if(a.Answer > 0)
-                                score = score + (float)a.Answer;
-                            }
-                        }
-                    }
+                    float scoresper = (score * 100) / dataTestAns.Count;
+                    List<ScoreStudent> DataSco = new List<ScoreStudent>();
+                    DataSco.Add(new ScoreStudent { Score = score, Scoreper = scoresper, countQuiz = dataTestAns.Count });
+
+                    ViewBag.dataScore = DataSco;
                 }
-                float scoresper = (score * 100) / dataTestAns.Count;
-                List<ScoreStudent> DataSco = new List<ScoreStudent>();
-                DataSco.Add(new ScoreStudent {Score = score, Scoreper = scoresper, countQuiz = dataTestAns.Count });
-               
-                ViewBag.dataScore = DataSco;
             }
             return View();
         }

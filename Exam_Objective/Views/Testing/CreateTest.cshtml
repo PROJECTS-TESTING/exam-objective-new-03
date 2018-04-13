@@ -179,15 +179,15 @@
          $('.btnEditTest').click(function () {
              var etid = $(this).data("examtopicid");
              //alert(etid);
-             location.replace("EditQuiz" + "?etid=" + $(this).data("examtopicid") + "&subid=" + $(this).data("subid"));
+             window.location.href = "EditQuiz" + "?etid=" + $(this).data("examtopicid") + "&subid=" + $(this).data("subid");
          });
          $('.btnScore').click(function () {
             // alert($(this).data("examtopicid"));
-             location.replace("ScoreStudent" + "?etid=" + $(this).data("examtopicid") + "&subid=" + $(this).data("subid") + "&g=" + $(this).data("groupid"));
+             window.location.href = "ScoreStudent" + "?etid=" + $(this).data("examtopicid") + "&subid=" + $(this).data("subid") + "&g=" + $(this).data("groupid");
          });
         
          $('.btnhardcopy').click(function () {
-             location.replace("HardCopys" + "?etid=" + $(this).data("examtopicid") + "&subid=" + $(this).data("subid") + "&g=" + $(this).data("groupid"));
+             window.location.href = "HardCopys" + "?etid=" + $(this).data("examtopicid") + "&subid=" + $(this).data("subid") + "&g=" + $(this).data("groupid");
          });
      </script>
 <script src="~/Scripts/Scriptss/CreateTestJs.js"></script>

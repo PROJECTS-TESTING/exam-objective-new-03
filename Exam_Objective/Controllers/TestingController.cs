@@ -648,14 +648,17 @@ namespace Exam_Objective.Controllers
                 var dataUserStudent = (from t in DB.Testing
                                        where t.ExamBodyID == (from eb in DB.ExamBody where eb.ExamtopicID == etid select eb.ExamBodyID).FirstOrDefault()
                                        select new { t.ExamBodyID, t.UserID }).DistinctBy(e => e.UserID).ToList();
-
-                foreach(var r in dataUserStudent)
+               
+                foreach (var r in dataUserStudent)
                 {
+                    int numberoftime = (from t in DB.Testing
+                                        where t.ExamBodyID == r.ExamBodyID && t.UserID == r.UserID
+                                        select t.NumberOfTimes).Max();
                     var dataTesting = (from t in DB.Testing
                                        join c in DB.Choice on t.ProposID equals c.ProposID
-                                       where t.ExamBodyID == r.ExamBodyID && t.UserID == r.UserID
+                                       where t.ExamBodyID == r.ExamBodyID && t.UserID == r.UserID && t.NumberOfTimes == numberoftime
                                        select new { c.Answer, t.ProposID, c.ChoiceID }).ToList();
-                    var dataTestAns = DB.Testing.Where(t => t.ExamBodyID == r.ExamBodyID && t.UserID == r.UserID).ToList();
+                    var dataTestAns = DB.Testing.Where(t => t.ExamBodyID == r.ExamBodyID && t.UserID == r.UserID && t.NumberOfTimes == numberoftime).ToList();
                     float score = 0f;
                     foreach (var c in dataTestAns)
                     {
@@ -943,7 +946,7 @@ namespace Exam_Objective.Controllers
                 string filename = "StreamTest.docx";
                 string contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
                 StringBuilder html = new StringBuilder();
-                string htmls = "";
+                
                 html.Append("<body>");
                 using (var DB = new dbEntities())
                 {

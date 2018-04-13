@@ -17,8 +17,8 @@ namespace Exam_Objective.Models
         public int ExamBodyID { get; set; }
         public int ProposID { get; set; }
         public string UserID { get; set; }
+        public int NumberOfTimes { get; set; }
         public string AnswerStudent { get; set; }
-        public Nullable<int> NumberOfTimes { get; set; }
     
         public virtual GetExam GetExam { get; set; }
         public virtual UserSystem UserSystem { get; set; }

@@ -152,12 +152,13 @@
             <PropertyRef Name="ExamBodyID" />
             <PropertyRef Name="ProposID" />
             <PropertyRef Name="UserID" />
+            <PropertyRef Name="NumberOfTimes" />
           </Key>
           <Property Name="ExamBodyID" Type="int" Nullable="false" />
           <Property Name="ProposID" Type="int" Nullable="false" />
           <Property Name="UserID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="NumberOfTimes" Type="int" Nullable="false" />
           <Property Name="AnswerStudent" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="NumberOfTimes" Type="int" />
         </EntityType>
         <EntityType Name="UserSystem">
           <Key>
@@ -648,12 +649,13 @@
             <PropertyRef Name="ExamBodyID" />
             <PropertyRef Name="ProposID" />
             <PropertyRef Name="UserID" />
+            <PropertyRef Name="NumberOfTimes" />
           </Key>
           <Property Name="ExamBodyID" Type="Int32" Nullable="false" />
           <Property Name="ProposID" Type="Int32" Nullable="false" />
           <Property Name="UserID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NumberOfTimes" Type="Int32" Nullable="false" />
           <Property Name="AnswerStudent" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="NumberOfTimes" Type="Int32" />
           <NavigationProperty Name="GetExam" Relationship="Self.FK_Testing_GetExam" FromRole="Testing" ToRole="GetExam" />
           <NavigationProperty Name="UserSystem" Relationship="Self.FK_Testing_UserSystem" FromRole="Testing" ToRole="UserSystem" />
         </EntityType>
@@ -1131,8 +1133,8 @@
                 <ScalarProperty Name="ExamBodyID" ColumnName="ExamBodyID" />
                 <ScalarProperty Name="ProposID" ColumnName="ProposID" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="AnswerStudent" ColumnName="AnswerStudent" />
                 <ScalarProperty Name="NumberOfTimes" ColumnName="NumberOfTimes" />
+                <ScalarProperty Name="AnswerStudent" ColumnName="AnswerStudent" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

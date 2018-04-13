@@ -156,8 +156,8 @@
           <ScalarProperty Name="ExamBodyID" ColumnName="ExamBodyID" />
           <ScalarProperty Name="ProposID" ColumnName="ProposID" />
           <ScalarProperty Name="UserID" ColumnName="UserID" />
-          <ScalarProperty Name="AnswerStudent" ColumnName="AnswerStudent" />
           <ScalarProperty Name="NumberOfTimes" ColumnName="NumberOfTimes" />
+          <ScalarProperty Name="AnswerStudent" ColumnName="AnswerStudent" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
