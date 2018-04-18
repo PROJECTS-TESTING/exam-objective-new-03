@@ -108,26 +108,27 @@
                             </div>
                         </div>
                         <div>
+                            TextLesson
                             <div class="form-group">
                                 <div class="col-md-10">
                                     <label>รายวิชา</label>
                                     @{
-                                        var subjectEntity = (List<SubjectsModel>)ViewBag.Subject;
-                                        var subID = "";
-                                        var subname = "";
-                                        if (subjectEntity.Count > 0 && subjectEntity != null)
-                                        {
-                                            foreach (var rows in subjectEntity)
-                                            {
+                var subjectEntity = (List<SubjectsModel>)ViewBag.Subject;
+                var subID = "";
+                var subname = "";
+                if (subjectEntity.Count > 0 && subjectEntity != null)
+                {
+                    foreach (var rows in subjectEntity)
+                    {
 
-                                                <input type="hidden" id="SubjectID" name="SubjectID" class="form-control" />
-                                                <input type="text" id="SubjectName" name="SubjectName" class="form-control" />
-                                                subID = rows.SubjectID;
-                                                subname = rows.SubjectName;
+                        <input type="hidden" id="SubjectID" name="SubjectID" class="form-control" />
+                        <input type="text" id="SubjectName" name="SubjectName" class="form-control" />
+subID = rows.SubjectID;
+subname = rows.SubjectName;
 
 
-                                            }
-                                        }
+}
+}
                                     }
 
                                 </div>
@@ -136,24 +137,24 @@
                                 <div class="col-md-10">
                                     <label>อาจารย์ผู้สอน</label>
                                     @{
-                                        var UserEntity = (List<UserSystemModel>)ViewBag.UserIDdata;
-                                        var userID = "";
-                                        var Fname = "";
-                                        var Status = "";
-                                        if (UserEntity.Count > 0 && UserEntity != null)
-                                        {
-                                            foreach (var rows in UserEntity)
-                                            {
-                                                if (rows.Status == "admin" || rows.Status == "professor")
-                                                {
-                                                    <input type="hidden" id="UserID" name="UserID" class="form-control" />
-                                                    <input type="text" id="Fname" name="Fname" class="form-control" />
-                                                    userID = rows.UserID;
-                                                    Fname = rows.Fname + " " + rows.Lname;
-                                                    Status = rows.Status;
-                                                }
-                                            }
-                                        }
+                var UserEntity = (List<UserSystemModel>)ViewBag.UserIDdata;
+                var userID = "";
+                var Fname = "";
+                var Status = "";
+                if (UserEntity.Count > 0 && UserEntity != null)
+                {
+                    foreach (var rows in UserEntity)
+                    {
+                        if (rows.Status == "admin" || rows.Status == "professor")
+                        {
+                            <input type="hidden" id="UserID" name="UserID" class="form-control" />
+                            <input type="text" id="Fname" name="Fname" class="form-control" />
+    userID = rows.UserID;
+    Fname = rows.Fname + " " + rows.Lname;
+    Status = rows.Status;
+}
+}
+}
                                     }
                                 </div>
                             </div>

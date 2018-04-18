@@ -18,6 +18,7 @@ using WebGrease.Css.Extensions;
 using ConsoleAppLog;
 using Networks;
 using System.Xml.Linq;
+using System.Web.UI.WebControls;
 
 namespace Exam_Objective.Controllers
 {
@@ -1025,45 +1026,124 @@ namespace Exam_Objective.Controllers
             }
             return View();
         }
-        public void ExportFile(int ObjID)
+        public void ExportFile(int ObjID)  //ExportFile XML
         {
             var ObjName = "";
+            string[] TChoice = new string[6];
             using (var DB = new dbEntities())
             {
                 ObjName = (from o in DB.Objective where o.ObjID == ObjID  select o.ObjName).FirstOrDefault();
+                
             }
-
+            
             using (var DB = new dbEntities())
             {
-                var ObjectiveData = (from o in DB.Objective
-                                     where o.ObjID == ObjID
-                                     orderby o.ObjID
-                                     select new ObjectiveModel
-                                     {
-                                         ObjID = o.ObjID,
-                                         ObjName = o.ObjName
-                                     }).ToList();
-                ViewBag.Objective = ObjectiveData;
-                var dataPropos = (from p in DB.Proposition
-                                  where p.ObjID == ObjID
-                                  orderby p.ObjID
-                                  select new ImportExportModel
-                                  {
-                                        ProposName = p.ProposName,
-                                        TextPropos = p.TextPropos,
-                                        ScoreMain = p.ScoreMain,
-                                        CheckChoice = p.CheckChoice
 
+                var dataPropos = (from p in DB.Proposition
+                                  //join c in DB.Choice on p.ProposID equals c.ProposID
+                                  where p.ObjID == ObjID
+                                  orderby p.ProposID
+                                  select new IXPropositionModel
+                                  {  
+                                      ProposID = p.ProposID,
+                                      TextPropos = p.TextPropos,
+                                      ScoreMain = p.ScoreMain,
+                                      CheckChoice = p.CheckChoice
                                   }).ToList();
+                var dataChoice = (from c in DB.Choice
+                                  join p in DB.Proposition on c.ProposID equals p.ProposID
+                                  where p.ObjID == ObjID
+                                  orderby p.ProposID
+                                  select new IXChoiceModel
+                                  {
+                                      ChoiceID = c.ChoiceID,
+                                      ProposID = c.ProposID,
+                                      TextChoice = c.TextChoice,
+                                      Answer = c.Answer
+                                  }).ToList();
+                List<DataImportExport> dataExprot = new List<DataImportExport>();
+                string[] Choice = new string[6];
+                for (var i=0;i<dataPropos.Count;i++) {
+                    dataExprot.Add(new DataImportExport
+                    {
+                        //ProposID = dataPropos[i].ProposID,
+                        TextPropos = dataPropos[i].TextPropos,
+                        ScoreMain = dataPropos[i].ScoreMain,
+                        CheckChoice = dataPropos[i].CheckChoice,
+                        Choice1 = "",
+                        Choice2 = "",
+                        Choice3 = "",
+                        Choice4 = "",
+                        Answer1 = 0.0f,
+                        Answer2 = 0.0f,
+                        Answer3 = 0.0f,
+                        Answer4 = 0.0f,
+                    });
+                    foreach (var dataCo in dataChoice) {
+                        if (dataPropos[i].ProposID == dataCo.ProposID) {
+                            if (dataCo.ChoiceID == 1)
+                            {
+                                dataExprot.ElementAt(i).Choice1 = dataCo.TextChoice;
+                                dataExprot.ElementAt(i).Answer1 = dataCo.Answer;
+                            }
+                            if (dataCo.ChoiceID == 2)
+                            {
+                                dataExprot.ElementAt(i).Choice2 = dataCo.TextChoice;
+                                dataExprot.ElementAt(i).Answer2 = dataCo.Answer;
+                            }
+                            if (dataCo.ChoiceID == 3)
+                            {
+                                dataExprot.ElementAt(i).Choice3 = dataCo.TextChoice;
+                                dataExprot.ElementAt(i).Answer3 = dataCo.Answer;
+                            }
+                            if (dataCo.ChoiceID == 4)
+                            {
+                                dataExprot.ElementAt(i).Choice4 = dataCo.TextChoice;
+                                dataExprot.ElementAt(i).Answer4 = dataCo.Answer;
+                            }
+                        }
+                    }
+                }
                 Response.ClearContent();
                 Response.Buffer = true;
                 Response.AddHeader("content-disposition", "attachment;filename = " + ObjName + ".xml");
                 Response.ContentType = "text/xml";
-                var serializer = new System.Xml.Serialization.XmlSerializer(dataPropos.GetType());
-                serializer.Serialize(Response.OutputStream, dataPropos);
-                
+                var serializer = new System.Xml.Serialization.XmlSerializer(dataExprot.GetType());
+                serializer.Serialize(Response.OutputStream, dataExprot); 
             }
-            
+        }
+        // GET: ExportData
+        public ActionResult ExportToWord()
+        {
+            // get the data from database
+            //var data = db.PersonalDetails.ToList();
+            // instantiate the GridView control from System.Web.UI.WebControls namespace
+            // set the data source
+            GridView gridview = new GridView();
+            //gridview.DataSource = data;
+            gridview.DataBind();
+
+            // Clear all the content from the current response
+            Response.ClearContent();
+            Response.Buffer = true;
+            // set the header
+            Response.AddHeader("content-disposition", "attachment;filename = itfunda.doc");
+            Response.ContentType = "application/ms-word";
+            Response.Charset = "";
+            // create HtmlTextWriter object with StringWriter
+            using (StringWriter sw = new StringWriter())
+            {
+                using (HtmlTextWriter htw = new HtmlTextWriter(sw))
+                {
+                    // render the GridView to the HtmlTextWriter
+                    gridview.RenderControl(htw);
+                    // Output the GridView content saved into StringWriter
+                    Response.Output.Write(sw.ToString());
+                    Response.Flush();
+                    Response.End();
+                }
+            }
+            return View();
         }
     }
 }

@@ -11,15 +11,15 @@
 <div class="panel-heading">
     @{var SubjectsEntity = (List<SubjectsModel>)ViewBag.Subject;
 
-            foreach (var rows in SubjectsEntity)
-            {
+        foreach (var rows in SubjectsEntity)
+        {
             <h3><span class="fa  fa-database"> คลังข้อสอบ / วิชา</span>@rows.SubjectName</h3>
         }
     }
     @{var SubjectShareEntity = (List<SubjectsModel>)ViewBag.SubjectShare;
 
-            foreach (var rows in SubjectShareEntity)
-            {
+        foreach (var rows in SubjectShareEntity)
+        {
             <h3><span class="fa  fa-database"> คลังข้อสอบ / วิชา</span>@rows.SubjectName</h3>
         }
     }
@@ -107,16 +107,16 @@
                                         {
 
                                             <br />
-                                                <label>&nbsp;&nbsp;&nbsp;&nbsp;- </label>@pcon.ProposName<label>&nbsp;</label>
-                                                <a>
-                                                    <span class="btnEdit glyphicon glyphicon-cog" data-propossub="@pcon.ProposID" data-check="1" title="แก้ไขข้อสอบต่อเนื่อง : @Regex.Replace(pcon.ProposName, @"<[^>]+>|&nbsp;", String.Empty)"></span>
-                                                </a>
-                                                <a>
-                                                    <span class="btnView glyphicon glyphicon-search" data-propos="@pcon.ProposID" data-check="1" title="แสดงรายละเอียดข้อสอบต่อเนื่อง : @Regex.Replace(pcon.ProposName, @"<[^>]+>|&nbsp;", String.Empty)"></span>
-                                                </a>
-                                                <a>
-                                                    <span class="btnDeletesub glyphicon glyphicon-remove" data-propossub="@pcon.ProposID" data-psubname="@Regex.Replace(pcon.ProposName, @"<[^>]+>|&nbsp;", String.Empty)" title="ลบข้อสอบต่อเนื่อง : @Regex.Replace(pcon.ProposName, @"<[^>]+>|&nbsp;", String.Empty)"></span>   <!--glyphicon glyphicon-plus-->
-                                                </a>
+                                            <label>&nbsp;&nbsp;&nbsp;&nbsp;- </label>@pcon.ProposName<label>&nbsp;</label>
+                                            <a>
+                                                <span class="btnEdit glyphicon glyphicon-cog" data-propossub="@pcon.ProposID" data-check="1" title="แก้ไขข้อสอบต่อเนื่อง : @Regex.Replace(pcon.ProposName, @"<[^>]+>|&nbsp;", String.Empty)"></span>
+                                            </a>
+                                            <a>
+                                                <span class="btnView glyphicon glyphicon-search" data-propos="@pcon.ProposID" data-check="1" title="แสดงรายละเอียดข้อสอบต่อเนื่อง : @Regex.Replace(pcon.ProposName, @"<[^>]+>|&nbsp;", String.Empty)"></span>
+                                            </a>
+                                            <a>
+                                                <span class="btnDeletesub glyphicon glyphicon-remove" data-propossub="@pcon.ProposID" data-psubname="@Regex.Replace(pcon.ProposName, @"<[^>]+>|&nbsp;", String.Empty)" title="ลบข้อสอบต่อเนื่อง : @Regex.Replace(pcon.ProposName, @"<[^>]+>|&nbsp;", String.Empty)"></span>   <!--glyphicon glyphicon-plus-->
+                                            </a>
 
 
 
@@ -400,12 +400,14 @@
                             </div>
                         </div>
                         <div class="panel panel-default col-md-9">
+
                             <div class="panel-body">
                                 <div class="form-group">
-                                    <label class="bold"></label>
-                                    <label id="TextProposv" name="TextProposv"></label>
+                                    <!--<label ><p><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mn>2</mn></msqrt></math></p></label>-->
+                                    <label id="TextProposv" name="TextProposv"></label>                                    
                                 </div>
                                 <div class="form-group">
+
                                     <label class="bold">Select one or more : </label>
                                 </div>
                                 <div class="form-group">
@@ -454,6 +456,13 @@
     <script type="text/javascript" src="~/Scripts/tinymce/tinymce.min.js"></script>
     <script src="~/Scripts/tinymce/plugins/tiny_mce_wiris/wirisplugin-generic.js"></script>
     <script src="~/Scripts/tinymce/plugins/tiny_mce_wiris/core/display.js"></script>
+    <script type="text/javascript">
+        WIRISplugins_js = "~/Scripts/tinymce/plugins/tiny_mce_wiris/integration/WIRISplugins.js";
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = WIRISplugins_js + "?viewer=image";
+        document.getElementsByTagName('head')[0].appendChild(script);
+    </script>
     <script type="text/javascript">
         $("#btnCrtPropos").click(function () {
             var Nchoice = 0;
@@ -959,13 +968,13 @@
                         $("#ProposNamev").text(res.data.ProposName);
                         $("#TextProposv").html(res.data.TextPropos);
                         $("#ScoreMainv").text(res.data.ScoreMain);
-                        $("#Choice1v").html(res.data.Choice1);
+                        $("#Choice1v").text(res.data.Choice1);
                         if ((res.data.Choice1) != null) {
                         } else {
                             $("#radiochoice1").html("");
                             $("#checkchoice1").html("");
                         }
-                        $("#Choice2v").html(res.data.Choice2);
+                        $("#Choice2v").text(res.data.Choice2);
                         if ((res.data.Choice2) != null) {
                         } else {
                             $("#radiochoice2").html("");
