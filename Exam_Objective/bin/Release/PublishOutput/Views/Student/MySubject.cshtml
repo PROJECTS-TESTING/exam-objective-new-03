@@ -1,0 +1,44 @@
+﻿@using Exam_Objective.Models
+@using System.Collections.Generic
+@{
+    ViewBag.Title = "MySubject";
+    Layout = "~/Views/Shared/_LayoutStudent.cshtml";
+}
+
+<div class="paddind-lr-30">
+    <h3>รายวิชาของฉัน</h3>
+    <hr />
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>วิชาทั้งหมด</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{var MySubjectsEntity = (List<MySubjectsModel>)ViewBag.MySubject;
+                if (MySubjectsEntity.Count > 0 && MySubjectsEntity != null)
+                {
+                    foreach (var rows in MySubjectsEntity)
+                    {
+                        <tr>
+                            <td>
+                                <span class="fa fa-book"> </span>
+                                <a href="@Url.Action("SubjectLogin", "Student", new { etid = rows.SubjectID, sid = rows.UserID, g = rows.GroupID })" title="คลิ๊กเพื่อ"><span>วิชา</span>@rows.SubjectName</a>
+                                <span> | @rows.Fname @rows.Lname | </span>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr><td><span style="color:#ff0000">*คุณยังไม่มีรายวิชา</span></td></tr>}
+            }
+        </tbody>
+    </table>
+
+
+
+</div>
+
+@section scripts{
+}

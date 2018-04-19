@@ -1,0 +1,1588 @@
+﻿@using Exam_Objective.Models
+@using System.Text.RegularExpressions;
+
+
+@{
+    ViewBag.Title = "Proposview";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="panel-heading">
+    @{var SubjectsEntity = (List<SubjectsModel>)ViewBag.Subject;
+
+        foreach (var rows in SubjectsEntity)
+        {
+            <h3><span class="fa  fa-database"> คลังข้อสอบ / วิชา</span>@rows.SubjectName</h3>
+        }
+    }
+    @{var SubjectShareEntity = (List<SubjectsModel>)ViewBag.SubjectShare;
+
+        foreach (var rows in SubjectShareEntity)
+        {
+            <h3><span class="fa  fa-database"> คลังข้อสอบ / วิชา</span>@rows.SubjectName</h3>
+        }
+    }
+</div>
+<div class="panel panel-default">
+
+    <div class="panel-heading">
+        เลือกข้อสอบตามจุดประสงค์
+    </div>
+    <div class="panel-body">
+        <div class="panel-body">
+            <select id="showCate" name="showCate" class="showCate form-control" data-cate="cateid">
+                <option value="0" selected>-- ข้อสอบตามจุดประสงค์ --</option>
+                @{
+                    var oEntity = (List<ObjectiveModel>)ViewBag.PObjective;
+                    var ctCountap = (List<ObjectiveModel>)ViewBag.ObjectiveNotDis;
+                    if (oEntity.Count > 0 && oEntity != null)
+                    {
+                        foreach (var rows in oEntity)
+                        {
+                            <option value='@rows.ObjID'>
+                                @rows.ObjName
+                                @foreach (var r2 in ctCountap)
+                                {
+                                    if (rows.ObjID == r2.ObjID)
+                                    {
+                                        <label> (@r2.CountProposID)</label>
+                                    }
+                                }
+                            </option>
+                        }
+                    }
+                }
+            </select>
+        </div>
+    </div>
+</div>
+<button class="btn btn-primary" type="button" id="btnCrtPropos"><i class="fa fa-plus-circle"></i> ตั้งข้อสอบใหม่</button>
+<button type="button" id="btnCrtProposCon" class="btn btn-danger"><i class="fa fa-plus-circle"></i> ตั้งข้อสอบต่อเนื่อง</button>
+<br />
+<br />
+<div class="panel panel-warning">
+    <div class="panel-heading">
+        ข้อสอบ
+    </div>
+    <table id="tshowCate" class="dynamicTable tableTools table table-striped table-bordered">
+
+        <tbody>
+            @{
+                var showProposEn = (List<PropositionModel>)ViewBag.ProposMain;
+                if (showProposEn.Count > 0 && showProposEn != null)
+                {
+                    foreach (var rows in showProposEn)
+                    {
+                        if (rows.Continuity == 0 || rows.Continuity == null)
+                        {
+                            <tr class="Row" data-pid="@rows.ProposID" data-cateid="@rows.ObjID">
+                                <td>
+                                    @rows.ProposName &nbsp;
+                                    @foreach (var pc in showProposEn)
+                                    {
+                                        int con = 0;
+                                        if (rows.ProposID == pc.ProposID && pc.Continuity == con)
+                                        {
+                                            <a>
+                                                <span class="btnCtrpCon glyphicon glyphicon-plus" data-propos="@rows.ProposID" data-proposname="@rows.ProposName" data-proposobj="@rows.ObjID" data-check="0" title="เพิ่มข้อต่อเนื่องจากข้อสอบข้อนี้"></span>
+                                            </a>
+
+                                        }
+                                    }
+                                    <a>
+                                        <span class="btnEdit glyphicon glyphicon-cog" data-propos="@rows.ProposID" data-check="0" title="แก้ไขข้อสอบ : @rows.ProposName"></span>
+                                    </a>
+                                    <a>
+                                        <span class="btnView glyphicon glyphicon-search" data-propos="@rows.ProposID" data-check="0" title="แสดงรายละเอียดข้อสอบ : @rows.ProposName"></span>
+                                    </a>
+                                    <a>
+                                        <span class="btnDelete glyphicon glyphicon-remove" data-propos="@rows.ProposID" data-proposname="@rows.ProposName" title="ลบข้อสอบ : @rows.ProposName"></span>   <!--glyphicon glyphicon-plus-->
+                                    </a>
+                                    <br />
+                                    @foreach (var pcon in showProposEn)
+                                    {
+
+                                        if ((pcon.Continuity != null && pcon.Continuity != 0) && (rows.ProposID == pcon.Continuity))
+                                        {
+
+                                            <br />
+                                            <label>&nbsp;&nbsp;&nbsp;&nbsp;- </label>@pcon.ProposName<label>&nbsp;</label>
+                                            <a>
+                                                <span class="btnEdit glyphicon glyphicon-cog" data-propossub="@pcon.ProposID" data-check="1" title="แก้ไขข้อสอบต่อเนื่อง : @Regex.Replace(pcon.ProposName, @"<[^>]+>|&nbsp;", String.Empty)"></span>
+                                            </a>
+                                            <a>
+                                                <span class="btnView glyphicon glyphicon-search" data-propos="@pcon.ProposID" data-check="1" title="แสดงรายละเอียดข้อสอบต่อเนื่อง : @Regex.Replace(pcon.ProposName, @"<[^>]+>|&nbsp;", String.Empty)"></span>
+                                            </a>
+                                            <a>
+                                                <span class="btnDeletesub glyphicon glyphicon-remove" data-propossub="@pcon.ProposID" data-psubname="@Regex.Replace(pcon.ProposName, @"<[^>]+>|&nbsp;", String.Empty)" title="ลบข้อสอบต่อเนื่อง : @Regex.Replace(pcon.ProposName, @"<[^>]+>|&nbsp;", String.Empty)"></span>   <!--glyphicon glyphicon-plus-->
+                                            </a>
+
+
+
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+            }
+        </tbody>
+        <!-- // Table body END -->
+    </table>
+</div>
+<!--Insert/Update Propos Model-->
+<form id="formPropos">
+    <div id="proposModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"><label id="title" name="title"></label></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4>โจทย์</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="col-md-10 form-group Row" id="divobj">
+                                    <label>จุดประสงค์<span class="required">*</span></label>
+                                    <select id="ObjID" name="ObjID" class="form-control">
+                                        <option selected value="">-- กรุณาเลือกจุดประสงค์ --</option>
+                                        @{
+                                            var o2Entity = (List<ObjectiveModel>)ViewBag.PObjective;
+                                            var ct2Countap = (List<ObjectiveModel>)ViewBag.ObjectiveNotDis;
+                                            if (o2Entity.Count > 0 && o2Entity != null)
+                                            {
+                                                foreach (var rows in o2Entity)
+                                                {
+                                                    <option value='@rows.ObjID'>
+                                                        @rows.ObjName
+                                                        @foreach (var r3 in ct2Countap)
+                                                        {
+                                                            if (rows.ObjID == r3.ObjID)
+                                                            {
+                                                                <label> (@r3.CountProposID)</label>
+                                                            }
+                                                        }
+                                                    </option>
+                                                }
+                                            }
+                                        }
+
+                                    </select>
+                                </div>
+                                <div class="col-md-10 form-group Row" id="divcon">
+                                    <label>ข้อต่อเนื่องมาจากข้อ<span class="required">*</span></label>
+                                    <input type="hidden" class="form-control" id="Continuity" name="Continuity" />
+                                    <input type="hidden" class="form-control" id="ObjID" name="ObjID" />
+                                    <input type="text" id="conName" name="conName" class="form-control" />
+                                </div>
+                                <div class="col-md-10 form-group">
+                                    <!--   <input type="hidden" class="form-control" id="whoUpdate" name="whoUpdate" value="1" />
+                                       <input type="hidden" class="form-control" id="whoCreat" name="whoCreat" value="1" /> -->
+                                    <input type="hidden" class="form-control" id="ProposID" name="ProposID" value="0" />
+                                    <label>ชื่อข้อสอบ<span class="required">*</span></label>
+                                    <input type="text" id="ProposName" name="ProposName" class="form-control" />
+                                </div>
+                                <div class="col-md-10 form-group">
+                                    <label id="txtp"></label><span class="required">*</span>
+                                    <textarea type="text" id="TextPropos" name="TextPropos" class="form-control TextPropos"></textarea>
+                                </div>
+                                <div class="col-md-10 form-group">
+                                    <label id="checkchoicev"></label><span class="required">*</span>
+                                    <select id="CheckChoice" name="CheckChoice" class="form-control">
+                                        <option selected value="1">คำตอบเดียวเท่านั้น</option>
+                                        <option value="2">หลายคำตอบ</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-10 form-group">
+                                    <label id="smain"></label><span class="required">*</span>
+                                    <input type="text" id="ScoreMain" name="ScoreMain" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4>ตัวเลือก</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="col-md-10 form-group">
+                                    <label id="txtc1">ตัวเลือก 1  </label>
+                                    <textChoice1 type="text" id="Choice1" name="Choice1" class="form-control textChoice1"></textChoice1>
+                                    <!--<label>เลือกคะแนนของตัวเลือกนี้ถ้าข้อนี้ถูกต้อง <input type="checkbox" name="numchoice1" value="1"> เลือกถ้าใช้ตัวเลือกนี้</label>-->
+                                    <select id="Answer1" name="Answer1" class="form-control">
+                                        <option selected value="null">-- กรุณาเลือกคะแนนของตัวเลือกนี้ --</option>
+                                        <option value="0.00">0%</option>
+                                        <option value="0.25">25%</option>
+                                        <option value="0.50">50%</option>
+                                        <option value="0.75">75%</option>
+                                        <option value="1.00">100%</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="col-md-10 form-group">
+                                    <label id="txtc2">ตัวเลือก 2  </label>
+                                    <textChoice2 type="text" id="Choice2" name="Choice2" class="form-control textChoice2"></textChoice2>
+                                    <!--<label>เลือกคะแนนของตัวเลือกนี้ถ้าข้อนี้ถูกต้อง <input type="checkbox" name="numchoice2" value="1" checked> เลือกถ้าใช้ตัวเลือกนี้</label>-->
+                                    <select id="Answer2" name="Answer2" class="form-control">
+                                        <option selected value="null">-- กรุณาเลือกคะแนนของตัวเลือกนี้ --</option>
+                                        <option value="0.00">0%</option>
+                                        <option value="0.25">25%</option>
+                                        <option value="0.50">50%</option>
+                                        <option value="0.75">75%</option>
+                                        <option value="1.00">100%</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="col-md-10 form-group">
+                                    <label id="txtc3">ตัวเลือก 3  </label>
+                                    <textChoice3 type="text" id="Choice3" name="Choice3" class="form-control textChoice3"></textChoice3>
+                                    <!--<label>เลือกคะแนนของตัวเลือกนี้ถ้าข้อนี้ถูกต้อง <input type="checkbox" name="numchoice3" value="1"> เลือกถ้าใช้ตัวเลือกนี้</label>-->
+                                    <select id="Answer3" name="Answer3" class="form-control">
+                                        <option selected value="null">-- กรุณาเลือกคะแนนของตัวเลือกนี้ --</option>
+                                        <option value="0.00">0%</option>
+                                        <option value="0.25">25%</option>
+                                        <option value="0.50">50%</option>
+                                        <option value="0.75">75%</option>
+                                        <option value="1.00">100%</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="col-md-10 form-group">
+                                    <label id="txtc4">ตัวเลือก 4  </label>
+                                    <textChoice2 type="text" id="Choice4" name="Choice4" class="form-control textChoice2"></textChoice2>
+                                    <!--<label>เลือกคะแนนของตัวเลือกนี้ถ้าข้อนี้ถูกต้อง <input type="checkbox" name="numchoice4" value="1"> เลือกถ้าใช้ตัวเลือกนี้</label>-->
+                                    <select id="Answer4" name="Answer4" class="form-control">
+                                        <option selected value="null">-- กรุณาเลือกคะแนนของตัวเลือกนี้ --</option>
+                                        <option value="0.00">0%</option>
+                                        <option value="0.25">25%</option>
+                                        <option value="0.50">50%</option>
+                                        <option value="0.75">75%</option>
+                                        <option value="1.00">100%</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="col-md-10 form-group">
+                                    <label id="txtc5">ตัวเลือก 5  </label>
+                                    <textChoice2 type="text" id="Choice5" name="Choice5" class="form-control textChoice2"></textChoice2>
+                                    <!--<label>เลือกคะแนนของตัวเลือกนี้ถ้าข้อนี้ถูกต้อง <input type="checkbox" name="numchoice5" value="1"> เลือกถ้าใช้ตัวเลือกนี้</label>-->
+                                    <select id="Answer5" name="Answer5" class="form-control">
+                                        <option selected value="null">-- กรุณาเลือกคะแนนของตัวเลือกนี้ --</option>
+                                        <option value="0.00">0%</option>
+                                        <option value="0.25">25%</option>
+                                        <option value="0.50">50%</option>
+                                        <option value="0.75">75%</option>
+                                        <option value="1.00">100%</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <input type="hidden" class="form-control" id="Nchoice" name="Nchoice" value="" />
+
+                            <!-- <button id="addRow" type="button" class="btn btn-primary">ยืนยันการใช้ตัวเลือก</button>
+                            &nbsp;
+                            <button id="removeRow" type="button" class="btn btn-danger">-</button> -->
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btnSave" class="btn btn-primary btnSAVE" title="บันทึกการสร้าง แก้ไขข้อสอบ">บันทึก</button>
+                        <button type="button" id="btnClose" class="btn btn-danger" data-dismiss="modal" title="ยกเลิกการสร้าง แก้ไข ข้อสอบ">ยกเลิก</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!--Insert/Update ProposContinuity Model-->
+<form id="formProposcon">
+    <div id="proposconModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"><label id="titlec" name="titlec"></label></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4>โจทย์</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="col-md-10 form-group Row" id="divcate">
+                                    <label>จุดประสงค์<span class="required">*</span></label>
+                                    <select id="ObjID" name="ObjID" class="form-control">
+                                        <option selected value="">-- กรุณาเลือกจุดประสงค์ --</option>
+                                        @{
+                                            var o2Entitycon = (List<ObjectiveModel>)ViewBag.PObjective;
+                                            var ct2Countapcon = (List<ObjectiveModel>)ViewBag.ObjectiveNotDis;
+                                            if (o2Entitycon.Count > 0 && o2Entitycon != null)
+                                            {
+                                                foreach (var rows in o2Entitycon)
+                                                {
+                                                    <option value='@rows.ObjID'>
+                                                        @rows.ObjName
+                                                        @foreach (var r3 in ct2Countapcon)
+                                                        {
+                                                            if (rows.ObjID == r3.ObjID)
+                                                            {
+                                                                <label> (@r3.CountProposID)</label>
+                                                            }
+                                                        }
+                                                    </option>
+                                                }
+                                            }
+                                        }
+
+                                    </select>
+                                </div>
+                                <div class="col-md-10 form-group">
+                                    <!--   <input type="hidden" class="form-control" id="whoUpdate" name="whoUpdate" value="1" />
+                                       <input type="hidden" class="form-control" id="whoCreat" name="whoCreat" value="1" /> -->
+                                    <input type="hidden" class="form-control" id="ProposID" name="ProposID" value="0" />
+                                    <label>ชื่อข้อสอบ<span class="required">*</span></label>
+                                    <input type="text" id="ProposName" name="ProposName" class="form-control" />
+                                </div>
+                                <div class="col-md-10 form-group">
+                                    <label id="txtc"></label><span class="required">*</span>
+                                    <textarea type="text" id="TextPropos" name="TextPropos" class="form-control TextPropos"></textarea>
+                                </div>
+                                <div class="col-md-10 form-group">
+                                    <input type="hidden" class="form-control" id="Continuity" name="Continuity" value="0" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btnSaveCon" class="btn btn-primary btnSAVE" title="บันทึกการสร้าง แก้ไขข้อสอบ">บันทึก</button>
+                        <button type="button" id="btnCloseCon" class="btn btn-danger" data-dismiss="modal" title="ยกเลิกการสร้าง แก้ไข ข้อสอบ">ยกเลิก</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!--form view detail-->
+<form id="formProposdetail">
+    <div id="proposdetailModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">รายละเอียดข้อสอบ<label id="titlev" name="titlev"></label></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="panel panel-default col-md-3">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <input type="hidden" class="form-control" id="isUpdateable" name="isUpdateable" value="1" />
+                                    <input type="hidden" class="form-control" id="ProposIDv" name="ProposIDv" value="0" />
+                                    <label class="bold">Question : </label>
+                                    <label id="ProposNamev" name="ProposNamev"></label>
+                                </div>
+                                <div class="form-group">
+                                    <label id="smainv" class="bold">Marked out of:</label>
+                                    <label id="ScoreMainv" name="ScoreMainv"></label>
+                                </div>
+                                <div class="form-group">
+                                    <label id="Userv" class="bold"></label>
+                                    <label id="Nameuv" name="Nameuv"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default col-md-9">
+
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <!--<label ><p><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mn>2</mn></msqrt></math></p></label>-->
+                                    <label id="TextProposv" name="TextProposv"></label>                                    
+                                </div>
+                                <div class="form-group">
+
+                                    <label class="bold">Select one or more : </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="bold" id="radiochoice1"><input type="radio" name="gender"> 1. </label>
+                                    <label class="bold" id="checkchoice1"><input name="check1" type="checkbox" id="check1" /> 1. </label>
+                                    <label id="Choice1v" name="Choice1v"></label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="bold" id="radiochoice2"><input type="radio" name="gender"> 2. </label>
+                                    <label class="bold" id="checkchoice2"><input name="check2" type="checkbox" id="check2" /> 2. </label>
+                                    <label id="Choice2v" name="Choice2v"></label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="bold" id="radiochoice3"><input type="radio" name="gender"> 3. </label>
+                                    <label class="bold" id="checkchoice3"><input name="check3" type="checkbox" id="check3" /> 3. </label>
+                                    <label id="Choice3v" name="Choice3v"></label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="bold" id="radiochoice4"><input type="radio" name="gender"> 4. </label>
+                                    <label class="bold" id="checkchoice4"><input name="check4" type="checkbox" id="check4" /> 4. </label>
+                                    <label id="Choice4v" name="Choice4v"></label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="bold" id="radiochoice5"><input type="radio" name="gender"> 5. </label>
+                                    <label class="bold" id="checkchoice5"><input name="check5" type="checkbox" id="check5" /> 5. </label>
+                                    <label id="Choice5v" name="Choice5v"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnClose" class="btn btn-danger" data-dismiss="modal" title="ปิดการแสดงรายอะเอียดข้อสอบ">ปิด</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.inputmask.bundle.js"></script>
+    <script src="~/Scripts/jquery.inputmask.bundle.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/tinymce/jquery.tinymce.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/tinymce/tinymce.min.js"></script>
+    <script src="~/Scripts/tinymce/plugins/tiny_mce_wiris/wirisplugin-generic.js"></script>
+    <script src="~/Scripts/tinymce/plugins/tiny_mce_wiris/core/display.js"></script>
+    <script type="text/javascript">
+        WIRISplugins_js = "~/Scripts/tinymce/plugins/tiny_mce_wiris/integration/WIRISplugins.js";
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = WIRISplugins_js + "?viewer=image";
+        document.getElementsByTagName('head')[0].appendChild(script);
+    </script>
+    <script type="text/javascript">
+        $("#btnCrtPropos").click(function () {
+            var Nchoice = 0;
+            var checkpoint1 = 0; var checkpoint2 = 0; var checkpoint3 = 0; var checkpoint4 = 0; var checkpoint5 = 0; var sumpoint = 0;
+
+            $(document).ready(function () {
+                var point = 0.00;
+                $("#Answer1").click(function () {
+                    if (document.getElementById('Answer1').value != "null") {
+                        Nchoice = 1;
+                        if (document.getElementById('Answer1').value == "0.00") {
+                            point = parseFloat((document.getElementById('Answer1').value), 10);
+                        }
+                        if (document.getElementById('Answer1').value == "0.25") {
+                            point = parseFloat((document.getElementById('Answer1').value), 10);
+                        }
+                        if (document.getElementById('Answer1').value == "0.50") {
+                            point = parseFloat((document.getElementById('Answer1').value), 10);
+                        }
+                        if (document.getElementById('Answer1').value == "0.75") {
+                            point = parseFloat((document.getElementById('Answer1').value), 10);
+                        }
+                        if (document.getElementById('Answer1').value == "1.00") {
+                            point = parseFloat((document.getElementById('Answer1').value), 10);
+                        }
+                        Nchoice = parseInt(Nchoice, 10);
+                        $("#Nchoice").val(Nchoice);
+                        checkpoint1 = parseFloat(point, 10);
+                    } else Nchoice = 0;
+
+                });
+            });
+            $(document).ready(function () {
+                var point = 0.00;
+                $("#Answer2").click(function () {
+                    if (document.getElementById('Answer2').value != "null") {
+                        Nchoice = 2;
+                        if (document.getElementById('Answer2').value == "0.00") {
+                            point = parseFloat((document.getElementById('Answer2').value), 10);
+                        }
+                        if (document.getElementById('Answer2').value == "0.25") {
+                            point = parseFloat((document.getElementById('Answer2').value), 10);
+                        }
+                        if (document.getElementById('Answer2').value == "0.50") {
+                            point = parseFloat((document.getElementById('Answer2').value), 10);
+                        }
+                        if (document.getElementById('Answer2').value == "0.75") {
+                            point = parseFloat((document.getElementById('Answer2').value), 10);
+                        }
+                        if (document.getElementById('Answer2').value == "1.00") {
+                            point = parseFloat((document.getElementById('Answer2').value), 10);
+                        }
+                        Nchoice = parseInt(Nchoice, 10);
+                        $("#Nchoice").val(Nchoice);
+                        checkpoint2 = parseFloat(point, 10);
+                    } else Nchoice -= 1;
+
+                });
+            });
+            $(document).ready(function () {
+                var point = 0.00;
+                $("#Answer3").click(function () {
+                    if (document.getElementById('Answer3').value != "null") {
+                        Nchoice = 3;
+                        if (document.getElementById('Answer3').value == "0.00") {
+                            point = parseFloat((document.getElementById('Answer3').value), 10);
+                        }
+                        if (document.getElementById('Answer3').value == "0.25") {
+                            point = parseFloat((document.getElementById('Answer3').value), 10);
+                        }
+                        if (document.getElementById('Answer3').value == "0.50") {
+                            point = parseFloat((document.getElementById('Answer3').value), 10);
+                        }
+                        if (document.getElementById('Answer3').value == "0.75") {
+                            point = parseFloat((document.getElementById('Answer3').value), 10);
+                        }
+                        if (document.getElementById('Answer3').value == "1.00") {
+                            point = parseFloat((document.getElementById('Answer3').value), 10);
+                        }
+                        Nchoice = parseInt(Nchoice, 10);
+                        $("#Nchoice").val(Nchoice);
+                        checkpoint3 = parseFloat(point, 10);
+                    } else Nchoice -= 1;
+
+                });
+            });
+            $(document).ready(function () {
+                var point = 0.00;
+                $("#Answer4").click(function () {
+                    if (document.getElementById('Answer4').value != "null") {
+                        Nchoice = 4;
+                        if (document.getElementById('Answer4').value == "0.00") {
+                            point = parseFloat((document.getElementById('Answer4').value), 10);
+                        }
+                        if (document.getElementById('Answer4').value == "0.25") {
+                            point = parseFloat((document.getElementById('Answer4').value), 10);
+                        }
+                        if (document.getElementById('Answer4').value == "0.50") {
+                            point = parseFloat((document.getElementById('Answer4').value), 10);
+                        }
+                        if (document.getElementById('Answer4').value == "0.75") {
+                            point = parseFloat((document.getElementById('Answer4').value), 10);
+                        }
+                        if (document.getElementById('Answer4').value == "1.00") {
+                            point = parseFloat((document.getElementById('Answer4').value), 10);
+                        }
+                        Nchoice = parseInt(Nchoice, 10);
+                        $("#Nchoice").val(Nchoice);
+                        checkpoint4 = parseFloat(point, 10);
+                    } else Nchoice -= 1;
+
+                });
+            });
+            $(document).ready(function () {
+                var point = 0.00;
+                $("#Answer5").click(function () {
+                    if (document.getElementById('Answer5').value != "null") {
+                        Nchoice = 5;
+                        if (document.getElementById('Answer5').value == "0.00") {
+                            point = parseFloat((document.getElementById('Answer5').value), 10);
+                        }
+                        if (document.getElementById('Answer5').value == "0.25") {
+                            point = parseFloat((document.getElementById('Answer5').value), 10);
+                        }
+                        if (document.getElementById('Answer5').value == "0.50") {
+                            point = parseFloat((document.getElementById('Answer5').value), 10);
+                        }
+                        if (document.getElementById('Answer5').value == "0.75") {
+                            point = parseFloat((document.getElementById('Answer5').value), 10);
+                        }
+                        if (document.getElementById('Answer5').value == "1.00") {
+                            point = parseFloat((document.getElementById('Answer5').value), 10);
+                        }
+                        checkpoint5 = parseFloat(point, 10);
+                        Nchoice = parseInt(Nchoice, 10);
+                        $("#Nchoice").val(Nchoice);
+                    } else Nchoice -= 1;
+
+                });
+            });
+            $("#title").text("เพิ่มข้อสอบ");
+            $("#divobj").show();
+            $("#divcon").hide();
+            $("#txtp").text("ข้อความข้อสอบ");
+            $("#checkchoicev").text("ทำคำตอบเดียวหรือหลายคำตอบ");
+            $("#smain").text("คะแนนตั้งต้น");
+            $("#btnCrtPropos").find("input").val("");
+            $("#ProposName").val("");
+            $("#proposModal").modal("show");
+            $("#ProposName").prop("readonly", false);
+            $("#btnSave").show()
+            tinyMCE.activeEditor.setContent('');  //clear text in tinyeditor
+            var valida = $("#formPropos").validate();
+            valida.resetForm();
+            $("#formPropos").find('.form-group').removeClass('has-error');
+        });
+        $(".btnCtrpCon").click(function () {
+            var id = $(this).data("propos");
+            var proposname = $(this).data("proposname");
+            var obj = $(this).data("proposobj");
+            var Nchoice = 0;
+            var checkpoint1 = 0; var checkpoint2 = 0; var checkpoint3 = 0; var checkpoint4 = 0; var checkpoint5 = 0; var sumpoint = 0;
+            $(document).ready(function () {
+                var point = 0.00;
+                $("#Answer1").click(function () {
+                    if (document.getElementById('Answer1').value != "null") {
+                        Nchoice = 1;
+                        if (document.getElementById('Answer1').value == "0.00") {
+                            point = parseFloat((document.getElementById('Answer1').value), 10);
+                        }
+                        if (document.getElementById('Answer1').value == "0.25") {
+                            point = parseFloat((document.getElementById('Answer1').value), 10);
+                        }
+                        if (document.getElementById('Answer1').value == "0.50") {
+                            point = parseFloat((document.getElementById('Answer1').value), 10);
+                        }
+                        if (document.getElementById('Answer1').value == "0.75") {
+                            point = parseFloat((document.getElementById('Answer1').value), 10);
+                        }
+                        if (document.getElementById('Answer1').value == "1.00") {
+                            point = parseFloat((document.getElementById('Answer1').value), 10);
+                        }
+                        Nchoice = parseInt(Nchoice, 10);
+                        $("#Nchoice").val(Nchoice);
+                        checkpoint1 = parseFloat(point, 10);
+                    } else Nchoice = 0;
+
+                });
+            });
+            $(document).ready(function () {
+                var point = 0.00;
+                $("#Answer2").click(function () {
+                    if (document.getElementById('Answer2').value != "null") {
+                        Nchoice = 2;
+                        if (document.getElementById('Answer2').value == "0.00") {
+                            point = parseFloat((document.getElementById('Answer2').value), 10);
+                        }
+                        if (document.getElementById('Answer2').value == "0.25") {
+                            point = parseFloat((document.getElementById('Answer2').value), 10);
+                        }
+                        if (document.getElementById('Answer2').value == "0.50") {
+                            point = parseFloat((document.getElementById('Answer2').value), 10);
+                        }
+                        if (document.getElementById('Answer2').value == "0.75") {
+                            point = parseFloat((document.getElementById('Answer2').value), 10);
+                        }
+                        if (document.getElementById('Answer2').value == "1.00") {
+                            point = parseFloat((document.getElementById('Answer2').value), 10);
+                        }
+                        Nchoice = parseInt(Nchoice, 10);
+                        $("#Nchoice").val(Nchoice);
+                        checkpoint2 = parseFloat(point, 10);
+                    } else Nchoice -= 1;
+
+                });
+            });
+            $(document).ready(function () {
+                var point = 0.00;
+                $("#Answer3").click(function () {
+                    if (document.getElementById('Answer3').value != "null") {
+                        Nchoice = 3;
+                        if (document.getElementById('Answer3').value == "0.00") {
+                            point = parseFloat((document.getElementById('Answer3').value), 10);
+                        }
+                        if (document.getElementById('Answer3').value == "0.25") {
+                            point = parseFloat((document.getElementById('Answer3').value), 10);
+                        }
+                        if (document.getElementById('Answer3').value == "0.50") {
+                            point = parseFloat((document.getElementById('Answer3').value), 10);
+                        }
+                        if (document.getElementById('Answer3').value == "0.75") {
+                            point = parseFloat((document.getElementById('Answer3').value), 10);
+                        }
+                        if (document.getElementById('Answer3').value == "1.00") {
+                            point = parseFloat((document.getElementById('Answer3').value), 10);
+                        }
+                        Nchoice = parseInt(Nchoice, 10);
+                        $("#Nchoice").val(Nchoice);
+                        checkpoint3 = parseFloat(point, 10);
+                    } else Nchoice -= 1;
+
+                });
+            });
+            $(document).ready(function () {
+                var point = 0.00;
+                $("#Answer4").click(function () {
+                    if (document.getElementById('Answer4').value != "null") {
+                        Nchoice = 4;
+                        if (document.getElementById('Answer4').value == "0.00") {
+                            point = parseFloat((document.getElementById('Answer4').value), 10);
+                        }
+                        if (document.getElementById('Answer4').value == "0.25") {
+                            point = parseFloat((document.getElementById('Answer4').value), 10);
+                        }
+                        if (document.getElementById('Answer4').value == "0.50") {
+                            point = parseFloat((document.getElementById('Answer4').value), 10);
+                        }
+                        if (document.getElementById('Answer4').value == "0.75") {
+                            point = parseFloat((document.getElementById('Answer4').value), 10);
+                        }
+                        if (document.getElementById('Answer4').value == "1.00") {
+                            point = parseFloat((document.getElementById('Answer4').value), 10);
+                        }
+                        Nchoice = parseInt(Nchoice, 10);
+                        $("#Nchoice").val(Nchoice);
+                        checkpoint4 = parseFloat(point, 10);
+                    } else Nchoice -= 1;
+
+                });
+            });
+            $(document).ready(function () {
+                var point = 0.00;
+                $("#Answer5").click(function () {
+                    if (document.getElementById('Answer5').value != "null") {
+                        Nchoice = 5;
+                        if (document.getElementById('Answer5').value == "0.00") {
+                            point = parseFloat((document.getElementById('Answer5').value), 10);
+                        }
+                        if (document.getElementById('Answer5').value == "0.25") {
+                            point = parseFloat((document.getElementById('Answer5').value), 10);
+                        }
+                        if (document.getElementById('Answer5').value == "0.50") {
+                            point = parseFloat((document.getElementById('Answer5').value), 10);
+                        }
+                        if (document.getElementById('Answer5').value == "0.75") {
+                            point = parseFloat((document.getElementById('Answer5').value), 10);
+                        }
+                        if (document.getElementById('Answer5').value == "1.00") {
+                            point = parseFloat((document.getElementById('Answer5').value), 10);
+                        }
+                        checkpoint5 = parseFloat(point, 10);
+                        Nchoice = parseInt(Nchoice, 10);
+                        $("#Nchoice").val(Nchoice);
+                    } else Nchoice -= 1;
+
+                });
+            });
+            $("#title").text("เพิ่มข้อสอบ");
+            $("#divobj").hide();
+            $("#divcon").show();
+            $("#txtp").text("ข้อความข้อสอบ");
+            $("#checkchoicev").text("ทำคำตอบเดียวหรือหลายคำตอบ");
+            $("#smain").text("คะแนนตั้งต้น");
+            $("#btnCrtPropos").find("input").val("");
+            $("#ProposName").val("");
+            $("#Continuity").val(id);
+            $("#conName").val(proposname);
+            $("#ObjID").val(obj);
+            $("#proposModal").modal("show");
+            $("#ProposName").prop("readonly", false);
+            $("#btnSave").show()
+            tinyMCE.activeEditor.setContent('');  //clear text in tinyeditor
+            var valida = $("#formPropos").validate();
+            valida.resetForm();
+            $("#formPropos").find('.form-group').removeClass('has-error');
+        });
+        // CrtProPosContinuity
+        $("#btnCrtProposCon").click(function () {
+            $("#titlec").text("เพิ่มข้อสอบต่อเนื่อง");
+            $("#divcate").show();
+            $("#txtc").text("ข้อความข้อสอบต่อเนื่อง");
+            $("#btnCrtProposCon").find("input").val("");
+            $("#ProposName").val("");
+            $("#Continuity").val("0");
+            $("#proposconModal").modal("show");
+            $("#ProposName").prop("readonly", false);
+            $("#btnSave").show()
+            tinyMCE.activeEditor.setContent('');  //clear text in tinyeditor
+            var valida = $("#formProposcon").validate();
+            valida.resetForm();
+            $("#formProposcon").find('.form-group').removeClass('has-error');
+        });
+        // btnSave Proposition
+        $('#btnSave').click(function () {
+
+            if ($("#formPropos").valid()) {
+
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: '@Url.Action("CreatePropos", "ExamBank")',
+                    dataType: "json",
+                    data: $('#formPropos').serialize(),
+                    traditional: true,
+                    beforeSend: function () {
+
+                    },
+
+                    success: function (res) {
+                        var status = false;
+                        var message = 'ดำเนินการไม่สำเร็จ';
+                        if (res != null && res != undefined) {
+                            status = res.status;
+                            message = res.message != '' ? res.message : message;
+                        }
+                        if (status == false) {
+                            swal("เกิดข้อผิดพลาด", message, "error");
+                        } else {
+                            swal({
+                                title: "บันทึกสำเร็จ",
+                                type: "success",
+                                showConfirmButton: false,
+                                timer: 1000,
+                                closeOnConfirm: false
+                            },
+                                function () {
+                                    location.reload(true);
+                                });
+                        }
+                    },
+                    error: function (xhr, ajaxOption, thrownError) {
+                        swal("เกิดข้อผิดพลาด", message, "error");
+                    },
+                    complete: function () {
+
+                    },
+                });
+
+            }
+        });
+        // btnSave PropositionContinuity
+        $('#btnSaveCon').click(function () {
+
+            if ($("#formProposcon").valid()) {
+
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: '@Url.Action("CreatePropos", "ExamBank")',
+                    dataType: "json",
+                    data: $('#formProposcon').serialize(),
+                    traditional: true,
+                    beforeSend: function () {
+
+                    },
+
+                    success: function (res) {
+                        var status = false;
+                        var message = 'ดำเนินการไม่สำเร็จ';
+                        if (res != null && res != undefined) {
+                            status = res.status;
+                            message = res.message != '' ? res.message : message;
+                        }
+                        if (status == false) {
+                            swal("เกิดข้อผิดพลาด", message, "error");
+                        } else {
+                            swal({
+                                title: "บันทึกสำเร็จ",
+                                type: "success",
+                                showConfirmButton: false,
+                                timer: 1000,
+                                closeOnConfirm: false
+                            },
+                                function () {
+                                    location.reload(true);
+                                });
+                        }
+                    },
+                    error: function (xhr, ajaxOption, thrownError) {
+                        swal("เกิดข้อผิดพลาด", message, "error");
+                    },
+                    complete: function () {
+
+                    },
+                });
+
+            }
+        });
+        // btnSave PropositionContinuityv2
+        $('#btnSaveContinuity').click(function () {
+
+
+
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: '@Url.Action("CreatePropos", "ExamBank")',
+                    dataType: "json",
+                    data: $('#formProposcontinuity').serialize(),
+                    traditional: true,
+                    beforeSend: function () {
+
+                    },
+
+                    success: function (res) {
+                        var status = false;
+                        var message = 'ดำเนินการไม่สำเร็จ';
+                        if (res != null && res != undefined) {
+                            status = res.status;
+                            message = res.message != '' ? res.message : message;
+                        }
+                        if (status == false) {
+                            swal("เกิดข้อผิดพลาด", message, "error");
+                        } else {
+                            swal({
+                                title: "บันทึกสำเร็จ",
+                                type: "success",
+                                showConfirmButton: false,
+                                timer: 1000,
+                                closeOnConfirm: false
+                            },
+                                function () {
+                                    location.reload(true);
+                                });
+                        }
+                    },
+                    error: function (xhr, ajaxOption, thrownError) {
+                        swal("เกิดข้อผิดพลาด", message, "error");
+                    },
+                    complete: function () {
+
+                    },
+                });
+
+
+        });
+        //View Propos by id
+        $('.btnView').click(function () {
+            var idp = $(this).data("propos");
+            tinyMCE.activeEditor.setContent('');  //clear text in tinyeditor
+            $.ajax({
+                type: "POST", // method ที่จะส่ง
+                cache: false,
+                url: '@Url.Action("EditPropos", "ExamBank")',  // ส่งไปให้ที่ได้ ระบุ
+                dataType: "json", // ชนิดข้อมูลที่ส่ง
+                data: { idp: idp},//$('#formSubject').serialize(), // ข้อมูลที่ส่ง
+                traditional: true, // การจดจำข้อมูล
+                beforeSend: function () { // ก่องส่ง data จะให้ทำไร
+
+                },
+                success: function (res) {
+                    var status = false;
+                    var message = 'ดำเนินการไม่สำเร็จ';
+                    if (res != null && res != undefined) {
+                        status = res.status;
+                        message = res.message != '' ? res.message : message;
+                    }
+                    if (status == false) {
+                        swal("เกิดข้อผิดพลาด", message, "error");
+
+                    } else {
+                        $("#ProposIDv").text(res.data.ProposID);
+                        $("#ProposNamev").text(res.data.ProposName);
+                        $("#TextProposv").html(res.data.TextPropos);
+                        $("#ScoreMainv").text(res.data.ScoreMain);
+                        $("#Choice1v").html(res.data.Choice1);
+                        if ((res.data.Choice1) != null) {
+                        } else {
+                            $("#radiochoice1").html("");
+                            $("#checkchoice1").html("");
+                        }
+                        $("#Choice2v").html(res.data.Choice2);
+                        if ((res.data.Choice2) != null) {
+                        } else {
+                            $("#radiochoice2").html("");
+                            $("#checkchoice2").html("");
+                        }
+                        $("#Choice3v").html(res.data.Choice3);
+                        if ((res.data.Choice3) != null) {
+                        } else {
+                            $("#radiochoice3").html("");
+                            $("#checkchoice3").html("");
+                        }
+                        $("#Choice4v").html(res.data.Choice4);
+                        if ((res.data.Choice4) != null) {
+                        } else {
+                            $("#radiochoice4").html("");
+                            $("#checkchoice4").html("");
+                        }
+                        $("#Choice5v").html(res.data.Choice5);
+                        if ((res.data.Choice5) != null) {
+                        } else {
+                            $("#radiochoice5").html("");
+                            $("#checkchoice5").html("");
+                        }
+                        if ((res.data.CheckChoice) == '2') {
+                            $("#radiochoice1").html("");
+                            $("#radiochoice2").html("");
+                            $("#radiochoice3").html("");
+                            $("#radiochoice4").html("");
+                            $("#radiochoice5").html("");
+                        } else {
+                            $("#checkchoice1").html("");
+                            $("#checkchoice2").html("");
+                            $("#checkchoice3").html("");
+                            $("#checkchoice4").html("");
+                            $("#checkchoice5").html("");
+                        }
+                        $("#proposdetailModal").modal("show");
+                        $("#formPropos").find('.form-group').removeClass('has-error');
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    swal("เกิดข้อผิดพลาด", message, "error");
+                },
+                complete: function () {
+
+                },
+            });
+        });
+        $('.btnEdit').click(function () {
+            var id = $(this).data("propos");
+            tinyMCE.activeEditor.setContent('');  //clear text in tinyeditor
+            $.ajax({
+                type: "POST", // method ที่จะส่ง
+                cache: false,
+                url: '@Url.Action("EditPropos", "ExamBank")',  // ส่งไปให้ที่ได้ ระบุ
+                dataType: "json", // ชนิดข้อมูลที่ส่ง
+                data: { id: id},//$('#formSubject').serialize(), // ข้อมูลที่ส่ง
+                traditional: true, // การจดจำข้อมูล
+                beforeSend: function () { // ก่องส่ง data จะให้ทำไร
+
+                },
+                success: function (res) {
+                    var status = false;
+                    var message = 'ดำเนินการไม่สำเร็จ';
+                    if (res != null && res != undefined) {
+                        status = res.status;
+                        message = res.message != '' ? res.message : message;
+                    }
+                    if (status == false) {
+                        swal("เกิดข้อผิดพลาด", message, "error");
+
+                    } else {
+                        $("#ProposID").val(res.data.ProposID);
+                        $("#ProposName").val(res.data.ProposName);
+                        $("#TextPropos").val(res.data.TextPropos);
+                        $("#ScoreMain").val(res.data.ScoreMain);
+                        var textTextPropos = (res.data.TextPropos);
+                        tinyMCE.activeEditor.selection.setContent(textTextPropos);  //Show value in tiny editor
+                        $("#proposModal").modal("show");
+                        $("#formPropos").find('.form-group').removeClass('has-error');
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    swal("เกิดข้อผิดพลาด", message, "error");
+                },
+                complete: function () {
+
+                },
+            });
+        });
+        //check formPropos
+        $("#formPropos").validate({
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            rules: {
+                ObjID: {
+                    required: true
+                },
+                ProposName: {
+                    required: true
+                },
+                TextPropos: {
+                    required: true
+                },
+                ScoreMain: {
+                    required: true
+                },
+            },
+
+            messages: {
+                ObjID: {
+                    required: "กรุณาเลือกชื่อจุดประสงค์"
+                },
+                ProposName: {
+                    required: "กรุณาป้อนชื่อข้อสอบ"
+                },
+                TextPropos: {
+                    required: "กรุณาป้อนข้อความข้อสอบ"
+                },
+                ScoreMain: {
+                    required: "กรุณาป้อนคะแนนตั้งต้น"
+                },
+            },
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                $('.alert-danger', $("#formPropos")).show();
+            },
+            highlight: function (element) { // hightlight error inputs
+                $(element)
+                    .closest('.form-group').addClass('has-error'); // set error class to the control group
+            },
+            unhighlight: function (element) {
+                $(element)
+                    .closest('.form-group')
+                    .removeClass('has-error');
+            },
+            success: function (label) {
+                label.closest('.form-group').removeClass('has-error');
+                label.remove();
+            },
+            errorPlacement: function (error, element) {
+                if (element.parent(".input-group").size() > 0) {
+                    error.insertAfter(element.parent(".input-group"));
+                } else if (element.attr("data-error-container")) {
+                    error.appendTo(element.attr("data-error-container"));
+                } else {
+                    error.insertAfter(element); // for other inputs, just perform default behavior
+                }
+            },
+            submitHandler: function (form) {
+                submit($("#formPropos"));
+                return false;
+                form.submit();
+            }
+        });
+        //check formProposContinuity
+        $("#formProposcon").validate({
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            rules: {
+                ObjID: {
+                    required: true
+                },
+                ProposName: {
+                    required: true
+                },
+                TextPropos: {
+                    required: true
+                },
+            },
+
+            messages: {
+                ObjID: {
+                    required: "กรุณาเลือกชื่อจุดประสงค์"
+                },
+                ProposName: {
+                    required: "กรุณาป้อนชื่อข้อสอบ"
+                },
+                TextPropos: {
+                    required: "กรุณาป้อนข้อความข้อสอบ"
+                },
+            },
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                $('.alert-danger', $("#formProposcon")).show();
+            },
+            highlight: function (element) { // hightlight error inputs
+                $(element)
+                    .closest('.form-group').addClass('has-error'); // set error class to the control group
+            },
+            unhighlight: function (element) {
+                $(element)
+                    .closest('.form-group')
+                    .removeClass('has-error');
+            },
+            success: function (label) {
+                label.closest('.form-group').removeClass('has-error');
+                label.remove();
+            },
+            errorPlacement: function (error, element) {
+                if (element.parent(".input-group").size() > 0) {
+                    error.insertAfter(element.parent(".input-group"));
+                } else if (element.attr("data-error-container")) {
+                    error.appendTo(element.attr("data-error-container"));
+                } else {
+                    error.insertAfter(element); // for other inputs, just perform default behavior
+                }
+            },
+            submitHandler: function (form) {
+                submit($("#formProposcon"));
+                return false;
+                form.submit();
+            }
+        });
+        //editor TextPropos
+        /* อย่าลืมใส่ AllowHttp[] ที่ไฟล์Model ด้วย */
+        tinymce.init({
+            selector: 'textarea',
+            setup: function (editor) {
+                editor.on('change', function () {
+                    editor.save();
+                });
+            },
+            height: 250,
+            menubar: false,
+            mode: "textareas",
+            editor_selector: "TextPropos",
+            plugins: [
+                'advlist autolink lists link image charmap print preview anchor textcolor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table contextmenu paste code tiny_mce_wiris'
+            ],
+            toolbar: 'undo redo | insert | styleselect | bold italic underline forecolor | tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry tiny_mce_wiris_CAS | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image table ',
+            content_css: [
+                '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+                '//www.tinymce.com/css/codepen.min.css'],
+            // enable title field in the Image dialog
+            image_title: true,
+            // enable automatic uploads of images represented by blob or data URIs
+            automatic_uploads: true,
+            // URL of our upload handler (for more details check:
+            images_upload_url: 'postAcceptor.php',
+            // here we add custom filepicker only to Image dialog
+            file_picker_types: 'image',
+            // and here's our custom image picker
+            file_picker_callback: function (cb, value, meta) {
+                var input = document.createElement('input');
+                input.setAttribute('type', 'file');
+                input.setAttribute('accept', 'image/*');
+
+                // Note: In modern browsers input[type="file"] is functional without
+                // even adding it to the DOM, but that might not be the case in some older
+                // or quirky browsers like IE, so you might want to add it to the DOM
+                // just in case, and visually hide it. And do not forget do remove it
+                // once you do not need it anymore.
+
+                input.onchange = function () {
+                    var file = this.files[0];
+
+                    var reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = function () {
+                        // Note: Now we need to register the blob in TinyMCEs image blob
+                        // registry. In the next release this part hopefully won't be
+                        // necessary, as we are looking to handle it internally.
+                        var id = 'blobid' + (new Date()).getTime();
+                        var blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                        var base64 = reader.result.split(',')[1];
+                        var blobInfo = blobCache.create(id, file, base64);
+                        blobCache.add(blobInfo);
+
+                        // call the callback and populate the Title field with the file name
+                        cb(blobInfo.blobUri(), { title: file.name });
+                    };
+                };
+                input.click();
+            }
+        }); //end editor TextPropos
+        //editor TextPropos
+        /* อย่าลืมใส่ AllowHttp[] ที่ไฟล์Model ด้วย */
+        tinymce.init({
+            selector: 'textChoice1',
+            setup: function (editor) {
+                editor.on('change', function () {
+                    editor.save();
+                });
+            },
+            height: 250,
+            menubar: false,
+            mode: "textChoice1",
+            editor_selector: "Choice1",
+            plugins: [
+                'autolink lists link image charmap print preview anchor textcolor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table contextmenu paste code tiny_mce_wiris'
+            ],
+            toolbar: 'undo redo | insert | bold italic underline forecolor | tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry tiny_mce_wiris_CAS | image  media',
+            content_css: [
+                '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+                '//www.tinymce.com/css/codepen.min.css'],
+            // enable title field in the Image dialog  advlist
+            image_title: true,
+            // enable automatic uploads of images represented by blob or data URIs
+            automatic_uploads: true,
+            // URL of our upload handler (for more details check:
+            images_upload_url: 'postAcceptor.php',
+            // here we add custom filepicker only to Image dialog
+            file_picker_types: 'image',
+            // and here's our custom image picker
+            relative_urls: false,
+            file_picker_callback: function (cb, value, meta) {
+                var input = document.createElement('input');
+                input.setAttribute('type', 'file');
+                input.setAttribute('accept', 'image/*');
+
+                // Note: In modern browsers input[type="file"] is functional without
+                // even adding it to the DOM, but that might not be the case in some older
+                // or quirky browsers like IE, so you might want to add it to the DOM
+                // just in case, and visually hide it. And do not forget do remove it
+                // once you do not need it anymore.
+
+                input.onchange = function () {
+                    var file = this.files[0];
+
+                    var reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = function () {
+                        // Note: Now we need to register the blob in TinyMCEs image blob
+                        // registry. In the next release this part hopefully won't be
+                        // necessary, as we are looking to handle it internally.
+                        var id = 'blobid' + (new Date()).getTime();
+                        var blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                        var base64 = reader.result.split(',')[1];
+                        var blobInfo = blobCache.create(id, file, base64);
+                        blobCache.add(blobInfo);
+
+                        // call the callback and populate the Title field with the file name
+                        cb(blobInfo.blobUri(), { title: file.name });
+                    };
+                };
+                input.click();
+            }
+        });
+        tinymce.init({
+            selector: 'textChoice2',
+            setup: function (editor) {
+                editor.on('change', function () {
+                    editor.save();
+                });
+            },
+            height: 250,
+            menubar: false,
+            mode: "textChoice2",
+            editor_selector: "Choice2",
+            plugins: [
+                'autolink lists link image charmap print preview anchor textcolor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table contextmenu paste code tiny_mce_wiris'
+            ],
+            toolbar: 'undo redo | insert | bold italic underline forecolor | tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry tiny_mce_wiris_CAS | image  media',
+            content_css: [
+                '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+                '//www.tinymce.com/css/codepen.min.css'],
+            // enable title field in the Image dialog
+            image_title: true,
+            // enable automatic uploads of images represented by blob or data URIs
+            automatic_uploads: true,
+            // URL of our upload handler (for more details check:
+            images_upload_url: 'postAcceptor.php',
+            // here we add custom filepicker only to Image dialog
+            file_picker_types: 'image',
+            // and here's our custom image picker
+            file_picker_callback: function (cb, value, meta) {
+                var input = document.createElement('input');
+                input.setAttribute('type', 'file');
+                input.setAttribute('accept', 'image/*');
+
+                // Note: In modern browsers input[type="file"] is functional without
+                // even adding it to the DOM, but that might not be the case in some older
+                // or quirky browsers like IE, so you might want to add it to the DOM
+                // just in case, and visually hide it. And do not forget do remove it
+                // once you do not need it anymore.
+
+                input.onchange = function () {
+                    var file = this.files[0];
+
+                    var reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = function () {
+                        // Note: Now we need to register the blob in TinyMCEs image blob
+                        // registry. In the next release this part hopefully won't be
+                        // necessary, as we are looking to handle it internally.
+                        var id = 'blobid' + (new Date()).getTime();
+                        var blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                        var base64 = reader.result.split(',')[1];
+                        var blobInfo = blobCache.create(id, file, base64);
+                        blobCache.add(blobInfo);
+
+                        // call the callback and populate the Title field with the file name
+                        cb(blobInfo.blobUri(), { title: file.name });
+                    };
+                };
+                input.click();
+            }
+        });
+        tinymce.init({
+            selector: 'textChoice3',
+            setup: function (editor) {
+                editor.on('change', function () {
+                    editor.save();
+                });
+            },
+            height: 250,
+            menubar: false,
+            mode: "textChoice3",
+            editor_selector: "Choice3",
+            plugins: [
+                'autolink lists link image charmap print preview anchor textcolor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table contextmenu paste code tiny_mce_wiris'
+            ],
+            toolbar: 'undo redo | insert | bold italic underline forecolor | tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry tiny_mce_wiris_CAS | image  media',
+            content_css: [
+                '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+                '//www.tinymce.com/css/codepen.min.css'],
+            // enable title field in the Image dialog
+            image_title: true,
+            // enable automatic uploads of images represented by blob or data URIs
+            automatic_uploads: true,
+            // URL of our upload handler (for more details check:
+            images_upload_url: 'postAcceptor.php',
+            // here we add custom filepicker only to Image dialog
+            file_picker_types: 'image',
+            // and here's our custom image picker
+            file_picker_callback: function (cb, value, meta) {
+                var input = document.createElement('input');
+                input.setAttribute('type', 'file');
+                input.setAttribute('accept', 'image/*');
+
+                // Note: In modern browsers input[type="file"] is functional without
+                // even adding it to the DOM, but that might not be the case in some older
+                // or quirky browsers like IE, so you might want to add it to the DOM
+                // just in case, and visually hide it. And do not forget do remove it
+                // once you do not need it anymore.
+
+                input.onchange = function () {
+                    var file = this.files[0];
+
+                    var reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = function () {
+                        // Note: Now we need to register the blob in TinyMCEs image blob
+                        // registry. In the next release this part hopefully won't be
+                        // necessary, as we are looking to handle it internally.
+                        var id = 'blobid' + (new Date()).getTime();
+                        var blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                        var base64 = reader.result.split(',')[1];
+                        var blobInfo = blobCache.create(id, file, base64);
+                        blobCache.add(blobInfo);
+
+                        // call the callback and populate the Title field with the file name
+                        cb(blobInfo.blobUri(), { title: file.name });
+                    };
+                };
+                input.click();
+            }
+        });
+        tinymce.init({
+            selector: 'textChoice4',
+            setup: function (editor) {
+                editor.on('change', function () {
+                    editor.save();
+                });
+            },
+            height: 250,
+            menubar: false,
+            mode: "textChoice4",
+            editor_selector: "Choice4",
+            plugins: [
+                'autolink lists link image charmap print preview anchor textcolor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table contextmenu paste code tiny_mce_wiris'
+            ],
+            toolbar: 'undo redo | insert | bold italic underline forecolor | tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry tiny_mce_wiris_CAS | image  media',
+            content_css: [
+                '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+                '//www.tinymce.com/css/codepen.min.css'],
+            // enable title field in the Image dialog
+            image_title: true,
+            // enable automatic uploads of images represented by blob or data URIs
+            automatic_uploads: true,
+            // URL of our upload handler (for more details check:
+            images_upload_url: 'postAcceptor.php',
+            // here we add custom filepicker only to Image dialog
+            file_picker_types: 'image',
+            // and here's our custom image picker
+            file_picker_callback: function (cb, value, meta) {
+                var input = document.createElement('input');
+                input.setAttribute('type', 'file');
+                input.setAttribute('accept', 'image/*');
+
+                // Note: In modern browsers input[type="file"] is functional without
+                // even adding it to the DOM, but that might not be the case in some older
+                // or quirky browsers like IE, so you might want to add it to the DOM
+                // just in case, and visually hide it. And do not forget do remove it
+                // once you do not need it anymore.
+
+                input.onchange = function () {
+                    var file = this.files[0];
+
+                    var reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = function () {
+                        // Note: Now we need to register the blob in TinyMCEs image blob
+                        // registry. In the next release this part hopefully won't be
+                        // necessary, as we are looking to handle it internally.
+                        var id = 'blobid' + (new Date()).getTime();
+                        var blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                        var base64 = reader.result.split(',')[1];
+                        var blobInfo = blobCache.create(id, file, base64);
+                        blobCache.add(blobInfo);
+
+                        // call the callback and populate the Title field with the file name
+                        cb(blobInfo.blobUri(), { title: file.name });
+                    };
+                };
+                input.click();
+            }
+        });
+        tinymce.init({
+            selector: 'textChoice5',
+            setup: function (editor) {
+                editor.on('change', function () {
+                    editor.save();
+                });
+            },
+            height: 250,
+            menubar: false,
+            mode: "textChoice5",
+            editor_selector: "Choice5",
+            plugins: [
+                'autolink lists link image charmap print preview anchor textcolor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table contextmenu paste code tiny_mce_wiris'
+            ],
+            toolbar: 'undo redo | insert | bold italic underline forecolor | tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry tiny_mce_wiris_CAS | image  media',
+            content_css: [
+                '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+                '//www.tinymce.com/css/codepen.min.css'],
+            // enable title field in the Image dialog
+            image_title: true,
+            // enable automatic uploads of images represented by blob or data URIs
+            automatic_uploads: true,
+            // URL of our upload handler (for more details check:
+            images_upload_url: 'postAcceptor.php',
+            // here we add custom filepicker only to Image dialog
+            file_picker_types: 'image',
+            // and here's our custom image picker
+            file_picker_callback: function (cb, value, meta) {
+                var input = document.createElement('input');
+                input.setAttribute('type', 'file');
+                input.setAttribute('accept', 'image/*');
+
+                // Note: In modern browsers input[type="file"] is functional without
+                // even adding it to the DOM, but that might not be the case in some older
+                // or quirky browsers like IE, so you might want to add it to the DOM
+                // just in case, and visually hide it. And do not forget do remove it
+                // once you do not need it anymore.
+
+                input.onchange = function () {
+                    var file = this.files[0];
+
+                    var reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = function () {
+                        // Note: Now we need to register the blob in TinyMCEs image blob
+                        // registry. In the next release this part hopefully won't be
+                        // necessary, as we are looking to handle it internally.
+                        var id = 'blobid' + (new Date()).getTime();
+                        var blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                        var base64 = reader.result.split(',')[1];
+                        var blobInfo = blobCache.create(id, file, base64);
+                        blobCache.add(blobInfo);
+
+                        // call the callback and populate the Title field with the file name
+                        cb(blobInfo.blobUri(), { title: file.name });
+                    };
+                };
+                input.click();
+            }
+        });//end editor TextPropos
+        //show table for option:selected
+        $("#tshowCate").find('.Row').hide(); //เปิดมายังไม่ให้โชว์อะไร
+        $('select.showCate').bind('change', function () {
+            $('select.showCate').attr('disabled', 'disabled');
+            $("#tshowCate").find('.Row').hide();
+            var cAttribute = '';
+            $('select.showCate').each(function () {
+                console.log($(this).data('cate'));
+                if ($(this).val() != '0') {
+                    cAttribute += '[data-' + $(this).data('cate') + '="' + $(this).val() + '"]';
+                }
+            });
+            $('#tshowCate').find('.Row' + cAttribute).show();
+            $('select.showCate').removeAttr('disabled');
+        });
+
+
+    </script>
+}
+

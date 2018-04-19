@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="8204e5a4043740e180b6ed40f6a71c29" Name="Diagram1">
+        <EntityTypeShape EntityType="ExamSystemModel.Choice" Width="1.5" PointX="12" PointY="10.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExamSystemModel.ExamBody" Width="1.5" PointX="7.5" PointY="7" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExamSystemModel.ExamTopic" Width="1.5" PointX="5.25" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExamSystemModel.GetExam" Width="1.5" PointX="13" PointY="8" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExamSystemModel.IOC" Width="1.5" PointX="12" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExamSystemModel.Lesson" Width="1.5" PointX="5.25" PointY="11.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExamSystemModel.Member" Width="1.5" PointX="7.5" PointY="16.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExamSystemModel.Objective" Width="1.5" PointX="7.5" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExamSystemModel.Participant" Width="1.5" PointX="10.25" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExamSystemModel.Proposition" Width="1.5" PointX="9.75" PointY="11.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExamSystemModel.Subject" Width="1.5" PointX="3" PointY="10.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExamSystemModel.sysdiagram" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExamSystemModel.TestGroup" Width="1.5" PointX="5.25" PointY="16.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExamSystemModel.Testing" Width="1.5" PointX="15.25" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExamSystemModel.UserSystem" Width="1.5" PointX="0.75" PointY="8" IsExpanded="true" />
+        <AssociationConnector Association="ExamSystemModel.FK_Choice_Proposition" ManuallyRouted="false" />
+        <AssociationConnector Association="ExamSystemModel.FK__ExamBody__Examto__753864A1" ManuallyRouted="false" />
+        <AssociationConnector Association="ExamSystemModel.FK_GetExam_ExamBody" ManuallyRouted="false" />
+        <AssociationConnector Association="ExamSystemModel.FK_ExamTopic_Subjects" ManuallyRouted="false" />
+        <AssociationConnector Association="ExamSystemModel.FK_GetExam_Proposition" ManuallyRouted="false" />
+        <AssociationConnector Association="ExamSystemModel.FK_Testing_GetExam" ManuallyRouted="false" />
+        <AssociationConnector Association="ExamSystemModel.FK_IOC_Proposition" ManuallyRouted="false" />
+        <AssociationConnector Association="ExamSystemModel.FK_Lesson_Subjects" ManuallyRouted="false" />
+        <AssociationConnector Association="ExamSystemModel.FK_Objective_Lesson" ManuallyRouted="false" />
+        <AssociationConnector Association="ExamSystemModel.FK__Member__GroupID__6CA31EA0" ManuallyRouted="false" />
+        <AssociationConnector Association="ExamSystemModel.FK_Proposition_Objective" ManuallyRouted="false" />
+        <AssociationConnector Association="ExamSystemModel.FK_Participant_Subjects" ManuallyRouted="false" />
+        <AssociationConnector Association="ExamSystemModel.FK_Participant_UserSystem" ManuallyRouted="false" />
+        <AssociationConnector Association="ExamSystemModel.FK__Subjects__UserID__38996AB5" ManuallyRouted="false" />
+        <AssociationConnector Association="ExamSystemModel.FK_TestGroup_Subjects" ManuallyRouted="false" />
+        <AssociationConnector Association="ExamSystemModel.FK_Testing_UserSystem" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
