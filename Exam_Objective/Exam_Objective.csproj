@@ -205,6 +205,7 @@
       <DependentUpon>ExamSystemModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ChoiceModel.cs" />
+    <Compile Include="Models\DataImportExport.cs" />
     <Compile Include="Models\ExamBody.cs">
       <DependentUpon>ExamSystemModel.tt</DependentUpon>
     </Compile>
@@ -234,6 +235,8 @@
     <Compile Include="Models\IOC.cs">
       <DependentUpon>ExamSystemModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\IXChoiceModel.cs" />
+    <Compile Include="Models\IXPropositionModel.cs" />
     <Compile Include="Models\JsonRe.cs" />
     <Compile Include="Models\Lesson.cs">
       <DependentUpon>ExamSystemModel.tt</DependentUpon>
@@ -941,9 +944,6 @@
     <Content Include="Views\Student\Index.cshtml" />
     <Content Include="Views\Student\Subjects.cshtml" />
     <Content Include="Views\Group\ViewMemder.cshtml" />
-    <Content Include="Views\ExamBank\CreateLesson_Obj.cshtml" />
-    <Content Include="Views\ExamBank\Propos.cshtml" />
-    <Content Include="Views\ExamBank\Proposview.cshtml" />
     <Content Include="Scripts\tinymce\langs\readme.md" />
     <Content Include="Scripts\tinymce\skins\lightgray\fonts\tinymce-mobile.woff" />
     <Content Include="Scripts\tinymce\skins\lightgray\fonts\tinymce-small.eot" />
@@ -999,6 +999,15 @@
     <Content Include="Views\IOC\SpecialistLogin.cshtml" />
     <Content Include="Views\Contents\Addcontent.cshtml" />
     <Content Include="Views\Contents\Index.cshtml" />
+    <Content Include="Views\ExamBank\CreateLesson_Obj.cshtml" />
+    <Content Include="Views\ExamBank\Export.cshtml" />
+    <Content Include="Views\ExamBank\ExportMain.cshtml" />
+    <Content Include="Views\ExamBank\Exportout.cshtml" />
+    <Content Include="Views\ExamBank\Import.cshtml" />
+    <Content Include="Views\ExamBank\Importin.cshtml" />
+    <Content Include="Views\ExamBank\ImportMain.cshtml" />
+    <Content Include="Views\ExamBank\Propos.cshtml" />
+    <Content Include="Views\ExamBank\Proposview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

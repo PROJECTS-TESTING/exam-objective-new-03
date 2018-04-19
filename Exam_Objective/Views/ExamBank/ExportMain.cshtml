@@ -9,7 +9,7 @@
 
         foreach (var rows in SubjectsEntity)
         {
-            <h3><span class="icon icon-login"> นำเข้าข้อสอบ / วิชา </span>@rows.SubjectName</h3>
+            <h3><span class="icon icon-logout"> ส่งออกข้อสอบ / วิชา </span>@rows.SubjectName</h3>
         }
     }
     @{var SubjectShareEntity = (List<SubjectsModel>)ViewBag.SubjectShare;
