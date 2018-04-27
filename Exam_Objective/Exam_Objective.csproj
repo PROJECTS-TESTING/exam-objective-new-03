@@ -187,6 +187,7 @@
     <Compile Include="Commoncode\Log.cs" />
     <Compile Include="Commoncode\NetworkAll.cs" />
     <Compile Include="Commoncode\NSystems.cs" />
+    <Compile Include="Commoncode\Saml.cs" />
     <Compile Include="Controllers\AnalysisController.cs" />
     <Compile Include="Controllers\ContentsController.cs" />
     <Compile Include="Controllers\ExamBankController.cs" />
@@ -246,6 +247,7 @@
       <DependentUpon>ExamSystemModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MemberModel.cs" />
+    <Compile Include="Models\ModelSSO.cs" />
     <Compile Include="Models\MySubjectsModel.cs" />
     <Compile Include="Models\Objective.cs">
       <DependentUpon>ExamSystemModel.tt</DependentUpon>
@@ -499,6 +501,15 @@
     </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\datepicker\bootstrap-datepicker-custom.js" />
+    <Content Include="Scripts\datepicker\bootstrap-datepicker-thai.js" />
+    <Content Include="Scripts\datepicker\bootstrap-datepicker.css" />
+    <Content Include="Scripts\datepicker\bootstrap-datepicker.min.css" />
+    <Content Include="Scripts\datepicker\bootstrap-datepicker.th.min.js" />
+    <Content Include="Scripts\datepicker\datepicker.css" />
+    <Content Include="Scripts\datepicker\indexLogin.js" />
+    <Content Include="Scripts\datepicker\jquery.table2excel.js" />
+    <Content Include="Scripts\datepicker\styleLogin.css" />
     <Content Include="Scripts\inputmask\bindings\inputmask.binding.js" />
     <Content Include="Scripts\inputmask\bindings\inputmask.binding.min.js" />
     <Content Include="Scripts\inputmask\dependencyLibs\inputmask.dependencyLib.jqlite.js" />
@@ -640,6 +651,7 @@
       <DependentUpon>ExamSystemModel.edmx</DependentUpon>
     </Content>
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <Content Include="Scripts\datepicker\bootstrap-datepicker.css.map" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />

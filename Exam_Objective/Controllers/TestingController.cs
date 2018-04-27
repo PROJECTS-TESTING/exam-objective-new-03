@@ -581,7 +581,7 @@ namespace Exam_Objective.Controllers
                     List<int> checkChoice = new List<int>();
                     foreach(var datac in dataChoices)
                     {
-                        if(datac.ChoiceID == 4)
+                        if(datac.ChoiceID == 4 && datac.TextChoice.Length > 13)
                         {
                             if (datac.TextChoice.Substring(3, 7).Equals("ถูกทั้ง"))
                             {
@@ -591,14 +591,14 @@ namespace Exam_Objective.Controllers
                             {
                                 checkChoice.Add(datac.ProposID);
                             }
-                            else if (datac.TextChoice.Length>15&&datac.TextChoice.Substring(3, 13).Equals("ไม่มีข้อใดถูก"))
-                            {
-                                checkChoice.Add(datac.ProposID);
-                            }
                             else if (datac.TextChoice.Length > 13 && datac.TextChoice.Substring(3, 11).Equals("ไม่มีข้อถูก"))
                             {
                                 checkChoice.Add(datac.ProposID);
                             }
+                            else if (datac.TextChoice.Length>15&&datac.TextChoice.Substring(3, 13).Equals("ไม่มีข้อใดถูก"))
+                            {
+                                checkChoice.Add(datac.ProposID);
+                            }                           
                         }
                     }
                     ViewBag.dataCheck = checkChoice;
@@ -976,7 +976,7 @@ namespace Exam_Objective.Controllers
                                        }).ToList();
 
                     var i = 0;
-                    var j = 97;
+                    var j = 0;
                     foreach(var row in dataProp)
                     {
                         i++;
@@ -992,11 +992,11 @@ namespace Exam_Objective.Controllers
                         {
                             if(row.ProposID == rowc.ProposID)
                             {
-                               
-                                html.Append("<p>" + (char)j+". " + rowc.TextChoice.Substring(3, rowc.TextChoice.Length - 3));
                                 j++;
+                                html.Append("<p>&nbsp;&nbsp;" + j+". " + rowc.TextChoice.Substring(3, rowc.TextChoice.Length - 3));
+                              
                             }
-                        }j = 97;
+                        }j = 0;
                     }
                     
                 }

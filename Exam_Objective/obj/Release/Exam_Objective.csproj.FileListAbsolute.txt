@@ -55,9 +55,9 @@ F:\VisualStudio\exam-objective-new-03\Exam_Objective\bin\Microsoft.AI.Dependency
 F:\VisualStudio\exam-objective-new-03\Exam_Objective\bin\Microsoft.AI.ServerTelemetryChannel.xml
 F:\VisualStudio\exam-objective-new-03\Exam_Objective\bin\Microsoft.AI.WindowsServer.xml
 F:\VisualStudio\exam-objective-new-03\Exam_Objective\bin\Microsoft.AI.Web.xml
-F:\VisualStudio\exam-objective-new-03\Exam_Objective\obj\Release\Exam_Objective.csprojResolveAssemblyReference.cache
 F:\VisualStudio\exam-objective-new-03\Exam_Objective\obj\Release\Exam_Objective.csproj.ResolveComReference.cache
 F:\VisualStudio\exam-objective-new-03\Exam_Objective\obj\Release\Exam_Objective.csproj.CoreCompileInputs.cache
 F:\VisualStudio\exam-objective-new-03\Exam_Objective\obj\Release\Exam_Objective.csproj.CopyComplete
 F:\VisualStudio\exam-objective-new-03\Exam_Objective\obj\Release\Exam_Objective.dll
 F:\VisualStudio\exam-objective-new-03\Exam_Objective\obj\Release\Exam_Objective.pdb
+F:\VisualStudio\exam-objective-new-03\Exam_Objective\obj\Release\Exam_Objective.csprojResolveAssemblyReference.cache
