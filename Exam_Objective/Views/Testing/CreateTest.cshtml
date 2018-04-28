@@ -224,7 +224,7 @@
                                 </span>
                                 <span class="col-md-7 text-right">
                                     <span> | </span>
-                                    <span title="รายละเอีนด" class="fa fa-search link-action btnView" data-toggle="modal" data-target="#TestModal" data-examtopicid="@rows.ExamtopicID"> รายละเอียด </span>
+                                    <span title="รายละเอียด" class="fa fa-search link-action btnView" data-toggle="modal" data-target="#TestModal" data-examtopicid="@rows.ExamtopicID"> รายละเอียด </span>
                                     <span title="แก้ไข" class="fa fa-cog link-action btnEdit" data-toggle="modal" data-target="#TestModal" data-examtopicid="@rows.ExamtopicID"> แก้ไข</span>
                                     <span title="ลบ" class="fa  fa-times link-action btnDelete" data-examtopicid="@rows.ExamtopicID" data-Exname="@rows.ExamtopicName"> ลบ</span>
                                     <span> | </span>
@@ -272,7 +272,8 @@
             startView: 0,
             minView: 0,
             maxView: 1,
-            forceParse: 0
+            forceParse: 0,
+            thaiyear: true
         });
         $('.form_timeEnd').datetimepicker({
             language: 'th',
@@ -283,7 +284,8 @@
             startView: 0,
             minView: 0,
             maxView: 1,
-            forceParse: 0
+            forceParse: 0,
+            thaiyear: true
         });
     </script>
     <script type="text/javascript">
