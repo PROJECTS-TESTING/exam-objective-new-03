@@ -1,0 +1,62 @@
+﻿@using Exam_Objective.Models
+@using System.Collections.Generic
+@{
+    var dataExamtopic = (List<ExamTopicModel>)ViewBag.DataExamtopic;
+    var DataPropos = (List<PropositionModel>)ViewBag.dataProposition;
+    var user = Session["User"] as UserSystemModel;
+}
+<div class="menu">
+    <div class="panel panel-default text-center" style="margin-bottom:2px; min-height:150px;border-radius:2px;border:solid 1px #bdbcbc">
+        <div class="panel-heading">
+            กำหนดเวลา
+        </div>
+        <p>เวลาเริ่ม-เวลาสิ้นสุด</p>
+        <p id="timeEnd">00:00:00-00:00:00 น.</p>
+        <p>เหลือเวลาในการทำ</p>
+        <p id="demo">0 ชั่วโมง 0 นาที 0 วินาที </p>
+    </div>
+
+    <div class="panel panel-default" style="margin-top:2px;margin-bottom:2px;min-height:150px;border-radius:2px;border:solid 1px #bdbcbc;">
+        <div class="panel-heading text-center">
+            นำทางข้อสอบ
+        </div>
+        <div style="width:100%;height:250px;overflow:auto;padding:4px;">
+            @{ var i = 0;
+                foreach (var rows in DataPropos)
+                {
+                    if (rows.Continuity == null)
+                    { i++;
+                <input class="@rows.ProposID" title="ข้อ @i" onclick="GotoQ('@rows.ProposID')" style="width:38px;height:20px; margin:1px;" type="button" value="@i" /> if (i % 5 == 0)
+                        { <br />}
+                    }
+                    else if (rows.Continuity == 0)
+                    {
+                        foreach (var rows1 in DataPropos)
+                        {
+                            if (rows1.Continuity == rows.ProposID)
+                            {
+                                i++;
+                             <input class="@rows1.ProposID" title="ข้อ @i" onclick="GotoQ('@rows1.ProposID')" style="width:38px;height:20px; margin:1px;" type="button" value="@i" /> if (i % 5 == 0)
+                                { <br />}
+                            }
+                        }
+                    }
+                }
+                }
+        </div>
+    </div>
+    @{ if (user.Status == "student")
+    {
+    <div class="panel panel-default" style="margin-top:2px;margin-bottom:2px;border-radius:2px;border:solid 1px #bdbcbc;">
+        <div class="panel-heading text-center">
+            ส่งข้อสอบ
+        </div>
+        <button title="ส่งข้อสอบ" style="margin:10px;margin-left:75px;" class="btn btn-primary">ส่งข้อสอบ</button>
+        </div>
+        }
+    }
+    </div>
+        
+    <span id="datein" data-dates="@dataExamtopic[0].DatetoBegin"></span>
+    <span id="datein1" data-dates="@dataExamtopic[0].TimetoBegin"></span>
+    <span id="datein2" data-dates="@dataExamtopic[0].TimetoEnd"></span>

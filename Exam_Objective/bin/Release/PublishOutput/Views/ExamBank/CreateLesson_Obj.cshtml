@@ -1,0 +1,882 @@
+﻿@using Exam_Objective.Models
+@using System.Collections.Generic
+@{
+    ViewBag.Title = "CreateLesson_Obj";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Basic Form -->
+<div class="panel panel-grey margin-bottom-60">
+    <div class="panel-heading">
+        @{var SubjectsEntity = (List<SubjectsModel>)ViewBag.Subject;
+
+            foreach (var rows in SubjectsEntity)
+            {
+                <h3><span class="fa  fa-tasks">หน่วยเรียนและวัตถุประสงค์ / วิชา</span>@rows.SubjectName</h3>
+            }
+
+        }
+        @{var SubjectShareEntity = (List<SubjectsModel>)ViewBag.SubjectShare;
+
+            foreach (var rows in SubjectShareEntity)
+            {
+                <h3><span class="fa  fa-tasks">หน่วยเรียนและวัตถุประสงค์ / วิชา</span>@rows.SubjectName</h3>
+            }
+        }
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            หน่วยเรียนและวัตถุประสงค์
+        </div>
+        <div class="panel-body">
+            @{
+                var CateEntity = (List<LessonModel>)ViewBag.Lesson;
+                var CateEnnotdis = (List<ObjectiveModel>)ViewBag.ObjectiveNotDis;
+                foreach (var r in CateEntity)
+                {
+                    <div class="col-md-10">
+                        <ul>
+                            <li>
+                                <b>
+                                    @r.LesName
+                                    <a>
+                                        <span class="btnEditl glyphicon glyphicon-cog" data-lesson="@r.LessonID" data-lessonname="@r.LesName" title="แก้ไขหน่วยเรียน : @r.LesName"></span>
+                                    </a>
+                                    <a>
+                                        <span class="btnViewl glyphicon glyphicon-search" data-lesson="@r.LessonID" data-lessonname="@r.LesName" title="แสดงรายละเอียดหน่วยเรียน : @r.LesName"></span>
+                                    </a>
+                                    <a>
+                                        <span class="btnDeletel glyphicon glyphicon-remove" data-lesson="@r.LessonID" data-lessonname="@r.LesName" title="ลบหน่วยเรียน : @r.LesName"></span>
+                                    </a>
+                                </b>
+                                <ul>
+                                    @foreach (var r2 in CateEnnotdis)
+                                    {
+                                        if (r.LessonID == r2.PLessonID)
+                                        {
+                                            <li>
+                                                @r2.ObjName (@r2.CountProposID)
+                                                <a>
+                                                    <span class="btnEdito glyphicon glyphicon-cog" data-objective="@r2.ObjID" data-objname="@r2.ObjName" title="แก้ไขหมวดหมู่ : @r2.ObjName"></span>
+                                                </a>
+                                                <a>
+                                                    <span class="btnViewo glyphicon glyphicon-search" data-objective="@r2.ObjID" data-objename="@r2.ObjName" title="แสดงรายละเอียดหมวดหมู่ : @r2.ObjName"></span>
+                                                </a>
+                                                <a>
+                                                    <span class="btnDeleteo glyphicon glyphicon-remove" data-objective="@r2.ObjID" data-objname="@r2.ObjName" title="ลบหมวดหมู่ : @r2.ObjName"></span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </li>
+                        </ul>
+                        <br />
+                    </div>
+                }
+
+
+            }
+
+        </div>
+    </div>
+    <button class="btn btn-primary" type="button" id="btnCrtLesson"><i class="fa fa-plus-circle"></i> สร้างบทเรียน</button>
+    <button class="btn btn-danger" type="button" id="btnCrtOjec"><i class="fa fa-plus-circle"></i> สร้างวัตถุประสงค์</button>
+</div>
+<form id="formLesson">
+    <div id="LessonModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"><label id="title" name="title"></label></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <input type="hidden" class="form-control" id="isUpdateable" name="isUpdateable" value="1" />
+                                <input type="hidden" class="form-control" id="LessonID" name="LessonID" value="0" />     
+                                <label>ชื่อหน่วยเรียน<span class="required">*</span></label>
+                                <input type="text" id="LesName" name="LesName" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <label class="bold">รายละเอียดหน่วยเรียน<span class="required">*</span></label>
+                                <textarea type="text" id="TextLesson" name="TextLesson" class="form-control Description"></textarea>
+                            </div>
+                        </div>
+                        <div>
+                            TextLesson
+                            <div class="form-group">
+                                <div class="col-md-10">
+                                    <label>รายวิชา</label>
+                                    @{
+                var subjectEntity = (List<SubjectsModel>)ViewBag.Subject;
+                var subID = "";
+                var subname = "";
+                if (subjectEntity.Count > 0 && subjectEntity != null)
+                {
+                    foreach (var rows in subjectEntity)
+                    {
+
+                        <input type="hidden" id="SubjectID" name="SubjectID" class="form-control" />
+                        <input type="text" id="SubjectName" name="SubjectName" class="form-control" />
+subID = rows.SubjectID;
+subname = rows.SubjectName;
+
+
+}
+}
+                                    }
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-10">
+                                    <label>อาจารย์ผู้สอน</label>
+                                    @{
+                var UserEntity = (List<UserSystemModel>)ViewBag.UserIDdata;
+                var userID = "";
+                var Fname = "";
+                var Status = "";
+                if (UserEntity.Count > 0 && UserEntity != null)
+                {
+                    foreach (var rows in UserEntity)
+                    {
+                        if (rows.Status == "admin" || rows.Status == "professor")
+                        {
+                            <input type="hidden" id="UserID" name="UserID" class="form-control" />
+                            <input type="text" id="Fname" name="Fname" class="form-control" />
+    userID = rows.UserID;
+    Fname = rows.Fname + " " + rows.Lname;
+    Status = rows.Status;
+}
+}
+}
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="btnSave" class="btn btn-primary btnSAVE" title="บันทึกการสร้าง แก้ไขหน่วยเรียน">บันทึก</button>
+                            <button type="button" id="btnClose" class="btn btn-danger" data-dismiss="modal" title="ยกเลิกการสร้าง แก้ไข และดูรายละเอียดหน่วยเรียน">ยกเลิก</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<form id="formObj">
+    <div id="ObjModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"><label id="titleOjec" name="titleOjec"></label></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <input type="hidden" class="form-control" id="isUpdateable" name="isUpdateable" value="1" />
+                                <input type="hidden" class="form-control" id="ObjID" name="ObjID" value="0" />       
+                                <label>ชื่อวัตถุประสงค์<span class="required">*</span></label>
+                                <input type="text" id="ObjName" name="ObjName" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <label class="bold">รายละเอียดจุดประสงค์<span class="required">*</span></label>
+                                <textarea type="text" id="TextObj" name="TextObj" class="form-control Description"></textarea>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="form-group">
+                                <div class="col-md-10">
+                                    <label>หน่วยเรียน</label>
+                                    <select id="PLessonID" name="PLessonID" class="form-control">
+                                        <option selected value="">-- กรุณาเลือกหน่วยเรียน --</option>
+                                        @{
+                                            var lessonEntity = (List<LessonModel>)ViewBag.Lesson;
+                                            foreach (var rows in lessonEntity)
+                                            {
+                                                int test = rows.LessonID;
+
+                                                <option value='@rows.LessonID'>@rows.LesName</option>
+
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="btnSaveObj" class="btn btn-primary btnSAVE" title="บันทึกการสร้าง แก้ไขจุดประสงค์">บันทึก</button>
+                            <button type="button" id="btnClose" class="btn btn-danger" data-dismiss="modal" title="ยกเลิกการสร้าง แก้ไข และดูรายละเอียดจุดประสงค์">ยกเลิก</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!--View Lesson-->
+<form id="formLessonv">
+    <div id="LessonModalv" class="modal fade LessonModalv">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"><label id="titlelv" name="titlelessonview"></label></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <label class="bold">หน่วยเรียน : </label>
+                                <label id="LesNamev" name="LesNamev"></label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <label class="bold">รายละเอียด : </label>
+                                <label type="text" id="TextLessonv" name="TextLessonv"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnClosev" class="btn btn-danger" data-dismiss="modal" title="ยกเลิกรายละเอียดหน่วยเรียน">ยกเลิก</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!--View Objective-->
+<form id="formObjv">
+    <div id="ObjModalv" class="modal fade ObjModalv">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"><label id="titleov" name="titleobjectiveview"></label></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <label class="bold">จุดประสงค์ : </label>
+                                <label id="ObjNamev" name="ObjNamev"></label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <label class="bold">รายละเอียด : </label>
+                                <label type="text" id="TextObjv" name="TextObjv"></label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <label class="bold">หน่วยเรียน : </label>
+                                <label type="text" id="LesNameov" name="LesNameov"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnClosev" class="btn btn-danger" data-dismiss="modal" title="ยกเลิกรายละเอียดหน่วยเรียน">ยกเลิก</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.inputmask.bundle.js"></script>
+    <script src="~/Scripts/jquery.inputmask.bundle.min.js"></script>
+    <script>
+        var checkEditL = 0;
+        var checkEditO = 0;
+        $("#btnCrtLesson").click(function () {
+            //swal("Good job!", "You clicked the button!", "success");
+            $("#title").text("เพิ่มหน่วยเรียนทดสอบ");
+            $("#btnCrtLesson").find("input").val("");
+            $("#LesName").val("");
+            $("#TextLesson").val("");
+            $("#SubjectID").val("@subID");
+            $("#SubjectName").val("@subname");
+            $("#UserID").val("@userID");
+            $("#Fname").val("@Fname");
+            $("#LessonModal").modal("show");
+            $("#Fname").prop("readonly", true);
+            $("#SubjectName").prop("readonly", true);
+            $("#LesName").prop("readonly", false);
+            $("#TextLesson").prop("readonly", false);
+            $("#btnSave").show()
+            tinyMCE.activeEditor.setContent('');  //clear text in tinyeditor
+            var valida = $("#formLesson").validate();
+            valida.resetForm();
+        });
+        $('#btnSave').click(function () {
+            if ($("#formLesson").valid()) {
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: '@Url.Action("CreateLesson", "ExamBank")',
+                    dataType: "json",
+                    data: $('#formLesson').serialize(),
+                    traditional: true,
+                    beforeSend: function(){
+
+                    },
+
+                    success: function (res){
+                        var status = false;
+                        var message = 'ดำเนินการไม่สำเร็จ';
+                        if (res != null && res != undefined) {
+                            status = res.status;
+                            message = res.message != '' ? res.message : message;
+                        }
+                        if (status == false) {
+                            swal("เกิดข้อผิดพลาด", message, "error");
+                        } else {
+                            if (checkEditL == 0) {
+                                swal({
+                                    title: "สร้างหน่วยเรียนสำเร็จ",
+                                    type: "success",
+                                    showConfirmButton: false,
+                                    //confirmButtonColor: "#AEDEF4",
+                                    //confirmButtonText: "Ok",
+                                    timer: 1000,
+                                    closeOnConfirm: false
+                                },
+                                    function () {
+                                        location.reload(true);
+                                    });
+                            } else {
+                                checkEditL = 0;
+                                swal({
+                                    title: "แก้ไขหน่วยเรียนสำเร็จ",
+                                    type: "success",
+                                    showConfirmButton: false,
+                                    //confirmButtonColor: "#AEDEF4",
+                                    //confirmButtonText: "Ok",
+                                    timer: 1000,
+                                    closeOnConfirm: false
+                                },
+                                    function () {
+                                        location.reload(true);
+                                    });
+                            }
+                        }
+                    },
+                    error: function (xhr, ajaxOption, thrownError) {
+                        swal("เกิดข้อผิดพลาด", message, "error");
+                    },
+                    complete: function () {
+
+                    },
+                });
+            }
+        });
+        $('.btnEditl').click(function () {
+            var id = $(this).data("lesson");
+            $("#title").text("แก้ไขหน่วยเรียน");
+            //alert(id);
+            checkEditL = 1;
+            $.ajax({
+                type: "POST",
+                cache: false,
+                url: '@Url.Action("EditLesson","ExamBank")',
+                dataType: "json",
+                data: {id :id},
+                traditional: true,
+                beforeSend: function () {
+                },
+
+                success: function (res) {
+                    var status = false;
+                    var message = 'ดำเนินการไม่สำเร็จ';
+                    if (res != null && res != undefined) {
+                        status = res.status;
+                        message = res.message != '' ? res.message : message;
+                    }
+                    if (status == false) {
+                        swal("เกิดข้อผิดพลาด", message, "error");
+                    } else {
+                        $("#LessonID").val(res.data.LessonID);
+                        $("#LesName").val(res.data.LesName);
+                        $("#TextLesson").val(res.data.TextLesson);
+                        $("#SubjectID").val(res.data.SubjectID);
+                        $("#UserID").val(res.data.UserID);
+                        $("#SubjectName").val(res.data.SubjectName).prop("readonly", true);
+                        $("#Fname").val(res.data.Fname + " " + res.data.Lname).prop("readonly", true);
+                        $("#LessonModal").modal("show");
+                        $("#SubjectID").prop("readonly", true);
+                        $("#Status").prop("readonly", true);
+                        $("#formLesson").find('.form-group').removeClass('has-error');
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    swal("เกิดข้อผิดพลาด", message, "error");
+                },
+                complete: function () {
+
+                },
+            });
+        });
+        $('.btnViewl').click(function () {
+            var id = $(this).data("lesson");
+            $("#titlelv").text("รายละเอียดหน่วยเรียน");
+            //alert(id);
+            $.ajax({
+                type: "POST", // method ที่จะส่ง
+                cache: false,
+                url: '@Url.Action("EditLesson", "ExamBank")',  // ส่งไปให้ที่ได้ ระบุ
+                dataType: "json", // ชนิดข้อมูลที่ส่ง
+                data: { id: id }, // ข้อมูลที่ส่ง
+                traditional: true, // การจดจำข้อมูล
+                beforeSend: function () { // ก่องส่ง data จะให้ทำไร
+
+                },
+
+                success: function (res) {
+
+                    var status = false;
+                    var message = 'ดำเนินการไม่สำเร็จ';
+                    if (res != null && res != undefined) {
+                        status = res.status;
+                        message = res.message != '' ? res.message : message;
+                    }
+                    if (status == false) {
+                        swal("เกิดข้อผิดพลาดที่", message, "error");
+
+                    } else {
+                        $("#LesNamev").text(res.data.LesName);
+                        $("#TextLessonv").text(res.data.TextLesson);
+                        $("#LessonModalv").modal("show");
+                        $("#formLessonv").find('.form-group').removeClass('has-error');
+
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    swal("เกิดข้อผิดพลาด", message, "error");
+                },
+                complete: function () {
+
+                },
+            });
+        });
+        $('.btnDeletel').click(function () {
+            var id = $(this).data("lesson");
+            var lname = $(this).data("lessonname");
+            //alert(id);
+            swal({
+                title: "ต้องการลบหน่วยเรียน : "+ lname + " ?",
+                text: "หน่วยเรียนที่ลบจะไม่สามารถกู้คืนกลับมาได้ !",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "ใช่ ต้องการลบ",
+                cancelButtonText: "ยกเลิก !",
+                closeOnConfirm: true,
+                colseOnCancel: true
+            },
+            function(isConfirm){
+                if (isConfirm){
+                    $.ajax({
+                        type: "POST",
+                        cache: false,
+                        url: '@Url.Action("DeleteLesson","ExamBank")',
+                        dataType: "json",
+                        data: {id:id},
+                        traditional: true,
+                        beforeSend: function(){
+                        },
+                        success: function (res){
+
+                            var status = false;
+                            var message = 'ดำเนินการไม่สำเร็จ';
+                            if (res != null && res != undefined){
+                                status = res.status;
+                                message = res.message != '' ? res.message :message;
+                            }
+                            if (status == false){
+                                swal("เกิดข้อผิดพลาด", message,"error");
+                            }else{
+                                swal({
+                                    title: "ลบหน่วยเรียนสำเร็จ",
+                                    type: "success",
+                                    showConfirmButton: false,
+                                    timer: 1000,
+                                    closeOnConfirm: false
+                                },
+                                function(){
+                                    location.reload(true);
+                                });
+                            }
+                        },
+                        error: function (xhr, ajaxOptions, thrownError){
+                            swal("เกิดข้อผิดพลาด", message, "error");
+                        },
+                        complete: function(){
+
+                        },
+                    });
+                }
+            }
+
+
+            );
+
+        });
+        $("#btnCrtOjec").click(function () {
+            //swal("Good job!", "You clicked the button!", "success");
+            $("#titleOjec").text("เพิ่มจุดประสงค์");
+            $("#btnCrtOjec").find("input").val("");
+            $("#ObjName").val("");
+            $("#TextObj").val("");
+            $("#ObjModal").modal("show");
+            $("#ObjName").prop("readonly", false);
+            $("#TextObj").prop("readonly", false);
+            $("#PLessonID").prop("readonly", false);
+            $("#btnSave").show()
+            tinyMCE.activeEditor.setContent('');  //clear text in tinyeditor
+            var valida = $("#formObj").validate();
+            valida.resetForm();
+        });
+        $('#btnSaveObj').click(function () {
+            if ($("#formObj").valid()) {
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: '@Url.Action("CreateObj", "ExamBank")',
+                    dataType: "json",
+                    data: $('#formObj').serialize(),
+                    traditional: true,
+                    beforeSend: function(){
+
+                    },
+
+                    success: function (res){
+                        var status = false;
+                        var message = 'ดำเนินการไม่สำเร็จ';
+                        if (res != null && res != undefined) {
+                            status = res.status;
+                            message = res.message != '' ? res.message : message;
+                        }
+                        if (status == false) {
+                            swal("เกิดข้อผิดพลาด", message, "error");
+                        } else {
+                            if (checkEditO == 0) {
+                                swal({
+                                    title: "สร้างจุดประสงค์สำเร็จ",
+                                    type: "success",
+                                    showConfirmButton: false,
+                                    //confirmButtonColor: "#AEDEF4",
+                                    //confirmButtonText: "Ok",
+                                    timer: 1000,
+                                    closeOnConfirm: false
+                                },
+                                    function () {
+                                        location.reload(true);
+                                    });
+                            } else {
+                                checkEditO = 0;
+                                swal({
+                                    title: "แก้ไขจุดประสงค์สำเร็จ",
+                                    type: "success",
+                                    showConfirmButton: false,
+                                    //confirmButtonColor: "#AEDEF4",
+                                    //confirmButtonText: "Ok",
+                                    timer: 1000,
+                                    closeOnConfirm: false
+                                },
+                                    function () {
+                                        location.reload(true);
+                                    });
+                            }
+                        }
+                    },
+                    error: function (xhr, ajaxOption, thrownError) {
+                        swal("เกิดข้อผิดพลาด", message, "error");
+                    },
+                    complete: function () {
+
+                    },
+                });
+            }
+        });
+        $('.btnEdito').click(function () {
+            var id = $(this).data("objective");
+            $("#titleOjec").text("แก้ไขจุดประสงค์");
+            //alert(id);
+            checkEditO = 1;
+            $.ajax({
+                type: "POST",
+                cache: false,
+                url: '@Url.Action("EditObj","ExamBank")',
+                dataType: "json",
+                data: {id :id},
+                traditional: true,
+                beforeSend: function () {
+                },
+
+                success: function (res) {
+                    var status = false;
+                    var message = 'ดำเนินการไม่สำเร็จ';
+                    if (res != null && res != undefined) {
+                        status = res.status;
+                        message = res.message != '' ? res.message : message;
+                    }
+                    if (status == false) {
+                        swal("เกิดข้อผิดพลาด", message, "error");
+                    } else {
+                        $("#ObjID").val(res.data.ObjID);
+                        $("#ObjName").val(res.data.ObjName);
+                        $("#TextObj").val(res.data.TextObj);
+                        $("#PLessonID").val(res.data.PLessonID);
+                        //$("#PLessonID").val(res.data.LesName).prop("readonly", true);
+                        $("#ObjModal").modal("show");
+                        $("#PLessonID").prop("readonly", true);
+                        $("#Status").prop("readonly", true);
+                        $("#formObj").find('.form-group').removeClass('has-error');
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    swal("เกิดข้อผิดพลาด", message, "error");
+                },
+                complete: function () {
+
+                },
+            });
+        });
+        $('.btnViewo').click(function () {
+            var id = $(this).data("objective");
+            
+            $("#titleov").text("รายละเอียดหน่วยเรียน");
+            //alert(id);
+            $.ajax({
+                type: "POST", // method ที่จะส่ง
+                cache: false,
+                url: '@Url.Action("EditObj", "ExamBank")',  // ส่งไปให้ที่ได้ ระบุ
+                dataType: "json", // ชนิดข้อมูลที่ส่ง
+                data: { id: id }, // ข้อมูลที่ส่ง
+                traditional: true, // การจดจำข้อมูล
+                beforeSend: function () { // ก่องส่ง data จะให้ทำไร
+
+                },
+
+                success: function (res) {
+
+                    var status = false;
+                    var message = 'ดำเนินการไม่สำเร็จ';
+                    if (res != null && res != undefined) {
+                        status = res.status;
+                        message = res.message != '' ? res.message : message;
+                    }
+                    if (status == false) {
+                        swal("เกิดข้อผิดพลาดที่", message, "error");
+
+                    } else {
+                        $("#ObjNamev").text(res.data.ObjName);
+                        $("#TextObjv").text(res.data.TextObj);
+                        $("#LesNameov").text(res.data.PLesName);
+                        $("#ObjModalv").modal("show");
+                        $("#formObjv").find('.form-group').removeClass('has-error');
+
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    swal("เกิดข้อผิดพลาด", message, "error");
+                },
+                complete: function () {
+
+                },
+            });
+        });
+        $('.btnDeleteo').click(function () {
+            var id = $(this).data("objective");
+            var Objname = $(this).data("objname");
+            //alert(id);
+            swal({
+                title: "ต้องการลบจุดประสงค์ : " + Objname + " ?",
+                text: "จุดประสงค์ที่ลบจะไม่สามารถกู้คืนกลับมาได้ !",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "ใช่ ต้องการลบ",
+                cancelButtonText: "ยกเลิก !",
+                closeOnConfirm: true,
+                colseOnCancel: true
+            },
+            function(isConfirm){
+                if (isConfirm){
+                    $.ajax({
+                        type: "POST",
+                        cache: false,
+                        url: '@Url.Action("DeleteObj","ExamBank")',
+                        dataType: "json",
+                        data: {id:id},
+                        traditional: true,
+                        beforeSend: function(){
+                        },
+                        success: function (res){
+
+                            var status = false;
+                            var message = 'ดำเนินการไม่สำเร็จ';
+                            if (res != null && res != undefined){
+                                status = res.status;
+                                message = res.message != '' ? res.message :message;
+                            }
+                            if (status == false){
+                                swal("เกิดข้อผิดพลาด", message,"error");
+                            }else{
+                                swal({
+                                    title: "ลบจุดประสงค์สำเร็จ",
+                                    type: "success",
+                                    showConfirmButton: false,
+                                    timer: 1000,
+                                    closeOnConfirm: false
+                                },
+                                function(){
+                                    location.reload(true);
+                                });
+                            }
+                        },
+                        error: function (xhr, ajaxOptions, thrownError){
+                            swal("เกิดข้อผิดพลาด", message, "error");
+                        },
+                        complete: function(){
+
+                        },
+                    });
+                }
+            }
+
+
+            );
+
+        });
+        //check formLesson
+        $("#formLesson").validate({
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            rules: {
+                LesName: {
+                    required: true
+                },
+                TextLesson: {
+                    required: true
+                },
+            },
+
+            messages: {
+                LesName: {
+                    required: "กรุณาป้อนชื่อหน่วยเรียน"
+                },
+                TextLesson: {
+                    required: "กรุณาป้อนคำอธิบายหน่วยเรียน"
+                },
+            },
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                $('.alert-danger', $("#formLesson")).show();
+            },
+            highlight: function (element) { // hightlight error inputs
+                $(element)
+                    .closest('.form-group').addClass('has-error'); // set error class to the control group
+            },
+            unhighlight: function (element) {
+                $(element)
+                    .closest('.form-group')
+                    .removeClass('has-error');
+            },
+            success: function (label) {
+                label.closest('.form-group').removeClass('has-error');
+                label.remove();
+            },
+            errorPlacement: function (error, element) {
+                if (element.parent(".input-group").size() > 0) {
+                    error.insertAfter(element.parent(".input-group"));
+                } else if (element.attr("data-error-container")) {
+                    error.appendTo(element.attr("data-error-container"));
+                } else {
+                    error.insertAfter(element); // for other inputs, just perform default behavior
+                }
+            },
+            submitHandler: function (form) {
+                submit($("#formLesson"));
+                return false;
+                form.submit();
+            }
+        });
+        //check formObj
+        $("#formObj").validate({
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            rules: {
+                ObjName: {
+                    required: true
+                },
+                TextObj: {
+                    required: true
+                },
+                PLessonID: {
+                    required: true
+                },
+            },
+
+            messages: {
+                ObjName: {
+                    required: "กรุณาป้อนชื่อจุดประสงค์"
+                },
+                TextObj: {
+                    required: "กรุณาป้อนรายละเอียดจุดประสงค์"
+                },
+                PLessonID: {
+                    required: "กรุณาป้อนเลือกหน่วยเรียน"
+                },
+            },
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                $('.alert-danger', $("#formObj")).show();
+            },
+            highlight: function (element) { // hightlight error inputs
+                $(element)
+                    .closest('.form-group').addClass('has-error'); // set error class to the control group
+            },
+            unhighlight: function (element) {
+                $(element)
+                    .closest('.form-group')
+                    .removeClass('has-error');
+            },
+            success: function (label) {
+                label.closest('.form-group').removeClass('has-error');
+                label.remove();
+            },
+            errorPlacement: function (error, element) {
+                if (element.parent(".input-group").size() > 0) {
+                    error.insertAfter(element.parent(".input-group"));
+                } else if (element.attr("data-error-container")) {
+                    error.appendTo(element.attr("data-error-container"));
+                } else {
+                    error.insertAfter(element); // for other inputs, just perform default behavior
+                }
+            },
+            submitHandler: function (form) {
+                submit($("#formObj"));
+                return false;
+                form.submit();
+            }
+        });
+
+    </script>
+
+}

@@ -102,14 +102,7 @@ $('.btnEdit').click(function () {
                 var textExplantion = (res.data.Explantion);
                 tinyMCE.activeEditor.setContent(textExplantion);
                
-               // $('#DatetoBegin').val(res.data.DatetoBegin);
-                var tss = res.data.DatetoBegin;
-                tss.toString();
-                var ss = /\d+/.exec(tss);
-                var Datadate = ss[0]; 
-               // alert(ss[0] * -1+"__"+tss);
-                var toDay = new Date(parseInt(Datadate));
-                $('#DatetoBegin').val(toDay.getDate() + "-" + (toDay.getMonth()+1) + "-" + (toDay.getFullYear()));
+                //$('#DatetoBegin').html(res.data.DatetoBegin);
                 var phtime = res.data.TimetoBegin.Hours;
                 var pmtime = res.data.TimetoBegin.Minutes;
                 var Sphtime = "";
@@ -183,14 +176,7 @@ $('.btnView').click(function () {
                 var textExplantion = (res.data.Explantion);
                 tinyMCE.activeEditor.setContent(textExplantion);
 
-                // $('#DatetoBegin').val(res.data.DatetoBegin);
-                var tss = res.data.DatetoBegin;
-                tss.toString();
-                var ss = /\d+/.exec(tss);
-                var Datadate = ss[0];
-                // alert(ss[0] * -1+"__"+tss);
-                var toDay = new Date(parseInt(Datadate));               
-                $('#DatetoBegin').val(toDay.getDate() + "-" + (toDay.getMonth() + 1) + "-" + (toDay.getFullYear()));
+              //  $('#DatetoBegin').html(res.data.DatetoBegin);
                 var phtime = res.data.TimetoBegin.Hours;
                 var pmtime = res.data.TimetoBegin.Minutes;
                 var Sphtime = "";

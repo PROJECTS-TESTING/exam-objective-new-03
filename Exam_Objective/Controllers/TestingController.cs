@@ -581,7 +581,7 @@ namespace Exam_Objective.Controllers
                     List<int> checkChoice = new List<int>();
                     foreach(var datac in dataChoices)
                     {
-                        if(datac.ChoiceID == 4)
+                        if(datac.ChoiceID == 4 && datac.TextChoice.Length > 13)
                         {
                             if (datac.TextChoice.Substring(3, 7).Equals("ถูกทั้ง"))
                             {
@@ -591,14 +591,14 @@ namespace Exam_Objective.Controllers
                             {
                                 checkChoice.Add(datac.ProposID);
                             }
-                            else if (datac.TextChoice.Length>15&&datac.TextChoice.Substring(3, 13).Equals("ไม่มีข้อใดถูก"))
-                            {
-                                checkChoice.Add(datac.ProposID);
-                            }
                             else if (datac.TextChoice.Length > 13 && datac.TextChoice.Substring(3, 11).Equals("ไม่มีข้อถูก"))
                             {
                                 checkChoice.Add(datac.ProposID);
                             }
+                            else if (datac.TextChoice.Length>15&&datac.TextChoice.Substring(3, 13).Equals("ไม่มีข้อใดถูก"))
+                            {
+                                checkChoice.Add(datac.ProposID);
+                            }                           
                         }
                     }
                     ViewBag.dataCheck = checkChoice;
@@ -937,6 +937,7 @@ namespace Exam_Objective.Controllers
             }
             return View();
         }
+        // Hard-Copy
         public void HardCopy(int exbody)
         {
             var user = Session["User"] as UserSystemModel;
@@ -976,27 +977,74 @@ namespace Exam_Objective.Controllers
                                        }).ToList();
 
                     var i = 0;
-                    var j = 97;
+                    var j = 0;
                     foreach(var row in dataProp)
                     {
-                        i++;
-                        if (Regex.IsMatch(row.TextPropos, "<img.*?>"))
-                        {
-                            html.Append("<p>" + i + ". " + Regex.Replace(row.TextPropos, "<.*?>", String.Empty) + "</p>"+"<p>"+Regex.Match(row.TextPropos,"<img.*?/>") +"</p>");
-                        }
-                        else {
-                            html.Append("<p>" + i + ". " + Regex.Replace(row.TextPropos, "<.*?>", String.Empty) + "</p>");
-                        }
                        
-                        foreach(var rowc in dataChoices)
+                        if (row.Continuity == null)
                         {
-                            if(row.ProposID == rowc.ProposID)
+                            i++;
+                            if (Regex.IsMatch(row.TextPropos, "<img.*?>"))
                             {
-                               
-                                html.Append("<p>" + (char)j+". " + rowc.TextChoice.Substring(3, rowc.TextChoice.Length - 3));
-                                j++;
+                                html.Append("<p>" + i + ". " + Regex.Replace(row.TextPropos, "<.*?>", String.Empty) + "</p>" + "<p>" + Regex.Match(row.TextPropos, "<img.*?/>") + "</p>");
                             }
-                        }j = 97;
+                            else
+                            {
+                                html.Append("<p>" + i + ". " + Regex.Replace(row.TextPropos, "<.*?>", String.Empty) + "</p>");
+                            }
+
+                            foreach (var rowc in dataChoices)
+                            {
+                                if (row.ProposID == rowc.ProposID)
+                                {
+                                    j++;
+                                    html.Append("<p>&nbsp;&nbsp;" + j + ". " + rowc.TextChoice.Substring(3, rowc.TextChoice.Length - 3));
+
+                                }
+                            }
+                            j = 0;
+                        }else if(row.Continuity == 0)
+                        {
+                            
+                            var countProp = DB.Proposition.Where(x => x.Continuity == row.ProposID).Count();
+                            countProp = i + countProp; 
+                            if (Regex.IsMatch(row.TextPropos, "<img.*?>"))
+                            {
+                                html.Append("<p>" + Regex.Replace(row.TextPropos, "<.*?>", String.Empty) + (i+1) +"-" + countProp + "</p>" + "<p>" + Regex.Match(row.TextPropos, "<img.*?/>") + "</p>");
+                            }
+                            else
+                            {
+                                html.Append("<p>" + Regex.Replace(row.TextPropos, "<.*?>", String.Empty) + (i+1) + "-" + countProp + "</p>");
+                            }
+
+                            foreach(var prop in dataProp)
+                            {
+
+                                if (prop.Continuity == row.ProposID)
+                                {
+                                    i++;
+                                    if (Regex.IsMatch(row.TextPropos, "<img.*?>"))
+                                    {
+                                        html.Append("<p>" + i + ". " + Regex.Replace(row.TextPropos, "<.*?>", String.Empty) + "</p>" + "<p>" + Regex.Match(row.TextPropos, "<img.*?/>") + "</p>");
+                                    }
+                                    else
+                                    {
+                                        html.Append("<p>" + i + ". " + Regex.Replace(row.TextPropos, "<.*?>", String.Empty) + "</p>");
+                                    }
+
+                                    foreach (var rowc in dataChoices)
+                                    {
+                                        if (prop.ProposID == rowc.ProposID)
+                                        {
+                                            j++;
+                                            html.Append("<p>&nbsp;&nbsp;" + j + ". " + rowc.TextChoice.Substring(3, rowc.TextChoice.Length - 3));
+
+                                        }
+                                    }
+                                    j = 0;
+                                }
+                            }
+                        }
                     }
                     
                 }

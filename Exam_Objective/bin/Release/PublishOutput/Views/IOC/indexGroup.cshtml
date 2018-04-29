@@ -1,0 +1,41 @@
+﻿@using Exam_Objective.Models
+@using System.Collections.Generic
+
+@{
+    ViewBag.Title = "indexGroup";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="paddind-lr-30">
+    <h3>เลือกวิชาที่จะจัดการกลุ่มประเมินความเที่ยงตรงเชิงเนื้อหา IOC</h3>
+    <hr />
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>วิชาทั้งหมด</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{var SubjectsEntity = (List<SubjectsModel>)ViewBag.SubjectIOC;
+                if (SubjectsEntity.Count > 0)
+                {
+                    foreach (var rows in SubjectsEntity)
+                    {
+                        <tr>
+                            <td>
+                                <span class="fa fa-book"> </span>
+                                <a href="@Url.Action("AddGroupIOC", "IOC", new { etid = rows.SubjectID })" title="คลิ๊กเพื่อเข้าไปเพิ่มเนื้อหา"><span>วิชา</span>@rows.SubjectName</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <p style="color:#ff0000">*ยังไม่มีวิชาให้เลือกต้องสร้างรายวิชาก่อน</p>}
+            }
+        </tbody>
+    </table>
+</div>
+
+
+@section scripts{
+}

@@ -1,0 +1,221 @@
+﻿@using Exam_Objective.Models
+@using System.Collections.Generic
+
+@{
+    var CateEnnotdis = (List<ObjectiveModel>)ViewBag.ObjectiveNotDis;
+    var dLesson = (List<LessonModel>)ViewBag.DLesson;
+    // var countPro = (List<LessonModel>)ViewBag.countP;
+    var DataPropos = (List<PropositionModel>)ViewBag.dataProposition;
+    var DataChoice = (List<ChoiceModel>)ViewBag.dataChoice;
+    var Datacontens = (List<LessonModel>)ViewBag.contens;
+}
+
+@{
+    ViewBag.Title = "Specialist";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h4 class="text-center">ประเมินความเที่ยงตรงเชิงเนื้อหา IOC /วิชา Computer Programing </h4>
+
+<div class="row">
+    @{ var i = 0;
+    <div class="col-md-5">
+    <div class="panel panel-info">
+    <div class="panel-heading">
+                @{
+                    foreach (var rows in dLesson)
+                    {
+                        <span value="@rows.LessonID">
+                            @rows.LesName
+                        </span><br />
+                    }
+                }
+        <br />
+    </div>
+    <div class="panel-body" style="width:100%;height:350px;overflow:auto" id="showCon">
+        <br />
+        @{
+            if (Datacontens != null || Datacontens.Count != 0)
+            {
+                foreach (var con in Datacontens)
+                {
+                    @Html.Raw(con.Contents)
+                }
+            }
+            else
+            {
+
+            }
+        }
+    </div>
+    </div>
+    </div>
+    <div class="col-md-7">
+        <div class="row">
+                <div class="panel panel-warning">
+                    <div class="panel-heading">วัตถุประสงค์</div>
+                    <div class="panel-body" style="width:100%;height:150px;overflow:auto" id="showObj">
+                        <br />
+                        @foreach (var robj in CateEnnotdis)
+                         {// i++;
+                           // if (i == robj.PLessonID)
+                            {
+                                <li>
+                                    @robj.ObjName
+                                </li>
+                            }
+                         }
+                    </div>
+                </div>
+            </div>
+        <div style="width:630px;height:340px;overflow:auto">
+        @{ var x = 0;
+            foreach (var rows in DataPropos)
+            {
+                if (rows.Continuity == null)
+                {
+                    x++;
+                    <div class="row">
+                        <div class="col-md-2">
+                            <h4><span class="label label-primary">ข้อที่ <span>@x</span></span></h4>
+                        </div>
+                        <div class="col-md-10">
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <div class="quizion" style="color:black" id="@rows.ProposID">@Html.Raw(rows.TextPropos)</div>
+                                    @{ var j = 0;
+                                        foreach (var rowsc in DataChoice)
+                                        {
+                                            if (rowsc.ProposID == rows.ProposID)
+                                            {
+                                                j++;
+                                                <div class="choice">
+
+                                                    @{if (rowsc.countAnswer > 1)
+                                                        {
+                                                             @j<span>.</span>
+                                                        }
+                                                        else
+                                                        {
+                                                             @j<span>.</span>
+                                                        }
+                                                    }
+                                                    @{if (rowsc.Answer > 0)
+                                                        {
+                                                            <span id="in-line" style="color:blue"> @Html.Raw(rowsc.TextChoice)</span>
+                                                        }
+                                                        else
+                                                        { <span id="in-line" style="color:black"> @Html.Raw(rowsc.TextChoice)</span> }
+                                                    }
+                                                </div>
+                                                            }
+                                                        }
+                                                        j = 0;
+                                    }
+                                    <span title="ดูรายละเอียดข้อมูลข้อสอบ" class="fa fa-search link-action ">รายละเอียด</span>
+                                    <br />
+                                    <br />
+                                    <input type="radio" name="gender" value="male"> <span style="color:black">ปรับปรุง</span> 
+                                    <input type="radio" name="gender" value="female"> <span style="color:black">พอใช้</span> 
+                                    <input type="radio" name="gender" value="other"> <span style="color:black">ดีมาก</span> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>                
+                }
+                @*-----ต่อเนื่อง-----*@
+                else if (rows.Continuity == 0)
+                {
+                    var countQ1 = x + 1;
+                    var countQ2 = 0;
+                    foreach(var c in DataPropos) { if (c.Continuity == rows.ProposID) { countQ2++; } }countQ2 = (countQ2 + x);
+                    <div class="row">
+                        <div class="col-md-2">
+                            <h4><span class="label label-primary">ข้อที่ @countQ1<span>-</span>@countQ2</span></h4>
+                        </div>
+                        <div class="col-md-10">
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <div class="quizion" style="color:black" id="XXX">@Html.Raw(rows.TextPropos)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    foreach(var rowst in DataPropos)
+                    {
+                        if(rowst.Continuity == rows.ProposID)
+                        {
+                            x++;
+                            <div class="row">
+                        <div class="col-md-2">
+                            <h4><span class="label label-primary">ข้อที่ <span>@x</span></span></h4>
+                        </div>
+                        <div class="col-md-10">
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <div class="quizion" style="color:black" id="@rowst.ProposID">@Html.Raw(rowst.TextPropos)</div>
+                                    @{ var j = 0;
+                                        foreach (var rowsct in DataChoice)
+                                        {
+                                            if (rowsct.ProposID == rowst.ProposID)
+                                            {
+                                                j++;
+                                                <div class="choice">
+
+                                                    @{if (rowsct.countAnswer > 1)
+                                                        {
+                                                             @j<span>.</span>
+                                                        }
+                                                        else
+                                                        {
+                                                             @j<span>.</span>
+                                                        }
+                                                    }
+                                                    @{if (rowsct.Answer > 0)
+                                                        {
+                                                            <span id="in-line" style="color:blue"> @Html.Raw(rowsct.TextChoice)</span>
+                                                        }
+                                                        else
+                                                        { <span id="in-line" style="color:black"> @Html.Raw(rowsct.TextChoice)</span> }
+                                                    }
+                                                </div>
+                                                            }
+                                                        }
+                                                        j = 0;
+
+                                    }
+                                    <span title="ดูรายละเอียดข้อมูลข้อสอบ" class="fa fa-search link-action " >รายละเอียด</span>
+                                    <br />
+                                    <br />
+                                    <input type="radio" name="gender" value="male"> <span style="color:black">ปรับปรุง</span> 
+                                    <input type="radio" name="gender" value="female"> <span style="color:black">พอใช้</span> 
+                                    <input type="radio" name="gender" value="other"> <span style="color:black">ดีมาก</span> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        }
+                    }
+                }
+            }
+
+        }
+        </div>        
+    </div>
+    }
+</div>
+
+@section scripts{
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.inputmask.bundle.js"></script>
+<script src="~/Scripts/jquery.inputmask.bundle.min.js"></script>
+<script type="text/javascript" src="~/Scripts/tinymce/jquery.tinymce.min.js"></script>
+<script type="text/javascript" src="~/Scripts/tinymce/tinymce.min.js"></script>
+<script src="~/Scripts/tinymce/plugins/tiny_mce_wiris/wirisplugin-generic.js"></script>
+<script src="~/Scripts/tinymce/plugins/tiny_mce_wiris/core/display.js"></script>
+<script type="text/javascript">
+    
+</script>
+}

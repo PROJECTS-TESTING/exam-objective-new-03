@@ -1,0 +1,255 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+/*--------------------- New Css By Programmer. ------------------------------------------------------*/
+.bg-nav1 {
+    background-color: #1a1735;
+}
+/*------------Menu------------*/
+.bg-menu {
+    background-color: rgb(185, 186, 200);
+    height: 100%;
+}
+
+.padding-menu {
+    padding-left: 10px;
+}
+
+.padding-menunav {
+    padding-left: 1px;
+}
+div.padding-50 {
+    padding: 50px;
+}
+
+div.paddind-lr-30 {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+div.border-menu {
+    border: solid 2px rgba(217, 217, 220, 0.87);
+    border-radius: 3px;
+}
+
+div.position-fixed-menu {
+    position: fixed;
+}
+
+.color-menu {
+    color: #212138;
+}
+
+.color-menunav {
+    color: #ffffff;
+}
+
+.padding-topmenu {
+    padding-top: 1px;
+}
+
+/*-----------Body------------*/
+.padding-body {
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.padding-leftright-10 {
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.padding-body-1 {
+    padding-left: 3px;
+}
+
+/*-------Footer------------*/
+div.iBannerFix {
+    height: 20px;
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
+    background-color: #1a1735;
+    border-top: 2px #15122c;
+    width: 100%;
+    z-index: 99;
+    color: #c2c6c7;
+}
+
+
+
+#top {
+    position: fixed;
+    right: 4px;
+    bottom: 25px;
+    z-index: 3000;
+    display: none;
+    cursor: pointer;
+    opacity: 0.5;
+    background-color: rgba(161, 218, 247, 0.86);
+    color: rgb(246, 247, 252);
+    width: 60px;
+    height: 60px;
+    border-radius: 5px;
+}
+
+/* Icon when the collapsible content is shown */
+.show-chevron-rightdown:after {
+    font-family: "Glyphicons Halflings";
+    content: "\e114";
+    float: left;
+    margin-right: 15px;
+    margin-left: 3px;
+}
+/* Icon when the collapsible content is hidden */
+.show-chevron-rightdown.collapsed:after {
+    content: "\e080";
+}
+
+
+
+div.menuL {
+    width: 250px;
+    height: 100%;
+    background: rgba(195, 194, 203, 0.95);
+    position: fixed;
+    left: 0px;
+    top: 50px;
+    border-right: 2px rgba(180, 178, 196, 0.95) solid;
+}
+
+div.paddings {
+    padding-left: 250px;
+}
+
+p.border1 {
+    border-radius: 3px;
+}
+
+@media(max-width: 767px) {
+    .hidden-menu-nav {
+        display: unset;
+    }
+
+    .hidden-menu-left {
+        display: none;
+    }
+
+    .padding-body {
+        padding: 15px;
+    }
+
+    div.menuL {
+        width: 250px;
+        height: 100%;
+        background: rgba(195, 194, 203, 0.95);
+        position: fixed;
+        left: 0px;
+        top: 50px;
+        display: none;
+    }
+
+    div.paddings {
+        padding-left: 0px;
+    }
+    div.padding-50 {
+        padding: 0px;
+    }
+    div.paddind-lr-30 {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+}
+
+@media(min-width:768px) {
+    .hidden-menu-nav {
+        display: none;
+    }
+
+    .hidden-menu-left {
+        display: unset;
+    }
+
+    div.paddind-lr-30 {
+        padding-left: 50px;
+        padding-right: 50px;
+    }
+}
+
+.bg-ber {
+    background-color: #1a1735;
+}
+
+.link-action{
+    color:#4d46ef;
+}
+
+.link-action:hover{
+    color:#7c9aee;
+    cursor:pointer;
+}
+
+.margin-LR-5{margin-left:5px;margin-right:5px;}
+
+a:hover{
+    text-decoration:none;
+}
+
+#in-line > p {
+    display: inline;
+    font-size: 14px;
+}
+
+.quizion {
+    font-size: 16px;
+}
+
+.choice {
+    padding: 8px
+}
+.table-fixed {
+    width: 100%;
+    background-color: #ffffff;
+}
+
+    .table-fixed tbody {
+        height: 230px;
+        overflow-y: auto;
+        width: 100%;
+    }
+
+    .table-fixed thead, .table-fixed tbody, .table-fixed tr, .table-fixed td, .table-fixed th {
+        display: block;
+        width: 100%;
+    }
+
+        .table-fixed tbody td {
+            float: left;
+        }
+
+        .table-fixed tbody tr {
+            float: left;
+            background-color: #f3f3f3;
+        }
+
+        .table-fixed thead tr th {
+            float: left;
+            background-color: #6979f8;
+            border-color: #3b50fc;
+            width: 100%;
+        }
