@@ -1,0 +1,15 @@
+﻿
+#top {
+    position: fixed;
+    right: 4px;
+    bottom: 25px;
+    z-index: 3000;
+    display: none;
+    cursor: pointer;
+    opacity: 0.5;
+    background-color: rgba(161, 218, 247, 0.86);
+    color: rgb(246, 247, 252);
+    width: 60px;
+    height: 60px;
+    border-radius: 5px;
+}

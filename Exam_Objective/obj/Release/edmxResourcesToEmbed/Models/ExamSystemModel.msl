@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ExamSystemModelStoreContainer" CdmEntityContainer="dbEntities">
+    <EntitySetMapping Name="Choices">
+      <EntityTypeMapping TypeName="ExamSystemModel.Choice">
+        <MappingFragment StoreEntitySet="Choice">
+          <ScalarProperty Name="ChoiceID" ColumnName="ChoiceID" />
+          <ScalarProperty Name="ProposID" ColumnName="ProposID" />
+          <ScalarProperty Name="TextChoice" ColumnName="TextChoice" />
+          <ScalarProperty Name="Answer" ColumnName="Answer" />
+          <ScalarProperty Name="Distracter" ColumnName="Distracter" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ExamBodies">
+      <EntityTypeMapping TypeName="ExamSystemModel.ExamBody">
+        <MappingFragment StoreEntitySet="ExamBody">
+          <ScalarProperty Name="ExamBodyID" ColumnName="ExamBodyID" />
+          <ScalarProperty Name="ExamtopicID" ColumnName="ExamtopicID" />
+          <ScalarProperty Name="KR20" ColumnName="KR20" />
+          <ScalarProperty Name="KR21" ColumnName="KR21" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ExamTopics">
+      <EntityTypeMapping TypeName="ExamSystemModel.ExamTopic">
+        <MappingFragment StoreEntitySet="ExamTopic">
+          <ScalarProperty Name="ExamtopicID" ColumnName="ExamtopicID" />
+          <ScalarProperty Name="ExamtopicName" ColumnName="ExamtopicName" />
+          <ScalarProperty Name="Explantion" ColumnName="Explantion" />
+          <ScalarProperty Name="SubjectID" ColumnName="SubjectID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="DatetoBegin" ColumnName="DatetoBegin" />
+          <ScalarProperty Name="TimetoBegin" ColumnName="TimetoBegin" />
+          <ScalarProperty Name="TimetoEnd" ColumnName="TimetoEnd" />
+          <ScalarProperty Name="Sequences" ColumnName="Sequences" />
+          <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+          <ScalarProperty Name="ExamtopicPW" ColumnName="ExamtopicPW" />
+          <ScalarProperty Name="NumberOfTimes" ColumnName="NumberOfTimes" />
+          <ScalarProperty Name="InNetWork" ColumnName="InNetWork" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GetExams">
+      <EntityTypeMapping TypeName="ExamSystemModel.GetExam">
+        <MappingFragment StoreEntitySet="GetExam">
+          <ScalarProperty Name="ExamBodyID" ColumnName="ExamBodyID" />
+          <ScalarProperty Name="ProposID" ColumnName="ProposID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="IOCs">
+      <EntityTypeMapping TypeName="ExamSystemModel.IOC">
+        <MappingFragment StoreEntitySet="IOC">
+          <ScalarProperty Name="ProposID" ColumnName="ProposID" />
+          <ScalarProperty Name="IOCScore" ColumnName="IOCScore" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Lessons">
+      <EntityTypeMapping TypeName="ExamSystemModel.Lesson">
+        <MappingFragment StoreEntitySet="Lesson">
+          <ScalarProperty Name="LessonID" ColumnName="LessonID" />
+          <ScalarProperty Name="LesName" ColumnName="LesName" />
+          <ScalarProperty Name="TextLesson" ColumnName="TextLesson" />
+          <ScalarProperty Name="SubjectID" ColumnName="SubjectID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Contents" ColumnName="Contents" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Members">
+      <EntityTypeMapping TypeName="ExamSystemModel.Member">
+        <MappingFragment StoreEntitySet="Member">
+          <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Objectives">
+      <EntityTypeMapping TypeName="ExamSystemModel.Objective">
+        <MappingFragment StoreEntitySet="Objective">
+          <ScalarProperty Name="ObjID" ColumnName="ObjID" />
+          <ScalarProperty Name="ObjName" ColumnName="ObjName" />
+          <ScalarProperty Name="TextObj" ColumnName="TextObj" />
+          <ScalarProperty Name="LessonID" ColumnName="LessonID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Participants">
+      <EntityTypeMapping TypeName="ExamSystemModel.Participant">
+        <MappingFragment StoreEntitySet="Participant">
+          <ScalarProperty Name="ParticipantID" ColumnName="ParticipantID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="SubjectID" ColumnName="SubjectID" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Propositions">
+      <EntityTypeMapping TypeName="ExamSystemModel.Proposition">
+        <MappingFragment StoreEntitySet="Proposition">
+          <ScalarProperty Name="ProposID" ColumnName="ProposID" />
+          <ScalarProperty Name="ObjID" ColumnName="ObjID" />
+          <ScalarProperty Name="ProposName" ColumnName="ProposName" />
+          <ScalarProperty Name="TextPropos" ColumnName="TextPropos" />
+          <ScalarProperty Name="ScoreMain" ColumnName="ScoreMain" />
+          <ScalarProperty Name="Continuity" ColumnName="Continuity" />
+          <ScalarProperty Name="Difficulty" ColumnName="Difficulty" />
+          <ScalarProperty Name="Discimination" ColumnName="Discimination" />
+          <ScalarProperty Name="IOC" ColumnName="IOC" />
+          <ScalarProperty Name="CheckChoice" ColumnName="CheckChoice" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Subjects">
+      <EntityTypeMapping TypeName="ExamSystemModel.Subject">
+        <MappingFragment StoreEntitySet="Subjects">
+          <ScalarProperty Name="SubjectID" ColumnName="SubjectID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="SubjectName" ColumnName="SubjectName" />
+          <ScalarProperty Name="Theory" ColumnName="Theory" />
+          <ScalarProperty Name="Practice" ColumnName="Practice" />
+          <ScalarProperty Name="Course" ColumnName="Course" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="sysdiagrams">
+      <EntityTypeMapping TypeName="ExamSystemModel.sysdiagram">
+        <MappingFragment StoreEntitySet="sysdiagrams">
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+          <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="definition" ColumnName="definition" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TestGroups">
+      <EntityTypeMapping TypeName="ExamSystemModel.TestGroup">
+        <MappingFragment StoreEntitySet="TestGroup">
+          <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+          <ScalarProperty Name="SubjectID" ColumnName="SubjectID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+          <ScalarProperty Name="GroupPW" ColumnName="GroupPW" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Testings">
+      <EntityTypeMapping TypeName="ExamSystemModel.Testing">
+        <MappingFragment StoreEntitySet="Testing">
+          <ScalarProperty Name="ExamBodyID" ColumnName="ExamBodyID" />
+          <ScalarProperty Name="ProposID" ColumnName="ProposID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="NumberOfTimes" ColumnName="NumberOfTimes" />
+          <ScalarProperty Name="AnswerStudent" ColumnName="AnswerStudent" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserSystems">
+      <EntityTypeMapping TypeName="ExamSystemModel.UserSystem">
+        <MappingFragment StoreEntitySet="UserSystem">
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Fname" ColumnName="Fname" />
+          <ScalarProperty Name="Lname" ColumnName="Lname" />
+          <ScalarProperty Name="PWLogin" ColumnName="PWLogin" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="StudentID" ColumnName="StudentID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

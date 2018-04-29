@@ -1,0 +1,500 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ExamSystemModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Choice">
+    <Key>
+      <PropertyRef Name="ChoiceID" />
+      <PropertyRef Name="ProposID" />
+    </Key>
+    <Property Name="ChoiceID" Type="Int32" Nullable="false" />
+    <Property Name="ProposID" Type="Int32" Nullable="false" />
+    <Property Name="TextChoice" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Answer" Type="Double" Nullable="false" />
+    <Property Name="Distracter" Type="Double" />
+    <NavigationProperty Name="Proposition" Relationship="Self.FK_Choice_Proposition" FromRole="Choice" ToRole="Proposition" />
+  </EntityType>
+  <EntityType Name="ExamBody">
+    <Key>
+      <PropertyRef Name="ExamBodyID" />
+    </Key>
+    <Property Name="ExamBodyID" Type="Int32" Nullable="false" />
+    <Property Name="ExamtopicID" Type="Int32" Nullable="false" />
+    <Property Name="KR20" Type="Double" />
+    <Property Name="KR21" Type="Double" />
+    <NavigationProperty Name="ExamTopic" Relationship="Self.FK__ExamBody__Examto__753864A1" FromRole="ExamBody" ToRole="ExamTopic" />
+    <NavigationProperty Name="GetExams" Relationship="Self.FK_GetExam_ExamBody" FromRole="ExamBody" ToRole="GetExam" />
+  </EntityType>
+  <EntityType Name="ExamTopic">
+    <Key>
+      <PropertyRef Name="ExamtopicID" />
+    </Key>
+    <Property Name="ExamtopicID" Type="Int32" Nullable="false" />
+    <Property Name="ExamtopicName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Explantion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="SubjectID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="UserID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="DatetoBegin" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="TimetoBegin" Type="Time" Nullable="false" Precision="7" />
+    <Property Name="TimetoEnd" Type="Time" Nullable="false" Precision="7" />
+    <Property Name="Sequences" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="GroupID" Type="Int32" Nullable="false" />
+    <Property Name="ExamtopicPW" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="NumberOfTimes" Type="Int32" />
+    <Property Name="InNetWork" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+    <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="ExamBodies" Relationship="Self.FK__ExamBody__Examto__753864A1" FromRole="ExamTopic" ToRole="ExamBody" />
+    <NavigationProperty Name="Subject" Relationship="Self.FK_ExamTopic_Subjects" FromRole="ExamTopic" ToRole="Subjects" />
+  </EntityType>
+  <EntityType Name="GetExam">
+    <Key>
+      <PropertyRef Name="ExamBodyID" />
+      <PropertyRef Name="ProposID" />
+    </Key>
+    <Property Name="ExamBodyID" Type="Int32" Nullable="false" />
+    <Property Name="ProposID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="ExamBody" Relationship="Self.FK_GetExam_ExamBody" FromRole="GetExam" ToRole="ExamBody" />
+    <NavigationProperty Name="Proposition" Relationship="Self.FK_GetExam_Proposition" FromRole="GetExam" ToRole="Proposition" />
+    <NavigationProperty Name="Testings" Relationship="Self.FK_Testing_GetExam" FromRole="GetExam" ToRole="Testing" />
+  </EntityType>
+  <EntityType Name="IOC">
+    <Key>
+      <PropertyRef Name="ProposID" />
+    </Key>
+    <Property Name="ProposID" Type="Int32" Nullable="false" />
+    <Property Name="IOCScore" Type="Int32" Nullable="false" />
+    <Property Name="UserID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Proposition" Relationship="Self.FK_IOC_Proposition" FromRole="IOC" ToRole="Proposition" />
+  </EntityType>
+  <EntityType Name="Lesson">
+    <Key>
+      <PropertyRef Name="LessonID" />
+    </Key>
+    <Property Name="LessonID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="LesName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="TextLesson" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="SubjectID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="UserID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Contents" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Subject" Relationship="Self.FK_Lesson_Subjects" FromRole="Lesson" ToRole="Subjects" />
+    <NavigationProperty Name="Objectives" Relationship="Self.FK_Objective_Lesson" FromRole="Lesson" ToRole="Objective" />
+  </EntityType>
+  <EntityType Name="Member">
+    <Key>
+      <PropertyRef Name="GroupID" />
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="GroupID" Type="Int32" Nullable="false" />
+    <Property Name="UserID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="TestGroup" Relationship="Self.FK__Member__GroupID__6CA31EA0" FromRole="Member" ToRole="TestGroup" />
+  </EntityType>
+  <EntityType Name="Objective">
+    <Key>
+      <PropertyRef Name="ObjID" />
+    </Key>
+    <Property Name="ObjID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ObjName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="TextObj" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="LessonID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Lesson" Relationship="Self.FK_Objective_Lesson" FromRole="Objective" ToRole="Lesson" />
+    <NavigationProperty Name="Propositions" Relationship="Self.FK_Proposition_Objective" FromRole="Objective" ToRole="Proposition" />
+  </EntityType>
+  <EntityType Name="Participant">
+    <Key>
+      <PropertyRef Name="ParticipantID" />
+      <PropertyRef Name="UserID" />
+      <PropertyRef Name="SubjectID" />
+    </Key>
+    <Property Name="ParticipantID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="UserID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="SubjectID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Subject" Relationship="Self.FK_Participant_Subjects" FromRole="Participant" ToRole="Subjects" />
+    <NavigationProperty Name="UserSystem" Relationship="Self.FK_Participant_UserSystem" FromRole="Participant" ToRole="UserSystem" />
+  </EntityType>
+  <EntityType Name="Proposition">
+    <Key>
+      <PropertyRef Name="ProposID" />
+    </Key>
+    <Property Name="ProposID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ObjID" Type="Int32" Nullable="false" />
+    <Property Name="ProposName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="TextPropos" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ScoreMain" Type="Double" Nullable="false" />
+    <Property Name="Continuity" Type="Int32" />
+    <Property Name="Difficulty" Type="Double" />
+    <Property Name="Discimination" Type="Double" />
+    <Property Name="IOC" Type="Double" />
+    <Property Name="CheckChoice" Type="Int32" />
+    <NavigationProperty Name="Choices" Relationship="Self.FK_Choice_Proposition" FromRole="Proposition" ToRole="Choice" />
+    <NavigationProperty Name="GetExams" Relationship="Self.FK_GetExam_Proposition" FromRole="Proposition" ToRole="GetExam" />
+    <NavigationProperty Name="IOC1" Relationship="Self.FK_IOC_Proposition" FromRole="Proposition" ToRole="IOC" />
+    <NavigationProperty Name="Objective" Relationship="Self.FK_Proposition_Objective" FromRole="Proposition" ToRole="Objective" />
+  </EntityType>
+  <EntityType Name="Subject">
+    <Key>
+      <PropertyRef Name="SubjectID" />
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="SubjectID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="UserID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="SubjectName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Theory" Type="Int32" />
+    <Property Name="Practice" Type="Int32" />
+    <Property Name="Course" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="ExamTopics" Relationship="Self.FK_ExamTopic_Subjects" FromRole="Subjects" ToRole="ExamTopic" />
+    <NavigationProperty Name="Lessons" Relationship="Self.FK_Lesson_Subjects" FromRole="Subjects" ToRole="Lesson" />
+    <NavigationProperty Name="Participants" Relationship="Self.FK_Participant_Subjects" FromRole="Subjects" ToRole="Participant" />
+    <NavigationProperty Name="UserSystem" Relationship="Self.FK__Subjects__UserID__38996AB5" FromRole="Subjects" ToRole="UserSystem" />
+    <NavigationProperty Name="TestGroups" Relationship="Self.FK_TestGroup_Subjects" FromRole="Subjects" ToRole="TestGroup" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="TestGroup">
+    <Key>
+      <PropertyRef Name="GroupID" />
+    </Key>
+    <Property Name="GroupID" Type="Int32" Nullable="false" />
+    <Property Name="SubjectID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="UserID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="GroupName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="GroupPW" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Members" Relationship="Self.FK__Member__GroupID__6CA31EA0" FromRole="TestGroup" ToRole="Member" />
+    <NavigationProperty Name="Subject" Relationship="Self.FK_TestGroup_Subjects" FromRole="TestGroup" ToRole="Subjects" />
+  </EntityType>
+  <EntityType Name="Testing">
+    <Key>
+      <PropertyRef Name="ExamBodyID" />
+      <PropertyRef Name="ProposID" />
+      <PropertyRef Name="UserID" />
+      <PropertyRef Name="NumberOfTimes" />
+    </Key>
+    <Property Name="ExamBodyID" Type="Int32" Nullable="false" />
+    <Property Name="ProposID" Type="Int32" Nullable="false" />
+    <Property Name="UserID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="NumberOfTimes" Type="Int32" Nullable="false" />
+    <Property Name="AnswerStudent" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="GetExam" Relationship="Self.FK_Testing_GetExam" FromRole="Testing" ToRole="GetExam" />
+    <NavigationProperty Name="UserSystem" Relationship="Self.FK_Testing_UserSystem" FromRole="Testing" ToRole="UserSystem" />
+  </EntityType>
+  <EntityType Name="UserSystem">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Fname" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Lname" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="PWLogin" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="StudentID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Participants" Relationship="Self.FK_Participant_UserSystem" FromRole="UserSystem" ToRole="Participant" />
+    <NavigationProperty Name="Subjects" Relationship="Self.FK__Subjects__UserID__38996AB5" FromRole="UserSystem" ToRole="Subjects" />
+    <NavigationProperty Name="Testings" Relationship="Self.FK_Testing_UserSystem" FromRole="UserSystem" ToRole="Testing" />
+  </EntityType>
+  <Association Name="FK_Choice_Proposition">
+    <End Role="Proposition" Type="Self.Proposition" Multiplicity="1" />
+    <End Role="Choice" Type="Self.Choice" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Proposition">
+        <PropertyRef Name="ProposID" />
+      </Principal>
+      <Dependent Role="Choice">
+        <PropertyRef Name="ProposID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__ExamBody__Examto__753864A1">
+    <End Role="ExamTopic" Type="Self.ExamTopic" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ExamBody" Type="Self.ExamBody" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ExamTopic">
+        <PropertyRef Name="ExamtopicID" />
+      </Principal>
+      <Dependent Role="ExamBody">
+        <PropertyRef Name="ExamtopicID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GetExam_ExamBody">
+    <End Role="ExamBody" Type="Self.ExamBody" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="GetExam" Type="Self.GetExam" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ExamBody">
+        <PropertyRef Name="ExamBodyID" />
+      </Principal>
+      <Dependent Role="GetExam">
+        <PropertyRef Name="ExamBodyID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ExamTopic_Subjects">
+    <End Role="Subjects" Type="Self.Subject" Multiplicity="1" />
+    <End Role="ExamTopic" Type="Self.ExamTopic" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Subjects">
+        <PropertyRef Name="SubjectID" />
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="ExamTopic">
+        <PropertyRef Name="SubjectID" />
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GetExam_Proposition">
+    <End Role="Proposition" Type="Self.Proposition" Multiplicity="1" />
+    <End Role="GetExam" Type="Self.GetExam" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Proposition">
+        <PropertyRef Name="ProposID" />
+      </Principal>
+      <Dependent Role="GetExam">
+        <PropertyRef Name="ProposID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Testing_GetExam">
+    <End Role="GetExam" Type="Self.GetExam" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Testing" Type="Self.Testing" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="GetExam">
+        <PropertyRef Name="ExamBodyID" />
+        <PropertyRef Name="ProposID" />
+      </Principal>
+      <Dependent Role="Testing">
+        <PropertyRef Name="ExamBodyID" />
+        <PropertyRef Name="ProposID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_IOC_Proposition">
+    <End Role="Proposition" Type="Self.Proposition" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="IOC" Type="Self.IOC" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Proposition">
+        <PropertyRef Name="ProposID" />
+      </Principal>
+      <Dependent Role="IOC">
+        <PropertyRef Name="ProposID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Lesson_Subjects">
+    <End Role="Subjects" Type="Self.Subject" Multiplicity="1" />
+    <End Role="Lesson" Type="Self.Lesson" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Subjects">
+        <PropertyRef Name="SubjectID" />
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Lesson">
+        <PropertyRef Name="SubjectID" />
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Objective_Lesson">
+    <End Role="Lesson" Type="Self.Lesson" Multiplicity="1" />
+    <End Role="Objective" Type="Self.Objective" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Lesson">
+        <PropertyRef Name="LessonID" />
+      </Principal>
+      <Dependent Role="Objective">
+        <PropertyRef Name="LessonID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Member__GroupID__6CA31EA0">
+    <End Role="TestGroup" Type="Self.TestGroup" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Member" Type="Self.Member" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TestGroup">
+        <PropertyRef Name="GroupID" />
+      </Principal>
+      <Dependent Role="Member">
+        <PropertyRef Name="GroupID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Proposition_Objective">
+    <End Role="Objective" Type="Self.Objective" Multiplicity="1" />
+    <End Role="Proposition" Type="Self.Proposition" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Objective">
+        <PropertyRef Name="ObjID" />
+      </Principal>
+      <Dependent Role="Proposition">
+        <PropertyRef Name="ObjID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Participant_Subjects">
+    <End Role="Subjects" Type="Self.Subject" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Participant" Type="Self.Participant" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Subjects">
+        <PropertyRef Name="SubjectID" />
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Participant">
+        <PropertyRef Name="SubjectID" />
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Participant_UserSystem">
+    <End Role="UserSystem" Type="Self.UserSystem" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Participant" Type="Self.Participant" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserSystem">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Participant">
+        <PropertyRef Name="ParticipantID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Subjects__UserID__38996AB5">
+    <End Role="UserSystem" Type="Self.UserSystem" Multiplicity="1" />
+    <End Role="Subjects" Type="Self.Subject" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserSystem">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Subjects">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TestGroup_Subjects">
+    <End Role="Subjects" Type="Self.Subject" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="TestGroup" Type="Self.TestGroup" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Subjects">
+        <PropertyRef Name="SubjectID" />
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="TestGroup">
+        <PropertyRef Name="SubjectID" />
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Testing_UserSystem">
+    <End Role="UserSystem" Type="Self.UserSystem" Multiplicity="1" />
+    <End Role="Testing" Type="Self.Testing" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserSystem">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Testing">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="dbEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Choices" EntityType="Self.Choice" />
+    <EntitySet Name="ExamBodies" EntityType="Self.ExamBody" />
+    <EntitySet Name="ExamTopics" EntityType="Self.ExamTopic" />
+    <EntitySet Name="GetExams" EntityType="Self.GetExam" />
+    <EntitySet Name="IOCs" EntityType="Self.IOC" />
+    <EntitySet Name="Lessons" EntityType="Self.Lesson" />
+    <EntitySet Name="Members" EntityType="Self.Member" />
+    <EntitySet Name="Objectives" EntityType="Self.Objective" />
+    <EntitySet Name="Participants" EntityType="Self.Participant" />
+    <EntitySet Name="Propositions" EntityType="Self.Proposition" />
+    <EntitySet Name="Subjects" EntityType="Self.Subject" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <EntitySet Name="TestGroups" EntityType="Self.TestGroup" />
+    <EntitySet Name="Testings" EntityType="Self.Testing" />
+    <EntitySet Name="UserSystems" EntityType="Self.UserSystem" />
+    <AssociationSet Name="FK_Choice_Proposition" Association="Self.FK_Choice_Proposition">
+      <End Role="Proposition" EntitySet="Propositions" />
+      <End Role="Choice" EntitySet="Choices" />
+    </AssociationSet>
+    <AssociationSet Name="FK__ExamBody__Examto__753864A1" Association="Self.FK__ExamBody__Examto__753864A1">
+      <End Role="ExamTopic" EntitySet="ExamTopics" />
+      <End Role="ExamBody" EntitySet="ExamBodies" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GetExam_ExamBody" Association="Self.FK_GetExam_ExamBody">
+      <End Role="ExamBody" EntitySet="ExamBodies" />
+      <End Role="GetExam" EntitySet="GetExams" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ExamTopic_Subjects" Association="Self.FK_ExamTopic_Subjects">
+      <End Role="Subjects" EntitySet="Subjects" />
+      <End Role="ExamTopic" EntitySet="ExamTopics" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GetExam_Proposition" Association="Self.FK_GetExam_Proposition">
+      <End Role="Proposition" EntitySet="Propositions" />
+      <End Role="GetExam" EntitySet="GetExams" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Testing_GetExam" Association="Self.FK_Testing_GetExam">
+      <End Role="GetExam" EntitySet="GetExams" />
+      <End Role="Testing" EntitySet="Testings" />
+    </AssociationSet>
+    <AssociationSet Name="FK_IOC_Proposition" Association="Self.FK_IOC_Proposition">
+      <End Role="Proposition" EntitySet="Propositions" />
+      <End Role="IOC" EntitySet="IOCs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Lesson_Subjects" Association="Self.FK_Lesson_Subjects">
+      <End Role="Subjects" EntitySet="Subjects" />
+      <End Role="Lesson" EntitySet="Lessons" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Objective_Lesson" Association="Self.FK_Objective_Lesson">
+      <End Role="Lesson" EntitySet="Lessons" />
+      <End Role="Objective" EntitySet="Objectives" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Member__GroupID__6CA31EA0" Association="Self.FK__Member__GroupID__6CA31EA0">
+      <End Role="TestGroup" EntitySet="TestGroups" />
+      <End Role="Member" EntitySet="Members" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Proposition_Objective" Association="Self.FK_Proposition_Objective">
+      <End Role="Objective" EntitySet="Objectives" />
+      <End Role="Proposition" EntitySet="Propositions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Participant_Subjects" Association="Self.FK_Participant_Subjects">
+      <End Role="Subjects" EntitySet="Subjects" />
+      <End Role="Participant" EntitySet="Participants" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Participant_UserSystem" Association="Self.FK_Participant_UserSystem">
+      <End Role="UserSystem" EntitySet="UserSystems" />
+      <End Role="Participant" EntitySet="Participants" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Subjects__UserID__38996AB5" Association="Self.FK__Subjects__UserID__38996AB5">
+      <End Role="UserSystem" EntitySet="UserSystems" />
+      <End Role="Subjects" EntitySet="Subjects" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TestGroup_Subjects" Association="Self.FK_TestGroup_Subjects">
+      <End Role="Subjects" EntitySet="Subjects" />
+      <End Role="TestGroup" EntitySet="TestGroups" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Testing_UserSystem" Association="Self.FK_Testing_UserSystem">
+      <End Role="UserSystem" EntitySet="UserSystems" />
+      <End Role="Testing" EntitySet="Testings" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

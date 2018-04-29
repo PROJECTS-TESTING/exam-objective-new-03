@@ -1,0 +1,231 @@
+﻿@using Exam_Objective.Models
+@using System.Collections.Generic
+@{
+    ViewBag.Title = "Subjecttest";
+    Layout = "~/Views/Shared/_LayoutStudent.cshtml";
+    var DataExbody = (List<ExamBodyModel>)ViewBag.exambody;
+}
+<div class="paddind-lr-30">
+    @{
+        var datasubject = (List<SubjectsModel>)ViewBag.DataSubject;
+
+        <h3><span>วิชา</span>@datasubject[0].SubjectName / @datasubject[0].Fname @datasubject[0].Lname</h3>
+    }
+    <hr />
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>แบบทดสอบ</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ var DataExamtopic = (List<ExamTopicModel>)ViewBag.DataExamtopic;
+                
+                if (DataExamtopic.Count > 0 && DataExamtopic != null)
+                {
+                    foreach (var rows in DataExamtopic)
+                    {
+                        <tr>
+                            <td>
+                                <span title="@rows.ExamtopicName" id="examtopic" class="link-action examtopic" data-toggle="modal" data-target="#PWtestModal"
+                                      data-examtopicid="@rows.ExamtopicID"
+                                      data-exampw="@rows.ExamtopicPW"
+                                      data-datebegin="@rows.DatetoBegin"
+                                      data-timebegin="@rows.TimetoBegin"
+                                      data-timeend="@rows.TimetoEnd"
+                                      data-ipsubnet="@rows.InNetWork"
+                                      data-ipsubnetclient="@rows.IPsubnetClient">
+                                    <span class="icon icon-doc"> </span>
+                                    <span> @rows.ExamtopicName</span> | 
+                                </span>
+                                @if(DataExbody.Count != 0 && DataExbody != null){
+                                    foreach(var exb in DataExbody) {
+                                        if (rows.ExamtopicID == exb.ExamtopicID)
+                                        {
+                                        <span id="viewscore" class="link-action viewscore" data-examtopicid="@rows.ExamtopicID" data-exbody="@exb.ExamBodyID"> ผลสอบ</span>
+                                        }
+                                    }
+                                }
+                            </td>
+                        </tr>
+                       
+                    }
+                }
+                else
+                {
+                    <tr><td><span style="color:#ff0000"> *ยังไม่มีแบบทดสอบในวิชานี้ </span></td></tr>}
+            }
+        </tbody>
+    </table>
+</div>
+<div class="modal fade" id="PWtestModal" tabindex="-1" role="dialog" aria-labelledby="User" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h5 class="modal-title"><label id="title" name="title"></label><label><span>เข้าสอบ</span></label></h5>
+            </div>
+
+            <div class="modal-body">
+
+                <form id="PWtestForm" method="post" class="form-horizontal">
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">รหัสผ่าน<span style="color:red"> *</span></label>
+                        <div class="col-md-5">
+                            <input type="password" class="form-control" name="TestPW" id="TestPW" />
+                            <input type="checkbox" onclick="CheckBlockPW('TestPW')"> ไม่ปกปิด
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-xs-10 col-xs-offset-3">
+                            <button type="button" id="btnSelect" class="btn btn-primary btnSelect">เข้าสอบ</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<span id="subj" data-subjid="@datasubject[0].SubjectID"></span>
+<span id="suser" data-userid="@datasubject[0].UserID"></span>
+@section scripts{
+    <script src="~/Scripts/Scriptss/ShowPW-HidePW-Js.js"></script>
+    <script type="text/javascript">
+        var Data1 = {
+            ExamtopicID: 0,
+            SubjectID: $('#subj').data("subjid"),
+            UserID: $('#suser').data("userid"),
+            ExamtopicPW: "",
+            CheckDateTime: 0,
+            CheckIP: true
+        };
+        $('.examtopic').click(function () {
+            $('#TestPW').val("");
+            var ipsub = $(this).data("ipsubnet");
+            var ipclient = $(this).data("ipsubnetclient");
+            var ip2long = function (ip) {
+                var components;
+                if (components = ip.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/)) {
+                    var iplong = 0;
+                    var power = 1;
+                    for (var i = 4; i >= 1; i -= 1) {
+                        iplong += power * parseInt(components[i]);
+                        power *= 256;
+                    }
+                    return iplong;
+                }
+                else return -1;
+            };
+
+            var inSubNet = function (ip, subnet) {
+                var mask, base_ip, long_ip = ip2long(ip);
+                if ((mask = subnet.match(/^(.*?)\/(\d{1,2})$/)) && ((base_ip = ip2long(mask[1])) >= 0)) {
+                    var freedom = Math.pow(2, 32 - parseInt(mask[2]));
+                    return (long_ip > base_ip) && (long_ip < base_ip + freedom - 1);
+                }
+                else return false;
+            };
+
+            var checkip = true;
+            if (ipsub != "") {
+                checkip = inSubNet(ipclient, ipsub);
+            }
+            // alert(checkip);
+            // Check DateTime Begin End.
+            var datein = $(this).data("datebegin");
+            var i = [];
+            i = datein.split(' ');
+            datein = i[0].split('/');
+            //alert(datein);
+            var DateBegin = {
+                dateBegin: datein[0],
+                monthBegin: datein[1],
+                yearBegin: datein[2]
+            };
+            var TimeBegin = $(this).data("timebegin");
+            var TimeEnd = $(this).data("timeend");
+            var countDownDate = new Date(DateBegin.monthBegin + " " + DateBegin.dateBegin + ", " + DateBegin.yearBegin + " " + TimeEnd).getTime();
+            var check1 = new Date(DateBegin.monthBegin + " " + DateBegin.dateBegin + ", " + DateBegin.yearBegin + " " + TimeBegin).getTime();
+            var now = new Date().getTime();
+            var checkdatetime = 0;
+            if (countDownDate - now < 0) {
+                checkdatetime = 1;
+            } else if (check1 > now) {
+                checkdatetime = 2;
+            } else { checkdatetime = 0; }
+            var exid = $(this).data("examtopicid");           
+            var subid = $('#subj').data("subjid");
+            Data1.ExamtopicID = exid;
+            Data1.SubjectID = subid;          
+            Data1.CheckDateTime = checkdatetime;
+            Data1.CheckIP = checkip;
+           // alert(Data1.ExamtopicID + "  " + Data1.SubjectID + "  " + Data1.ExamtopicPW + " " + Data1.UserID);
+           
+        });
+        $('#btnSelect').click(function () {  
+            var expw = $('#TestPW').val();
+            Data1.ExamtopicPW = expw;
+            $.ajax({
+                type: "POST",
+                cache: false,
+                url: "ViewTesting",
+                 dataType: "json",
+                data: Data1,
+                traditional: true,
+                beforeSend: function () {
+
+                }, success: function (res) {
+                var status = false;
+                var message = 'ดำเนินการไม่สำเร็จ';
+                if (res != null && res != undefined) {
+                status = res.status;
+                message = res.message != '' ? res.message : message;
+                }
+                if (status == false) {
+       
+                swal({
+            title: message,
+            type: "warning",
+            showConfirmButton: false,
+            timer: 2000,
+            closeOnConfirm: false
+        },
+            function () {
+                location.reload(true);
+            });
+    }  else {
+             swal({
+                title: message,
+                type: "success",
+                showConfirmButton: false,
+                timer: 1000,
+                 closeOnConfirm: false
+                },
+                function () {
+                     location.reload(true);                    
+                     window.location.href = "ViewTestings" + "?subid=" + res.data.SubjectID + "&datasu=" + res.data.UserID + "&e=" + res.data.ExamtopicID;
+                 });
+                }
+                },
+                error: function (xhr, ajaxOption, thrownError) {
+                swal("เกิดข้อผิดพลาด", message, "error");
+                },
+                 complete: function () {
+
+            }
+
+
+            });
+        });
+
+        $('.viewscore').click(function () {           
+            window.location.href = "ViewScore" + "?subid=" + $('#subj').data("subjid") + "&datasu=" + $('#suser').data("userid") + "&e=" + $(this).data("examtopicid") + "&eb=" + $(this).data("exbody");
+        });
+    </script>
+}

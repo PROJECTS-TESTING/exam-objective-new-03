@@ -1,0 +1,262 @@
+﻿@using Exam_Objective.Models
+@{
+    ViewBag.Title = "Msubjects";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Basic Form -->
+
+<div class="panel panel-grey margin-bottom-60">
+    <div class="panel-heading">
+        <h2><span class="fa fa-cogs"></span> จัดการผู้ใช้งานร่วมในรายวิชา</h2>
+    </div>
+    <div class="panel-body">
+        <form class="margin-bottom-60" role="form">            
+            <button class="btn btn-primary" type="button" id="btnCrtParticipant"><i class="fa fa-plus-circle"></i> เพิ่มผู้ใช้ในการจัดการรายวิชา</button>
+            <br />
+            <br />
+            <div class="col-md-12">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>รหัสวิชา</th>                            
+                            <th>รหัสผู้ใช้ร่วม</th>
+                            <th>เจ้าของวิชา</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var ParticipantEntity = (List<ParticipantModel>)ViewBag.Participant;
+                            foreach (var rows in ParticipantEntity)
+                            {
+                                string test = rows.PSubjectID;
+                                <tr>
+                                    <td>@rows.PSubjectID</td>
+                                    <td>@rows.ParticipantID</td>
+                                    <td>@rows.PUserID</td>
+                                    <td>                                                                                
+                                        <button type="button" class="btn btn-danger btnDeletePartici" data-participant="@rows.ParticipantID" data-sname="@rows.ParticipantID" title="ลบรายวิชา : @rows.ParticipantID">ลบรายผู้ใช้ร่วม</button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            
+        </form>
+    </div>
+    <!-- End Basic Form  subjectModal  -->
+</div>
+
+<form id="formParticipant">
+    <div id="ParticipantModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"><label id="Mtitle" name="Mtitle"></label></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <!--      <input type="hidden" class="form-control" id="SubID_PK" name="SubID_PK" value="0" />  ในกรณีที่เป็น Auto increment ค่าเริ่มต้นเป็น 0-->
+                                <input type="hidden" class="form-control" id="isUpdateable" name="isUpdateable" value="1" />
+                                <label>รหัสผู้ใช้ร่วม<span class="required">*</span></label>
+                                <input type="text" id="ParticipantID" name="ParticipantID" class="form-control" /> <!--onkeyup="isNumber(this.value, this)"-->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <label>วิชาที่ต้องการเพิ่มผู้จัดการร่วม<span class="required">*</span></label>
+                                <select id="PSubjectID" name="PSubjectID" class="form-control">
+                                    <option selected value="">-- กรุณาเลือกรายวิชา --</option>
+                                    @{
+                                        var SubjectEntity = (List<SubjectsModel>)ViewBag.Subject;
+                                        foreach (var rows in SubjectEntity)
+                                        {
+                                            string test = rows.SubjectID;
+
+                                            <option value='@rows.SubjectID'>@rows.SubjectName</option>
+
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <label>เจ้าของรายวิชา<span class="required">*</span></label>
+                                @{
+                                    var PUserEntity = (List<UserSystemModel>)ViewBag.UserIDdata;
+                                    var PuserID = "";
+                                    var PFname = "";
+                                    if (PUserEntity.Count > 0 && PUserEntity != null)
+                                    {
+                                        //KeepStatus = "1";
+                                        foreach (var rows in PUserEntity)
+                                        {
+                                            if (rows.Status == "admin" || rows.Status == "professor")
+                                            {
+                                                @*<option value='@rows.UserID'> @rows.Fname</option>*@
+                                                <input type="hidden" id="PUserID" name="PUserID" class="form-control" />
+                                                <input type="text" id="PFname" name="PFname" class="form-control" />
+                                                PuserID = rows.UserID;
+                                                PFname = rows.Fname + " " + rows.Lname;
+                                            }
+                                        }
+                                    }
+                                }
+                                @*</select>*@
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <label>สถานะ<span class="required">*</span></label>
+                                <input type="text" id="PStatus" name="PStatus" class="form-control" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btnMSave" class="btn btn-primary" title="บันทึกการสร้าง แก้ไขรายวิชา">บันทึก</button>
+                        <button type="button" id="btnMClose" class="btn btn-danger" data-dismiss="modal" title="ยกเลิกการสร้าง แก้ไข และดูรายละเอียดรายวิชา">ยกเลิก</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@section scripts{
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.inputmask.bundle.js"></script>
+<script src="~/Scripts/jquery.inputmask.bundle.min.js"></script>
+    <script>
+        $("#btnCrtParticipant").click(function () {
+            //swal("Good job!", "You clicked the button!", "success");
+            $("#Mtitle").text("เพิ่มผู้ใช้ในการจัดการรายวิชา");
+            $("#formParticipant").find("input").val("");
+            $("#ParticipantID").val("");
+            $("#PUserID").val("");
+            $("#PUserID").val("@PuserID");
+            $("#PFname").val("@PFname");
+            $("#PStatus").val("professor");
+            $("#ParticipantModal").modal("show");
+            $("#PFname").prop("readonly", true);
+            $("#ParticipantID").prop("readonly", false);
+            $("#PSubjectID").prop("readonly", false);
+            $("#PStatus").prop("readonly", true);
+            $("#btnMSave").show()
+            var valida = $("#formParticipant").validate();
+            valida.resetForm();
+        });
+        $('#btnMSave').click(function () {
+            if ($("#formParticipant").valid()) {
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: '@Url.Action("CreateParticipant", "Subjects")',
+                    dataType: "json",
+                    data: $('#formParticipant').serialize(),
+                    traditional: true,
+                    beforeSend: function(){
+
+                    },
+
+                    success: function (res){
+                        var status = false;
+                        var message = 'ดำเนินการไม่สำเร็จ';
+                        if (res != null && res != undefined) {
+                            status = res.status;
+                            message = res.message != '' ? res.message : message;
+                        }
+                        if (status == false) {
+                            swal("เกิดข้อผิดพลาด", message, "error");
+                        } else {
+                            swal({
+                                title: "บันทึกสำเร็จ",
+                                type: "success",
+                                showConfirmButton: false,
+                                timer: 1000,
+                                closeOnConfirm: false
+                            },
+                                function () {
+                                    location.reload(true);
+                                });
+                        }
+                    },
+                    error: function (xhr, ajaxOption, thrownError) {
+                        swal("เกิดข้อผิดพลาด", message, "error");
+                    },
+                    complete: function () {
+
+                    },
+                });
+            }
+        });
+        $('.btnDeletePartici').click(function () {
+            var id = $(this).data("participant");
+            var sname = $(this).data("sname");
+            //alert(id);
+            swal({
+                title: "ต้องการลบผู้ใช้ : " + sname + " ออกจากรายวิชา ?",
+                text: "ผู้ใช้ที่ถูกลบจะไม่สามารถกู้คืนกลับมาได้ !",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "ใช่ ต้องการลบ",
+                cancelButtonText: "ยกเลิก !",
+                closeOnConfirm: true,
+                colseOnCancel: true
+            },
+            function(isConfirm){
+                if (isConfirm){
+                    $.ajax({
+                        type: "POST",
+                        cache: false,
+                        url: '@Url.Action("DeleteParticipant", "Subjects")',
+                        dataType: "json",
+                        data: {id:id},
+                        traditional: true,
+                        beforeSend: function(){
+                        },
+                        success: function (res){
+
+                            var status = false;
+                            var message = 'ดำเนินการไม่สำเร็จ';
+                            if (res != null && res != undefined){
+                                status = res.status;
+                                message = res.message != '' ? res.message :message;
+                            }
+                            if (status == false){
+                                swal("เกิดข้อผิดพลาด", message,"error");
+                            }else{
+                                swal({
+                                    title: "ลบรายผู้ใช้ร่วมสำเร็จ",
+                                    type: "success",
+                                    showConfirmButton: false,
+                                    timer: 1000,
+                                    closeOnConfirm: false
+                                },
+                                function(){
+                                    location.reload(true);
+                                });
+                            }
+                        },
+                        error: function (xhr, ajaxOptions, thrownError){
+                            swal("เกิดข้อผิดพลาด", message, "error");
+                        },
+                        complete: function(){
+
+                        },
+                    });
+                }
+            }
+            );
+        });
+
+    </script>
+}

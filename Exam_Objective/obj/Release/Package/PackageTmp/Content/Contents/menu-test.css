@@ -1,0 +1,75 @@
+﻿p.menu-slidet {
+    width: 100%;
+    background-color: #f3f7f7;
+    margin-bottom: 1px;
+    margin-top: 3px;
+    border-radius: 5px;
+}
+
+    p.menu-slidet:hover {
+        background-color: #ecf1f1;
+        cursor: pointer;
+    }
+
+div.menu {
+    margin: 5px;
+    width: auto;
+    height: auto;
+}
+
+div.menu-header {
+    color: #f3f7f7;
+    height: 30px;
+    width: 100%;
+    background-color: rgba(51, 53, 83, 0.90);
+    margin-bottom: 1px;
+    border-radius: 3px;
+    font-size: 18px;
+}
+
+p.menu-child {
+    width: 100%;
+    background-color: rgba(218, 219, 222, 0.90);
+    margin: 1px;
+    border-radius: 3px;
+    font-size: 16px;
+}
+
+div.menu-grandchild {
+    background-color: rgba(233, 233, 234, 0.90);
+    margin: 0px;
+    border-radius: 3px;
+    font-size: 14px;
+}
+
+p.menu-child:hover {
+    background-color: rgba(241, 241, 242, 0.90);
+    cursor: pointer;
+}
+
+div.menu-grandchild:hover {
+    background-color: rgb(245, 243, 243);
+}
+
+.noneline-child {
+    color: #f3f7f7;
+}
+
+    .noneline-child:link {
+        color: aliceblue;
+    }
+
+    .noneline-child:hover {
+        text-decoration: none;
+        color: #dadddd;
+    }
+
+.noneline-grandchild {
+}
+
+    .noneline-grandchild:link {
+    }
+
+    .noneline-grandchild:hover {
+        text-decoration: none;
+    }
