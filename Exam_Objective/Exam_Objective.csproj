@@ -650,14 +650,6 @@
     <Content Include="Models\ExamSystemModel.edmx.diagram">
       <DependentUpon>ExamSystemModel.edmx</DependentUpon>
     </Content>
-<<<<<<< HEAD
-    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
-    <None Include="Properties\PublishProfiles\CustomProfile1.pubxml" />
-    <None Include="Properties\PublishProfiles\CustomProfile2.pubxml" />
-=======
-    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
-    <Content Include="Scripts\datepicker\bootstrap-datepicker.css.map" />
->>>>>>> 42a72699a6492403ade3fde4fe0b6bca6d2f0197
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />
