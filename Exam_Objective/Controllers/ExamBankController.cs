@@ -556,11 +556,16 @@ namespace Exam_Objective.Controllers
                 {
                     int CountChoice = DB.Choice.Where(x => x.ProposID == idp).Count();
                     string[] TChoice = new string[6];
+                    double[] TAnswer = new double[6];
                     for (int i = 1; i <= CountChoice; i++)
                     {
                         TChoice[i] = (from c in DB.Choice
                                       where c.ProposID == idp && c.ChoiceID == i
                                       select c.TextChoice
+                                     ).FirstOrDefault();
+                        TAnswer[i] = (from c in DB.Choice
+                                      where c.ProposID == idp && c.ChoiceID == i
+                                      select c.Answer
                                      ).FirstOrDefault();
                     }
                     var TextChoice1 = TChoice[1];
@@ -568,12 +573,18 @@ namespace Exam_Objective.Controllers
                     var TextChoice3 = TChoice[3];
                     var TextChoice4 = TChoice[4];
                     var TextChoice5 = TChoice[5];
+                    var TextAnswer1 = TAnswer[1];
+                    var TextAnswer2 = TAnswer[2];
+                    var TextAnswer3 = TAnswer[3];
+                    var TextAnswer4 = TAnswer[4];
+                    var TextAnswer5 = TAnswer[5];
                     var EditPropos = (from p in DB.Proposition
                                       join c in DB.Proposition on p.ProposID equals c.ProposID
                                       where p.ProposID == idp
                                       select new PropositionModel
                                       {
                                           ProposID = p.ProposID,
+                                          ObjID = p.ObjID,
                                           ProposName = p.ProposName,
                                           TextPropos = p.TextPropos,
                                           ScoreMain = p.ScoreMain,
@@ -582,7 +593,12 @@ namespace Exam_Objective.Controllers
                                           Choice2 = TextChoice2,
                                           Choice3 = TextChoice3,
                                           Choice4 = TextChoice4,
-                                          Choice5 = TextChoice5
+                                          Choice5 = TextChoice5,
+                                          Answer1 = TextAnswer1,
+                                          Answer2 = TextAnswer2,
+                                          Answer3 = TextAnswer3,
+                                          Answer4 = TextAnswer4,
+                                          Answer5 = TextAnswer5
 
                                       }).FirstOrDefault();
 

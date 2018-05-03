@@ -1,0 +1,1 @@
+{"result":{"text":"square root of à¸  minus negative à¸à¸ à¸ 234 end root"},"status":"ok"}
