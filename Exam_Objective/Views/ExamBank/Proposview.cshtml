@@ -893,9 +893,6 @@
         });
         // btnSave PropositionContinuityv2
         $('#btnSaveContinuity').click(function () {
-
-
-
                 $.ajax({
                     type: "POST",
                     cache: false,
@@ -936,7 +933,6 @@
 
                     },
                 });
-
 
         });
         //View Propos by id
@@ -1025,7 +1021,7 @@
         });
         $('.btnEdit').click(function () {
             var idp = $(this).data("propos");
-            tinyMCE.activeEditor.setContent('');  //clear text in tinyeditor
+            //tinyMCE.activeEditor.setContent('');  //clear text in tinyeditor
             //alert(id);
             $.ajax({
                 type: "POST", // method ที่จะส่ง
@@ -1048,6 +1044,7 @@
                         swal("เกิดข้อผิดพลาด", message, "error");
 
                     } else {
+                        $("#ProposID").val(res.data.ProposID);
                         $("#ObjID").val(res.data.ObjID);
                         $("#ProposName").val(res.data.ProposName);
                         $("#TextPropos").val(res.data.TextPropos);
@@ -1107,7 +1104,7 @@
                         $("#txtp").text("ข้อความข้อสอบ");
                         $("#checkchoicev").text("ทำคำตอบเดียวหรือหลายคำตอบ");
                         $("#smain").text("คะแนนตั้งต้น");
-                        $("#ObjID").prop("readonly", false);
+                        $("#ObjID").prop("readonly", true);
                         $("#Answer1").prop("readonly", false);
                         $("#Answer2").prop("readonly", false);
                         $("#Answer3").prop("readonly", false);

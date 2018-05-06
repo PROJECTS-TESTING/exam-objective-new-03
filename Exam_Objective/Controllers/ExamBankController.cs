@@ -522,6 +522,7 @@ namespace Exam_Objective.Controllers
                     else
                     {
                         var proposUpdate = DB.Proposition.Where(x => x.ProposID == propos.ProposID).FirstOrDefault();
+                        var choiceUpdate = DB.Choice.Where(c => c.ProposID == propos.ProposID).Count();
                         if (proposUpdate != null)
                         {
                             DB.Proposition.Where(x => x.ProposID == proposUpdate.ProposID).ForEach(x =>
@@ -534,6 +535,53 @@ namespace Exam_Objective.Controllers
                                 x.ObjID = propos.ObjID;
                             });
                             DB.SaveChanges();
+                            for (int i = 1; i <= choiceUpdate; i++)
+                            {
+                                if (i == 1)
+                                {
+                                    DB.Choice.Where(c => c.ProposID == propos.ProposID && c.ChoiceID == i).ForEach(c =>
+                                    {
+                                        c.ChoiceID = i;
+                                        c.ProposID = propos.ProposID;
+                                        c.TextChoice = propos.Choice1;
+                                        c.Answer = propos.Answer1;
+                                    });
+                                    DB.SaveChanges();
+                                }
+                                if (i == 2)
+                                {
+                                    DB.Choice.Where(c => c.ProposID == propos.ProposID && c.ChoiceID == i).ForEach(c =>
+                                    {
+                                        c.ChoiceID = 2;
+                                        c.ProposID = propos.ProposID;
+                                        c.TextChoice = propos.Choice2;
+                                        c.Answer = propos.Answer2;
+                                    });
+                                    DB.SaveChanges();
+                                }
+                                if (i == 3)
+                                {
+                                    DB.Choice.Where(c => c.ProposID == propos.ProposID && c.ChoiceID == i).ForEach(c =>
+                                    {
+                                        c.ChoiceID = i;
+                                        c.ProposID = propos.ProposID;
+                                        c.TextChoice = propos.Choice3;
+                                        c.Answer = propos.Answer3;
+                                    });
+                                    DB.SaveChanges();
+                                }
+                                if (i == 4)
+                                {
+                                    DB.Choice.Where(c => c.ProposID == propos.ProposID && c.ChoiceID == i).ForEach(c =>
+                                    {
+                                        c.ChoiceID = i;
+                                        c.ProposID = propos.ProposID;
+                                        c.TextChoice = propos.Choice4;
+                                        c.Answer = propos.Answer4;
+                                    });
+                                    DB.SaveChanges();
+                                }
+                            }
                         }
                     }
                     jsonreturn = new JsonRespone { status = true, message = "บันทึกเรียบร้อย" };
@@ -601,7 +649,6 @@ namespace Exam_Objective.Controllers
                                           Answer5 = TextAnswer5
 
                                       }).FirstOrDefault();
-
                     if (EditPropos == null)
                     {
                         jsonreturn = new JsonRespone { status = false, message = "เกิดข้อผิดพลาด" };
