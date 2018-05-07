@@ -522,7 +522,7 @@ namespace Exam_Objective.Controllers
                     else
                     {
                         var proposUpdate = DB.Proposition.Where(x => x.ProposID == propos.ProposID).FirstOrDefault();
-                        var choiceUpdate = DB.Choice.Where(c => c.ProposID == propos.ProposID).Count();
+                        
                         if (proposUpdate != null)
                         {
                             DB.Proposition.Where(x => x.ProposID == proposUpdate.ProposID).ForEach(x =>
@@ -535,7 +535,7 @@ namespace Exam_Objective.Controllers
                                 x.ObjID = propos.ObjID;
                             });
                             DB.SaveChanges();
-                            for (int i = 1; i <= choiceUpdate; i++)
+                            for (int i = 1; i <= 5; i++)
                             {
                                 if (i == 1)
                                 {
@@ -578,6 +578,17 @@ namespace Exam_Objective.Controllers
                                         c.ProposID = propos.ProposID;
                                         c.TextChoice = propos.Choice4;
                                         c.Answer = propos.Answer4;
+                                    });
+                                    DB.SaveChanges();
+                                }
+                                if (i == 5)
+                                {
+                                    DB.Choice.Where(c => c.ProposID == propos.ProposID && c.ChoiceID == i).ForEach(c =>
+                                    {
+                                        c.ChoiceID = i;
+                                        c.ProposID = propos.ProposID;
+                                        c.TextChoice = propos.Choice5;
+                                        c.Answer = propos.Answer5;
                                     });
                                     DB.SaveChanges();
                                 }

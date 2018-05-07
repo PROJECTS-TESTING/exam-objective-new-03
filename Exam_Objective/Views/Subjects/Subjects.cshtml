@@ -1,6 +1,6 @@
 ﻿@using Exam_Objective.Models
 @{
-    ViewBag.Title = "Subjects";
+    //ViewBag.Title = "Subjects";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <!-- Basic Form -->
@@ -35,7 +35,7 @@
                                     string test = rows.SubjectID;
                                 <tr>
                                     <td>@rows.SubjectID</td>
-                                    <td>@rows.SubjectName</td>
+                                    <td><a href="@Url.Action("CreateLesson_Obj", "ExamBank", new { SubjecID = rows.SubjectID })" class="nav-link ">@rows.SubjectName</a></td>
                                     <td>@rows.Theory</td>
                                     <td>@rows.Practice</td>
                                     <td>@rows.Course</td>
