@@ -96,7 +96,7 @@
                         <div class="form-group">
                             <div class="col-md-10">
                                 <input type="hidden" class="form-control" id="isUpdateable" name="isUpdateable" value="1" />
-                                <input type="hidden" class="form-control" id="LessonID" name="LessonID" value="0" />     
+                                <input type="hidden" class="form-control" id="LessonID" name="LessonID" value="0" />
                                 <label>ชื่อหน่วยเรียน<span class="required">*</span></label>
                                 <input type="text" id="LesName" name="LesName" class="form-control" />
                             </div>
@@ -108,27 +108,27 @@
                             </div>
                         </div>
                         <div>
-                            
+
                             <div class="form-group">
                                 <div class="col-md-10">
                                     <label>รายวิชา</label>
                                     @{
-                var subjectEntity = (List<SubjectsModel>)ViewBag.Subject;
-                var subID = "";
-                var subname = "";
-                if (subjectEntity.Count > 0 && subjectEntity != null)
-                {
-                    foreach (var rows in subjectEntity)
-                    {
+                                        var subjectEntity = (List<SubjectsModel>)ViewBag.Subject;
+                                        var subID = "";
+                                        var subname = "";
+                                        if (subjectEntity.Count > 0 && subjectEntity != null)
+                                        {
+                                            foreach (var rows in subjectEntity)
+                                            {
 
-                        <input type="hidden" id="SubjectID" name="SubjectID" class="form-control" />
-                        <input type="text" id="SubjectName" name="SubjectName" class="form-control" />
-subID = rows.SubjectID;
-subname = rows.SubjectName;
+                                                <input type="hidden" id="SubjectID" name="SubjectID" class="form-control" />
+                                                <input type="text" id="SubjectName" name="SubjectName" class="form-control" />
+                                                subID = rows.SubjectID;
+                                                subname = rows.SubjectName;
 
 
-}
-}
+                                            }
+                                        }
                                     }
 
                                 </div>
@@ -137,24 +137,24 @@ subname = rows.SubjectName;
                                 <div class="col-md-10">
                                     <label>อาจารย์ผู้สอน</label>
                                     @{
-                var UserEntity = (List<UserSystemModel>)ViewBag.UserIDdata;
-                var userID = "";
-                var Fname = "";
-                var Status = "";
-                if (UserEntity.Count > 0 && UserEntity != null)
-                {
-                    foreach (var rows in UserEntity)
-                    {
-                        if (rows.Status == "admin" || rows.Status == "professor")
-                        {
-                            <input type="hidden" id="UserID" name="UserID" class="form-control" />
-                            <input type="text" id="Fname" name="Fname" class="form-control" />
-    userID = rows.UserID;
-    Fname = rows.Fname + " " + rows.Lname;
-    Status = rows.Status;
-}
-}
-}
+                                        var UserEntity = (List<UserSystemModel>)ViewBag.UserIDdata;
+                                        var userID = "";
+                                        var Fname = "";
+                                        var Status = "";
+                                        if (UserEntity.Count > 0 && UserEntity != null)
+                                        {
+                                            foreach (var rows in UserEntity)
+                                            {
+                                                if (rows.Status == "admin" || rows.Status == "professor")
+                                                {
+                                                    <input type="hidden" id="UserID" name="UserID" class="form-control" />
+                                                    <input type="text" id="Fname" name="Fname" class="form-control" />
+                                                    userID = rows.UserID;
+                                                    Fname = rows.Fname + " " + rows.Lname;
+                                                    Status = rows.Status;
+                                                }
+                                            }
+                                        }
                                     }
                                 </div>
                             </div>
@@ -182,7 +182,7 @@ subname = rows.SubjectName;
                         <div class="form-group">
                             <div class="col-md-10">
                                 <input type="hidden" class="form-control" id="isUpdateable" name="isUpdateable" value="1" />
-                                <input type="hidden" class="form-control" id="ObjID" name="ObjID" value="0" />       
+                                <input type="hidden" class="form-control" id="ObjID" name="ObjID" value="0" />
                                 <label>ชื่อวัตถุประสงค์<span class="required">*</span></label>
                                 <input type="text" id="ObjName" name="ObjName" class="form-control" />
                             </div>
@@ -659,7 +659,7 @@ subname = rows.SubjectName;
         });
         $('.btnViewo').click(function () {
             var id = $(this).data("objective");
-            
+
             $("#titleov").text("รายละเอียดหน่วยเรียน");
             //alert(id);
             $.ajax({
