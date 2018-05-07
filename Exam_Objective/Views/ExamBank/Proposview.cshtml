@@ -1048,7 +1048,7 @@
                         $("#ObjID").val(res.data.ObjID);
                         $("#ProposName").val(res.data.ProposName);
                         $("#TextPropos").val(res.data.TextPropos);
-                        var textTextPropos = (res.data.TextPropos); //selector: 'textChoice5', ObjID 
+                        var textTextPropos = (res.data.TextPropos); //selector: 'textChoice5', ObjID
                         //tinymce.activeEditor.selection.setContent(textTextPropos);  //Show value in tiny editor
                         tinymce.get('TextPropos').setContent(textTextPropos);
                         $("#CheckChoice").val(res.data.CheckChoice);
@@ -1060,7 +1060,7 @@
                             $("#Answer1").val(res.data.Answer1);
                         } else {
                             $("#DivChoice1").hide();
-                            
+
                         }
                         $("#Choice2").val(res.data.Choice2);
                         var textChoice2 = (res.data.Choice2);
@@ -1069,7 +1069,7 @@
                             $("#Answer2").val(res.data.Answer2);
                         } else {
                             $("#DivChoice2").hide();
-                            
+
                         }
                         $("#Choice3").val(res.data.Choice3);
                         var textChoice3 = (res.data.Choice3);
@@ -1078,8 +1078,8 @@
                             $("#Answer3").val(res.data.Answer3);
                         } else {
                             $("#DivChoice3").hide();
-                           
-                        }                        
+
+                        }
                         $("#Choice4").val(res.data.Choice4);
                         var textChoice4 = (res.data.Choice4);
                         if (textChoice4 != null) {
@@ -1087,8 +1087,8 @@
                             $("#Answer4").val(res.data.Answer4);
                         } else {
                             $("#DivChoice4").hide();
-                            
-                        }  
+
+                        }
                         $("#Choice5").val(res.data.Choice5);
                         var textChoice5 = (res.data.Choice5);
                         if (textChoice5 != null) {
@@ -1096,9 +1096,9 @@
                             $("#Answer5").val(res.data.Answer5);
                         } else {
                             $("#DivChoice5").hide();
-                            
-                        }  
-                        $("#proposModal").modal("show"); 
+
+                        }
+                        $("#proposModal").modal("show");
                         $("#divcon").hide();
                         $("#title").text("แก้ไขข้อสอบ");
                         $("#txtp").text("ข้อความข้อสอบ");
@@ -1120,6 +1120,66 @@
 
                 },
             });
+        });
+        $('.btnDelete').click(function () {
+            var id = $(this).data("propos");
+            var pname = $(this).data("proposname");
+            //alert(pname);
+            swal({
+                title: "ต้องการลบข้อสอบ : "+ pname + " ?",
+                text: "ข้อสอบที่ลบจะไม่สามารถกู้คืนกลับมาได้ !",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "ใช่ ต้องการลบ",
+                cancelButtonText: "ยกเลิก !",
+                closeOnConfirm: true,
+                colseOnCancel: true
+            },
+            function(isConfirm){
+                if (isConfirm){
+                    $.ajax({
+                        type: "POST",
+                        cache: false,
+                        url: '@Url.Action("DeletePropos","ExamBank")',
+                        dataType: "json",
+                        data: {id:id},
+                        traditional: true,
+                        beforeSend: function(){
+                        },
+                        success: function (res){
+
+                            var status = false;
+                            var message = 'ดำเนินการไม่สำเร็จ';
+                            if (res != null && res != undefined){
+                                status = res.status;
+                                message = res.message != '' ? res.message :message;
+                            }
+                            if (status == false){
+                                swal("เกิดข้อผิดพลาด", message,"error");
+                            }else{
+                                swal({
+                                    title: "ลบรายข้อสอบสำเร็จ",
+                                    type: "success",
+                                    showConfirmButton: false,
+                                    timer: 1000,
+                                    closeOnConfirm: false
+                                },
+                                function(){
+                                    location.reload(true);
+                                });
+                            }
+                        },
+                        error: function (xhr, ajaxOptions, thrownError){
+                            swal("เกิดข้อผิดพลาด", message, "error");
+                        },
+                        complete: function(){
+
+                        },
+                    });
+                }
+            }
+            );
         });
         //check formPropos
         $("#formPropos").validate({

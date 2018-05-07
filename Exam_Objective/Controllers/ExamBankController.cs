@@ -665,6 +665,40 @@ namespace Exam_Objective.Controllers
             }
             return Json(jsonreturn);
         }
+        //// DeletePropos  By ProposID
+        public ActionResult DeletePropos(int id)
+        {
+            var jsonreturn = new JsonRespone();
+            try
+            {
+                using (var DB = new dbEntities())
+                {
+                    var DeletePropos = DB.Proposition.Where(x => x.ProposID == id).FirstOrDefault();
+                    var ChoiceCount = DB.Choice.Where(c => c.ProposID == id).Count();
+                    if (DeletePropos == null)
+                    {
+                        jsonreturn = new JsonRespone { status = false, message = "เกิดข้อผิดพลาด" };
+                    }
+                    else
+                    {
+                        DB.Proposition.Remove(DeletePropos);
+                        DB.SaveChanges();
+                        for (int i = 1;i <= ChoiceCount;i++ )
+                        {
+                            var DeleteChoice = DB.Choice.Where(d => d.ProposID == id && d.ChoiceID == i).FirstOrDefault();
+                            DB.Choice.Remove(DeleteChoice);
+                            DB.SaveChanges();
+                        }
+                        jsonreturn = new JsonRespone { status = true, message = "บันทึกเรียบร้อย" };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                jsonreturn = new JsonRespone { status = false, message = "เกิดข้อผิดพลาด" + ex.Message };
+            }
+            return Json(jsonreturn);
+        }
         // GEGIN Import
         // Index of Import
         public ActionResult Import()
