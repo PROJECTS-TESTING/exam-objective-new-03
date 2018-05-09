@@ -1,1 +1,0 @@
-{"result":{"text":"square root of 324 root index 324 of 23 end root"},"status":"ok"}

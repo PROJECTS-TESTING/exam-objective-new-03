@@ -1,1 +1,0 @@
-{"result":{"text":"square root of 2 square root of 3424"},"status":"ok"}

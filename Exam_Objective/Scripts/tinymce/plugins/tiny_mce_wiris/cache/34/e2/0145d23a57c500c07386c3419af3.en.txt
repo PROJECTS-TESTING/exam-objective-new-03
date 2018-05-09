@@ -1,1 +1,0 @@
-{"result":{"text":"square root of 23 open parentheses 234 square root of 3424 close parentheses end root"},"status":"ok"}

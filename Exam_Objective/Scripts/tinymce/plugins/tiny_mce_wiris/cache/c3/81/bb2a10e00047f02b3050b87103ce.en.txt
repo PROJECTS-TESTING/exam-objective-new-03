@@ -1,1 +1,0 @@
-{"result":{"text":"square root of 245 cube root of 3 end root"},"status":"ok"}
