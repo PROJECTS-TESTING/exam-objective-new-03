@@ -201,7 +201,7 @@
                                 </div>
                                 <div class="col-md-10 form-group">
                                     <label id="smain"></label><span class="required">*</span>
-                                    <input type="text" id="ScoreMain" name="ScoreMain" class="form-control" />
+                                    <input type="number" min="1" max="5" step="1" value="1" id="ScoreMain" name="ScoreMain" class="form-control" />
                                 </div>
                             </div>
                         </div>
@@ -403,7 +403,6 @@
 
                             <div class="panel-body">
                                 <div class="form-group">
-                                    <!--<label ><p><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mn>2</mn></msqrt></math></p></label>-->
                                     <label id="TextProposv" name="TextProposv"></label>
                                 </div>
                                 <div class="form-group">
@@ -456,13 +455,7 @@
     <script type="text/javascript" src="~/Scripts/tinymce/tinymce.min.js"></script>
     <script src="~/Scripts/tinymce/plugins/tiny_mce_wiris/wirisplugin-generic.js"></script>
     <script src="~/Scripts/tinymce/plugins/tiny_mce_wiris/core/display.js"></script>
-    <script type="text/javascript">
-        WIRISplugins_js = "~/Scripts/tinymce/plugins/tiny_mce_wiris/integration/WIRISplugins.js";
-        var script = document.createElement('script');
-        script.type = 'text/javascript';
-        script.src = WIRISplugins_js + "?viewer=image";
-        document.getElementsByTagName('head')[0].appendChild(script);
-    </script>
+
     <script type="text/javascript">
         $("#btnCrtPropos").click(function () {
             var Nchoice = 0;
@@ -1047,50 +1040,55 @@
                         $("#ObjID").val(res.data.ObjID);
                         $("#ProposName").val(res.data.ProposName);
                         $("#TextPropos").val(res.data.TextPropos);
-                        var textTextPropos = (res.data.TextPropos); //selector: 'textChoice5', ObjID
+                        var textTextPropos = (res.data.TextPropos); //selector: 
                         //tinymce.activeEditor.selection.setContent(textTextPropos);  //Show value in tiny editor
                         tinymce.get('TextPropos').setContent(textTextPropos);
                         $("#CheckChoice").val(res.data.CheckChoice);
                         $("#ScoreMain").val(res.data.ScoreMain);
-                        $("#Choice1").val(res.data.Choice1);
+                        
                         var textChoice1 = (res.data.Choice1);
                         if (textChoice1 != null) {
+                            $("#Choice1").val(res.data.Choice1);
                             tinymce.get('Choice1').setContent(textChoice1);  //Show value in tiny editor
                             $("#Answer1").val(res.data.Answer1);
                         } else {
                             $("#DivChoice1").hide();
 
                         }
-                        $("#Choice2").val(res.data.Choice2);
+                        
                         var textChoice2 = (res.data.Choice2);
                         if (textChoice2 != null) {
+                            $("#Choice2").val(res.data.Choice2);
                             tinymce.get('Choice2').setContent(textChoice2);  //Show value in tiny editor
                             $("#Answer2").val(res.data.Answer2);
                         } else {
                             $("#DivChoice2").hide();
 
                         }
-                        $("#Choice3").val(res.data.Choice3);
+                        
                         var textChoice3 = (res.data.Choice3);
                         if (textChoice3 != null) {
+                            $("#Choice3").val(res.data.Choice3);
                             tinymce.get('Choice3').setContent(textChoice3);  //Show value in tiny editor
                             $("#Answer3").val(res.data.Answer3);
                         } else {
                             $("#DivChoice3").hide();
 
                         }
-                        $("#Choice4").val(res.data.Choice4);
+                        
                         var textChoice4 = (res.data.Choice4);
                         if (textChoice4 != null) {
+                            $("#Choice4").val(res.data.Choice4);
                             tinymce.get('Choice4').setContent(textChoice4);  //Show value in tiny editor
                             $("#Answer4").val(res.data.Answer4);
                         } else {
                             $("#DivChoice4").hide();
 
                         }
-                        $("#Choice5").val(res.data.Choice5);
+                        
                         var textChoice5 = (res.data.Choice5);
                         if (textChoice5 != null) {
+                            $("#Choice5").val(res.data.Choice5);
                             tinymce.get('Choice5').setContent(textChoice5);  //Show value in tiny editor
                             $("#Answer5").val(res.data.Answer5);
                         } else {

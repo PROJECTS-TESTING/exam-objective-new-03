@@ -17,7 +17,7 @@
     <h4>@dataExamtopics[0].ExamtopicName กลุ่มเรียน: @ViewBag.dataGroup</h4><hr />
     @{ var x = 0;
         var ckrandom = 0;
-        
+
         foreach (var rows0 in DataPropos)
         {
             List<ChoiceModel> rndchoice = new List<ChoiceModel>();
@@ -60,13 +60,13 @@
                         <div style="border:solid 1px #adfacd;border-radius:3px;padding:4px;background-color:#e0fced">
                             <div class="quizion container" id="@rows0.ProposID">@Html.Raw(rows0.TextPropos)</div>
                             @{ var i = 0;
-                               
+
                                 foreach (var rows in rndchoice)
                                 {
                                     if (rows.ProposID == rows0.ProposID)
                                     {
                                         i++;
-                                       
+
                                         <div class="choice container">
                                             @{if (rows.countAnswer > 1)
                                                 {
@@ -87,21 +87,21 @@
                                         </div>
                                     }
                                 }
-                               
+
                             }
                         </div><br />
                     </div>
                 </div>
             }
             @*-----------------------------------ข้อสอบต่อเนื่อง------------------------------------*@
-    else if (rows0.Continuity == 0)
-    {
-        ckrandom = 0;
-        var countQ1 = x + 1;
-        var countQ2 = 0;
+            else if (rows0.Continuity == 0)
+            {
+                ckrandom = 0;
+                var countQ1 = x + 1;
+                var countQ2 = 0;
 
-        foreach (var c in DataPropos) { if (c.Continuity == rows0.ProposID) { countQ2++; } }
-        countQ2 = (countQ2 + x);
+                foreach (var c in DataPropos) { if (c.Continuity == rows0.ProposID) { countQ2++; } }
+                countQ2 = (countQ2 + x);
                 <div>
                     <div class="col-md-2" style="margin-bottom:8px ;padding:1px">
                         <div style="border:solid 1px #808080;border-radius:3px;padding:4px">
@@ -114,38 +114,38 @@
                         </div><br />
                     </div>
                 </div>
-        foreach (var rows1 in DataPropos)
-        {
-             rndchoice = new List<ChoiceModel>();
-            foreach (var rowsc in DataChoice)
-            {
-                if (rowsc.ProposID == rows1.ProposID)
+                foreach (var rows1 in DataPropos)
                 {
-                    rndchoice.Add(new ChoiceModel { ChoiceID = rowsc.ChoiceID, ProposID = rowsc.ProposID, TextChoice = rowsc.TextChoice, Answer = rowsc.Answer, Distracter = rowsc.Distracter, countAnswer = rowsc.countAnswer });
-                }
-            }
-            if (dataExamtopics[0].Sequences.Equals("2") || dataExamtopics[0].Sequences.Equals("3"))
-            {
-                if (DataCheck != null && DataCheck.Count != 0)
-                {
-
-                    foreach (var checkcoice in DataCheck)
+                    rndchoice = new List<ChoiceModel>();
+                    foreach (var rowsc in DataChoice)
                     {
-                        if (checkcoice == rows1.ProposID)
+                        if (rowsc.ProposID == rows1.ProposID)
                         {
-                            ckrandom = 1;
+                            rndchoice.Add(new ChoiceModel { ChoiceID = rowsc.ChoiceID, ProposID = rowsc.ProposID, TextChoice = rowsc.TextChoice, Answer = rowsc.Answer, Distracter = rowsc.Distracter, countAnswer = rowsc.countAnswer });
                         }
                     }
-                }
-                if (ckrandom == 0)
-                {
-                    rndchoice.Shuff();
-                    ckrandom = 0;
-                }
-            }
-            if (rows1.Continuity == rows0.ProposID)
-            {
-                x++;
+                    if (dataExamtopics[0].Sequences.Equals("2") || dataExamtopics[0].Sequences.Equals("3"))
+                    {
+                        if (DataCheck != null && DataCheck.Count != 0)
+                        {
+
+                            foreach (var checkcoice in DataCheck)
+                            {
+                                if (checkcoice == rows1.ProposID)
+                                {
+                                    ckrandom = 1;
+                                }
+                            }
+                        }
+                        if (ckrandom == 0)
+                        {
+                            rndchoice.Shuff();
+                            ckrandom = 0;
+                        }
+                    }
+                    if (rows1.Continuity == rows0.ProposID)
+                    {
+                        x++;
                         <div>
                             <div class="col-md-2" style="margin-bottom:8px ;padding:1px">
                                 <div style="border:solid 1px #808080;border-radius:3px;padding:4px">
@@ -161,7 +161,7 @@
                                             if (rows.ProposID == rows1.ProposID)
                                             {
                                                 i++;
-                                               
+
                                                 <div class="choice container">
                                                     @{if (rows.countAnswer > 1)
                                                         {
@@ -182,15 +182,16 @@
                                                 </div>
                                             }
                                         }
-                                        
+
                                     }
                                 </div><br />
                             </div>
                         </div>
-                    }ckrandom=0;
+                    }
+                    ckrandom = 0;
                 }
             }
-           ckrandom=0;
+            ckrandom = 0;
         }
     }
     <div style="margin:30px">
@@ -235,7 +236,7 @@
         var DateBegin = {
             dateBegin: datein[0],
             monthBegin: datein[1],
-            yearBegin: datein[2]-543
+            yearBegin: datein[2] - 543
         };
 
         var TimeBegin = $('#datein1').data("dates");
@@ -280,4 +281,13 @@
             $('html,body').animate({ scrollTop: $('div#' + n).offset().top - 60 }, 500);
         }
     </script>
+    <script src="~/Scripts/tinymce/plugins/tiny_mce_wiris/integration/WIRISplugins.js"></script>
+    <script type="text/javascript">
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = "integration/WIRISplugins.js" + "?viewer=image";
+        document.getElementsByTagName('head')[0].appendChild(script);
+    </script>
+    <script src="~/Scripts/tinymce/plugins/tiny_mce_wiris/core/display.js"></script>
+    <script src="~/Scripts/tinymce/plugins/tiny_mce_wiris/wirisplugin-generic.js"></script>
 }
