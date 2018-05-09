@@ -522,6 +522,7 @@ namespace Exam_Objective.Controllers
                     else
                     {
                         var proposUpdate = DB.Proposition.Where(x => x.ProposID == propos.ProposID).FirstOrDefault();
+                        
                         if (proposUpdate != null)
                         {
                             DB.Proposition.Where(x => x.ProposID == proposUpdate.ProposID).ForEach(x =>
@@ -534,6 +535,64 @@ namespace Exam_Objective.Controllers
                                 x.ObjID = propos.ObjID;
                             });
                             DB.SaveChanges();
+                            for (int i = 1; i <= 5; i++)
+                            {
+                                if (i == 1)
+                                {
+                                    DB.Choice.Where(c => c.ProposID == propos.ProposID && c.ChoiceID == i).ForEach(c =>
+                                    {
+                                        c.ChoiceID = i;
+                                        c.ProposID = propos.ProposID;
+                                        c.TextChoice = propos.Choice1;
+                                        c.Answer = propos.Answer1;
+                                    });
+                                    DB.SaveChanges();
+                                }
+                                if (i == 2)
+                                {
+                                    DB.Choice.Where(c => c.ProposID == propos.ProposID && c.ChoiceID == i).ForEach(c =>
+                                    {
+                                        c.ChoiceID = 2;
+                                        c.ProposID = propos.ProposID;
+                                        c.TextChoice = propos.Choice2;
+                                        c.Answer = propos.Answer2;
+                                    });
+                                    DB.SaveChanges();
+                                }
+                                if (i == 3)
+                                {
+                                    DB.Choice.Where(c => c.ProposID == propos.ProposID && c.ChoiceID == i).ForEach(c =>
+                                    {
+                                        c.ChoiceID = i;
+                                        c.ProposID = propos.ProposID;
+                                        c.TextChoice = propos.Choice3;
+                                        c.Answer = propos.Answer3;
+                                    });
+                                    DB.SaveChanges();
+                                }
+                                if (i == 4)
+                                {
+                                    DB.Choice.Where(c => c.ProposID == propos.ProposID && c.ChoiceID == i).ForEach(c =>
+                                    {
+                                        c.ChoiceID = i;
+                                        c.ProposID = propos.ProposID;
+                                        c.TextChoice = propos.Choice4;
+                                        c.Answer = propos.Answer4;
+                                    });
+                                    DB.SaveChanges();
+                                }
+                                if (i == 5)
+                                {
+                                    DB.Choice.Where(c => c.ProposID == propos.ProposID && c.ChoiceID == i).ForEach(c =>
+                                    {
+                                        c.ChoiceID = i;
+                                        c.ProposID = propos.ProposID;
+                                        c.TextChoice = propos.Choice5;
+                                        c.Answer = propos.Answer5;
+                                    });
+                                    DB.SaveChanges();
+                                }
+                            }
                         }
                     }
                     jsonreturn = new JsonRespone { status = true, message = "บันทึกเรียบร้อย" };
@@ -556,11 +615,16 @@ namespace Exam_Objective.Controllers
                 {
                     int CountChoice = DB.Choice.Where(x => x.ProposID == idp).Count();
                     string[] TChoice = new string[6];
+                    double[] TAnswer = new double[6];
                     for (int i = 1; i <= CountChoice; i++)
                     {
                         TChoice[i] = (from c in DB.Choice
                                       where c.ProposID == idp && c.ChoiceID == i
                                       select c.TextChoice
+                                     ).FirstOrDefault();
+                        TAnswer[i] = (from c in DB.Choice
+                                      where c.ProposID == idp && c.ChoiceID == i
+                                      select c.Answer
                                      ).FirstOrDefault();
                     }
                     var TextChoice1 = TChoice[1];
@@ -568,12 +632,18 @@ namespace Exam_Objective.Controllers
                     var TextChoice3 = TChoice[3];
                     var TextChoice4 = TChoice[4];
                     var TextChoice5 = TChoice[5];
+                    var TextAnswer1 = TAnswer[1];
+                    var TextAnswer2 = TAnswer[2];
+                    var TextAnswer3 = TAnswer[3];
+                    var TextAnswer4 = TAnswer[4];
+                    var TextAnswer5 = TAnswer[5];
                     var EditPropos = (from p in DB.Proposition
                                       join c in DB.Proposition on p.ProposID equals c.ProposID
                                       where p.ProposID == idp
                                       select new PropositionModel
                                       {
                                           ProposID = p.ProposID,
+                                          ObjID = p.ObjID,
                                           ProposName = p.ProposName,
                                           TextPropos = p.TextPropos,
                                           ScoreMain = p.ScoreMain,
@@ -582,10 +652,14 @@ namespace Exam_Objective.Controllers
                                           Choice2 = TextChoice2,
                                           Choice3 = TextChoice3,
                                           Choice4 = TextChoice4,
-                                          Choice5 = TextChoice5
+                                          Choice5 = TextChoice5,
+                                          Answer1 = TextAnswer1,
+                                          Answer2 = TextAnswer2,
+                                          Answer3 = TextAnswer3,
+                                          Answer4 = TextAnswer4,
+                                          Answer5 = TextAnswer5
 
                                       }).FirstOrDefault();
-
                     if (EditPropos == null)
                     {
                         jsonreturn = new JsonRespone { status = false, message = "เกิดข้อผิดพลาด" };
@@ -593,6 +667,40 @@ namespace Exam_Objective.Controllers
                     else
                     {
                         jsonreturn = new JsonRespone { status = true, message = "บันทึกเรียบร้อย", data = EditPropos };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                jsonreturn = new JsonRespone { status = false, message = "เกิดข้อผิดพลาด" + ex.Message };
+            }
+            return Json(jsonreturn);
+        }
+        //// DeletePropos  By ProposID
+        public ActionResult DeletePropos(int id)
+        {
+            var jsonreturn = new JsonRespone();
+            try
+            {
+                using (var DB = new dbEntities())
+                {
+                    var DeletePropos = DB.Proposition.Where(x => x.ProposID == id).FirstOrDefault();
+                    var ChoiceCount = DB.Choice.Where(c => c.ProposID == id).Count();
+                    if (DeletePropos == null)
+                    {
+                        jsonreturn = new JsonRespone { status = false, message = "เกิดข้อผิดพลาด" };
+                    }
+                    else
+                    {
+                        DB.Proposition.Remove(DeletePropos);
+                        DB.SaveChanges();
+                        for (int i = 1;i <= ChoiceCount;i++ )
+                        {
+                            var DeleteChoice = DB.Choice.Where(d => d.ProposID == id && d.ChoiceID == i).FirstOrDefault();
+                            DB.Choice.Remove(DeleteChoice);
+                            DB.SaveChanges();
+                        }
+                        jsonreturn = new JsonRespone { status = true, message = "บันทึกเรียบร้อย" };
                     }
                 }
             }

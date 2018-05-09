@@ -1,0 +1,18 @@
+﻿@using Exam_Objective.Models
+@using System.Collections.Generic
+@{
+    ViewBag.Title = "Analysis";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Styles/buttonA.css" rel="stylesheet" />
+<body >
+    <h2>การวิเคราะห์มาตรฐานข้อสอบแบบปรนัย</h2>
+    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+    <p align="center">
+        <a class="button" style="vertical-align:middle" href="@Url.Action("index", "IOC",new { })" role="button" onclick="focus" ><span>ประเมินข้อสอบ</span></a>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a class="button" style="vertical-align:middle" href="HeaderTestAnalysis" role="button" onclick="focus"><span>วิเคราะห์ข้อสอบ</span></a>
+    </p>
+</body>
+@section scripts{
+}

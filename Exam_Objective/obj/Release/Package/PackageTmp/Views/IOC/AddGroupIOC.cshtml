@@ -1,0 +1,112 @@
+﻿@using Exam_Objective.Models
+@using System.Collections.Generic
+
+@{
+    ViewBag.Title = "AddGroupIOC";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="paddind-lr-30">
+    @{var SubjectsEntity = (List<SubjectsModel>)ViewBag.Subject;
+
+        <h3><span>จัดการกลุ่มผู้เชี่ยวชาญ / วิชา</span>@SubjectsEntity[0].SubjectName <span id="subj" data-subject="@SubjectsEntity[0].SubjectID"></span></h3>
+    }
+    <hr />
+    <p class="text-left">
+        <button type="button" class="btn btn-default" onclick='window.history.back()'><span class="fa fa-reply"></span> ย้อนกลับ</button>
+        <button id="btnCrtGroup" class="btn btn-primary" data-toggle="modal" data-target="#GroupModal"><span class="fa fa-plus"></span> เพิ่มกลุ่มผู้เชี่ยวชาญ</button>
+    </p><hr style="margin:2px;" />
+
+    <div class="modal fade" id="GroupModal" tabindex="-1" role="dialog" aria-labelledby="User" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5 class="modal-title"><label id="title" name="title"></label><label><span>วิชา</span>@SubjectsEntity[0].SubjectName</label></h5>
+                </div>
+
+                <div class="modal-body">
+
+                    <form id="createGroupForm" method="post" class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">ชื่อกลุ่มเรียน<span style="color:red"> *</span></label>
+                            <div class="col-md-5">
+                                <input type="text" class="form-control" name="StudyGroup" id="StudyGroup" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">รหัสผ่าน<span style="color:red"> *</span></label>
+                            <div class="col-md-5">
+                                <input type="password" class="form-control" name="GroupPW" id="GroupPW" />
+                                <sapn title="randompassword" style="margin:12px" class="fa fa-random link-action" onclick="RandomPass(4,'#GroupPW')" id="randompassword"></sapn>
+                                <input type="checkbox" onclick="CheckBlockPW('GroupPW')"> ไม่ปกปิด
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="col-xs-10 col-xs-offset-3">
+                                <button type="button" id="btnSave" class="btn btn-primary btnSave">บันทึก</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>กลุ่มเรียน @SubjectsEntity[0].SubjectName</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{var GroupEntity = (List<TestGroupModel>)ViewBag.testGroup;
+                if (GroupEntity.Count > 0 && GroupEntity != null)
+                {
+                    foreach (var rows in GroupEntity)
+                    {
+                        <tr>
+                            <td>
+                                <span class="fa  fa-caret-right"> </span>
+                                <span>กลุ่มเรียน </span>@rows.StudyGroup
+                                <span> | </span>
+                                <a title="สมาชิก" class="fa fa-users link-action margin-LR-5" href="@Url.Action("ViewMemder", "Group", new { etid = rows.GroupID })"> สมาชิก</a>
+                                <span title="รายละเอีนด" class="fa fa-search link-action btnView" data-toggle="modal" data-target="#GroupModal" data-groupid="@rows.GroupID"> รายละเอียด </span>
+                                <span title="แก้ไข" class="fa fa-cog link-action btnEdit" data-toggle="modal" data-target="#GroupModal" data-groupid="@rows.GroupID"> แก้ไข</span>
+                                <span title="ลบ" class="fa  fa-times link-action btnDelete" data-groupid="@rows.GroupID" data-gname="@rows.StudyGroup"> ลบ</span>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr><td><span style="color:#ff0000">*ยังไม่มีกลุ่มเรียนในวิชานี้</span></td></tr> }
+            }
+        </tbody>
+    </table>
+</div>
+
+@section scripts{
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.inputmask.bundle.js"></script>
+<script src="~/Scripts/jquery.inputmask.bundle.min.js"></script>
+<script type="text/javascript">
+    var Data = {
+        GroupID: 0,
+        SubjectID: $('#subj').data("subject"),
+        UserID: "",
+        StudyGroup: $("[name='StudyGroup']").val(),
+        GroupPW: $("[name='GroupPW']").val(),
+        isUpdateable: 0
+    };
+</script>
+<script src="~/Scripts/Scriptss/AddGroupJs.js"></script>
+<script src="~/Scripts/Scriptss/ShowPW-HidePW-Js.js"></script>
+}

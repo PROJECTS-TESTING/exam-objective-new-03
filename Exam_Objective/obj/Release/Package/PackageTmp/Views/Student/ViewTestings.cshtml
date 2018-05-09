@@ -1,0 +1,345 @@
+﻿@using Exam_Objective.Models
+@using System.Collections.Generic
+@using NSystems.Collections
+@{
+    var dataExamtopics = (List<ExamTopicModel>)ViewBag.DataExamtopic;
+    var DataPropos = (List<PropositionModel>)ViewBag.dataProposition;
+    var DataChoice = (List<ChoiceModel>)ViewBag.dataChoice;
+    var DataCheck = (List<int>)ViewBag.dataCheck;
+}
+@{
+    ViewBag.Title = "ViewTestings";
+    Layout = "~/Views/Shared/_LayoutStudent.cshtml";
+}
+<input type="hidden" name="idexambody" id="idexambody" value="@ViewBag.Dataexambodyid" />
+<input type="hidden" name="idsubj" id="idsubj" value="@dataExamtopics[0].SubjectID" />
+<input type="hidden" name="iduser" id="iduser" value="@dataExamtopics[0].UserID" />
+<input type="hidden" name="idtopic" id="idtopic" value="@dataExamtopics[0].ExamtopicID" />
+<div class="paddind-lr-30" id="scollviewQ">
+    <h4>วิชา @ViewBag.dataSubject</h4>
+    <h4>@dataExamtopics[0].ExamtopicName กลุ่มเรียน: @ViewBag.dataGroup</h4><hr />
+    @{ var x = 0;
+        var ckrandom = 0;
+        char choiceForm = 'a';
+        foreach (var rows0 in DataPropos)
+        {
+            List<ChoiceModel> rndchoice = new List<ChoiceModel>();
+            foreach (var rowsc in DataChoice)
+            {
+                if (rowsc.ProposID == rows0.ProposID)
+                {
+                    rndchoice.Add(new ChoiceModel { ChoiceID = rowsc.ChoiceID, ProposID = rowsc.ProposID, TextChoice = rowsc.TextChoice, Answer = rowsc.Answer, Distracter = rowsc.Distracter, countAnswer = rowsc.countAnswer });
+                }
+            }
+            if (dataExamtopics[0].Sequences.Equals("2") || dataExamtopics[0].Sequences.Equals("3"))
+            {
+                if (DataCheck != null && DataCheck.Count != 0)
+                {
+
+                    foreach (var checkcoice in DataCheck)
+                    {
+                        if (checkcoice == rows0.ProposID)
+                        {
+                            ckrandom = 1;
+                        }
+                    }
+                }
+                if (ckrandom == 0)
+                {
+                    rndchoice.Shuff();
+                    ckrandom = 0;
+                }
+            }
+            if (rows0.Continuity == null)
+            {
+                x++;
+                <div class="content_question">
+                    <div class="col-md-2" style="margin-bottom:8px ;padding:1px"><div style="border:solid 1px #808080;border-radius:3px;padding:4px"><span style="font-size:20px">Question  @x</span></div></div>
+                    <div class="col-md-10" style="margin-bottom:8px; padding:1px">
+                        <div style="border:solid 1px #adfacd;border-radius:3px;padding:4px;background-color:#e0fced">
+                            <span class="quizion container" id="@rows0.ProposID">@Html.Raw(rows0.TextPropos)</span>
+                            <input type="hidden" name="@x" value="@rows0.ProposID" />
+                            @{ var i = 96;
+                                foreach (var rows in rndchoice)
+                                {
+                                    if (rows.ProposID == rows0.ProposID)
+                                    {
+                                        i++;
+                                        choiceForm = (char)i;
+                                        <div class="choice container">
+                                            @{if (rows.countAnswer > 1)
+                                                {
+                                                    <input type="checkbox" value="@rows.ChoiceID" name="@rows0.ProposID" /> @choiceForm<span>.</span>
+                                                }
+                                                else
+                                                {
+                                                    <input type="radio" value="@rows.ChoiceID" name="@rows0.ProposID" /> @choiceForm<span>.</span>
+                                                }
+                                            }
+                                            <span id="in-line"> @Html.Raw(rows.TextChoice)</span>
+                                        </div>
+                                    }
+                                }
+                                i = 96;
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+            @*-----------------------------------ข้อสอบต่อเนื่อง------------------------------------*@
+            else if (rows0.Continuity == 0)
+            {
+                ckrandom=0;
+                var countQ1 = x + 1;
+                var countQ2 = 0;
+
+                foreach (var c in DataPropos) { if (c.Continuity == rows0.ProposID) { countQ2++; } }
+                countQ2 = (countQ2 + x);
+                <div>
+                    <div class="col-md-2" style="margin-bottom:8px ;padding:1px">
+                        <div style="border:solid 1px #808080;border-radius:3px;padding:4px">
+                            <span style="font-size:20px">Question @countQ1<span>-</span>@countQ2</span>
+                        </div>
+                    </div>
+                    <div class="col-md-10" style="margin-bottom:8px; padding:1px">
+                        <div style="border:solid 1px #adfacd;border-radius:3px;padding:4px;background-color:#e4fbe8">
+                            <div class="quizion container" id="XXX">@Html.Raw(rows0.TextPropos)</div>
+                        </div><br />
+                    </div>
+                </div>
+        foreach (var rows1 in DataPropos)
+        {
+            rndchoice = new List<ChoiceModel>();
+            foreach (var rowsc in DataChoice)
+            {
+                if (rowsc.ProposID == rows1.ProposID)
+                {
+                    rndchoice.Add(new ChoiceModel { ChoiceID = rowsc.ChoiceID, ProposID = rowsc.ProposID, TextChoice = rowsc.TextChoice, Answer = rowsc.Answer, Distracter = rowsc.Distracter, countAnswer = rowsc.countAnswer });
+                }
+            }
+            if (dataExamtopics[0].Sequences.Equals("2") || dataExamtopics[0].Sequences.Equals("3"))
+            {
+                if (DataCheck != null && DataCheck.Count != 0)
+                {
+
+                    foreach (var checkcoice in DataCheck)
+                    {
+                        if (checkcoice == rows1.ProposID)
+                        {
+                            ckrandom = 1;
+                        }
+                    }
+                }
+                if (ckrandom == 0)
+                {
+                    rndchoice.Shuff();
+                    ckrandom = 0;
+                }
+            }
+            if (rows1.Continuity == rows0.ProposID)
+            {
+                x++;
+                        <div class="content_question">
+                            <div class="col-md-2" style="margin-bottom:8px ;padding:1px"><div style="border:solid 1px #808080;border-radius:3px;padding:4px"><span style="font-size:20px">Question  @x</span></div></div>
+                            <div class="col-md-10" style="margin-bottom:8px; padding:1px">
+                                <div style="border:solid 1px #adfacd;border-radius:3px;padding:4px;background-color:#e0fced">
+                                    <span class="quizion container" id="@rows1.ProposID">@Html.Raw(rows1.TextPropos)</span>
+                                    <input type="hidden" name="@x" value="@rows1.ProposID" />
+                                    @{ var i = 96;
+                                        foreach (var rows in rndchoice)
+                                        {
+                                            if (rows.ProposID == rows1.ProposID)
+                                            {
+                                                i++;
+                                                choiceForm = (char)i;
+                                                <div class="choice container">
+                                                    @{if (rows.countAnswer > 1)
+                                                        {
+                                                            <input type="checkbox" value="@rows.ChoiceID" name="@rows1.ProposID" /> @choiceForm<span>.</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <input type="radio" value="@rows.ChoiceID" name="@rows1.ProposID" /> @choiceForm<span>.</span>
+                                                        }
+                                                    }
+                                                    <span id="in-line"> @Html.Raw(rows.TextChoice)</span>
+                                                </div>
+                                            }
+                                        }
+                                        i = 96;
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }ckrandom=0;
+                }
+            }ckrandom=0;
+        }
+    }
+    <div style="margin:30px">
+        .
+    </div>
+
+</div>
+@section scripts{
+    <script type="text/javascript">
+        $('input[type=radio], input[type=checkbox]').each(function () {
+            if (sessionStorage.getItem($(this).attr('name') + $(this).val()) != null) {
+                $(this).attr('checked', 'checked');
+                $('input.' + $(this).attr('name')).css('border', 'solid 1px #1102DF');
+            }
+        });
+
+        $('input[type=radio], input[type=checkbox]').change(function () {
+            $(this).each(function () {
+                if ($(this).is(':checked')) {
+                    sessionStorage.setItem($(this).attr('name') + $(this).val(), "1");
+                    $('input.' + $(this).attr('name')).css('border', 'solid 1px #1102DF');
+                } else {
+                    sessionStorage.removeItem($(this).attr('name') + $(this).val());
+                    $('input.' + $(this).attr('name')).css('border', 'none');
+                }
+            });
+            $('input[type=radio], input[type=checkbox]').each(function () {
+                if (sessionStorage.getItem($(this).attr('name') + $(this).val()) != null) {
+                    $(this).attr('checked', 'checked');
+                    $('input.' + $(this).attr('name')).css('border', 'solid 1px #1102DF');
+                }
+            });
+        });
+
+        $('#btnsendQ').click(function () {
+            var AnswerStudenQ = [];
+            var AnswerStudenC = [];
+            var errors = [];
+            $('.content_question').each(function () {
+                AnswerStudenQ.push($(this).find('input[type=hidden]').val());
+                var inputs = $(this).find('input[type=radio], input[type=checkbox]');
+
+                if (inputs.length > 0) {
+                    var cansw = 0;
+                    $(inputs).each(function () {
+                        if ($(this).is(':checked')) {
+                            if (cansw.toString().length >= 1 && cansw != 0) {
+                                cansw += "," + $(this).val();
+                            } else { cansw = $(this).val(); }
+                        }
+                    });
+                    AnswerStudenC.push(cansw);
+                }
+            });
+            sessionStorage.clear();
+            //alert(AnswerStudenC);
+            // alert(AnswerStudenQ);
+            var DataAnswer = {
+                ExamBodyID: $('input[type=hidden]#idexambody').val(),
+                ProposID: AnswerStudenQ,
+                AnswerStudent: AnswerStudenC
+            };
+            $.ajax({
+                type: "POST",
+                cache: false,
+                url: "AnswerStudent",
+                dataType: "json",
+                data: DataAnswer,
+                traditional: true,
+                beforeSend: function () {
+
+                }, success: function (res) {
+                    var status = false;
+                    var message = 'ดำเนินการไม่สำเร็จ';
+                    if (res != null && res != undefined) {
+                        status = res.status;
+                        message = res.message != '' ? res.message : message;
+                    }
+                    if (status == false) {
+
+                        swal({
+                            title: message,
+                            type: "warning",
+                            showConfirmButton: false,
+                            timer: 2000,
+                            closeOnConfirm: false
+                        },
+                            function () {
+                                location.reload(true);
+                            });
+                    } else {
+                        swal({
+                            title: message,
+                            type: "success",
+                            showConfirmButton: false,
+                            timer: 1000,
+                            closeOnConfirm: false
+                        },
+                            function () {
+                                location.reload(true);
+                                location.replace("ViewScore" + "?subid=" + $('input[type=hidden]#idsubj').val() + "&datasu=" + $('input[type=hidden]#iduser').val() + "&e=" + $('input[type=hidden]#idtopic').val() + "&eb=" + $('input[type=hidden]#idexambody').val());
+                            });
+                    }
+                },
+                error: function (xhr, ajaxOption, thrownError) {
+                    swal("เกิดข้อผิดพลาด", message, "error");
+                },
+                complete: function () {
+
+                }
+
+
+            });
+        });
+
+        var datein = $('#datein').data("dates");
+        var i = [];
+        i = datein.split(' ');
+        datein = i[0].split('/');
+        //alert(datein);
+        var DateBegin = {
+            dateBegin: datein[0],
+            monthBegin: datein[1],
+            yearBegin: datein[2]
+        };
+
+        var TimeBegin = $('#datein1').data("dates");
+
+        var TimeEnd = $('#datein2').data("dates");
+
+        var countDownDate = new Date(DateBegin.monthBegin + " " + DateBegin.dateBegin + ", " + DateBegin.yearBegin + " " + TimeEnd).getTime();
+        var check1 = new Date(DateBegin.monthBegin + " " + DateBegin.dateBegin + ", " + DateBegin.yearBegin + " " + TimeBegin).getTime();
+        // Update the count down every 1 second
+        var x = setInterval(function () {
+
+            // Get todays date and time
+            var now = new Date().getTime();
+
+            // Find the distance between now an the count down date
+            var distance = countDownDate - now;
+
+            // Time calculations for days, hours, minutes and seconds
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // If the count down is over, write some text
+            if (distance < 0) {
+                clearInterval(x);
+                document.getElementById("timeEnd").innerHTML = TimeBegin + "-" + TimeEnd + " น.";
+                document.getElementById("demo").innerHTML = "หมดเวลาทำแบบทดสอบ";
+            } else if (check1 > now) {
+                document.getElementById("timeEnd").innerHTML = TimeBegin + "-" + TimeEnd + " น.";
+                document.getElementById("demo").innerHTML = "ยังไม่ถึงเวลาทำแบบทดสอบ";
+            }
+            else {
+                document.getElementById("timeEnd").innerHTML = TimeBegin + "-" + TimeEnd + " น.";
+                // Output the result in an element with id="demo"
+                document.getElementById("demo").innerHTML = hours + " ชั่วโมง " + minutes + " นาที " + seconds + " วินาที ";
+            }
+
+        }, 1000);
+
+        function GotoQ(n) {
+            $('html,body').animate({ scrollTop: $('span#' + n).offset().top - 60 }, 500);
+        }
+    </script>
+}

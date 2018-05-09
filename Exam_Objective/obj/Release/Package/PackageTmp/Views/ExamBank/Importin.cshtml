@@ -1,0 +1,35 @@
+﻿@using Exam_Objective.Models
+@{
+    ViewBag.Title = "Importin";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="panel-heading">
+    @{var ObjectiveModelEntity = (List<ObjectiveModel>)ViewBag.Objective;
+
+            foreach (var rows in ObjectiveModelEntity)
+            {
+            <h3><span class="icon icon-login"> นำเข้าข้อสอบของจุดประสงค์ </span>@rows.ObjName</h3>
+            }
+    }
+</div>
+@using (Html.BeginForm("Importin", "ExamBank", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+<div class="col-md-10 form-group">
+    <label>XML File<span class="required">*</span></label>
+    @{var ObjectiveID = (List<ObjectiveModel>)ViewBag.Objective;
+
+        foreach (var rows in ObjectiveID)
+        {
+        <input type="hidden" id="ObjID" name="ObjID" value="@rows.ObjID" />
+        }
+    }
+        <input type="file" id="xmlFile" name="xmlFile" /><br />
+        <button type="submit" value="Import" id="Import" class="btn btn-primary icon-login" title="คลิกเพื่อนำเข้าข้อสอบ"> นำเข้าข้อสอบ</button>
+</div>
+    
+}
+
+@section scripts{
+
+}
