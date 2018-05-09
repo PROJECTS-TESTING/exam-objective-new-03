@@ -60,6 +60,7 @@ namespace Exam_Objective.Models
     {
         public int ExamtopicID { get; set; }
         public string SubjectID { get; set; }
+        public int ExamBodyID { get; set; }
     }
     public class ExamBodyModel
     {

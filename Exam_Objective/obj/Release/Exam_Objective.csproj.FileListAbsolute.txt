@@ -117,5 +117,8 @@ F:\VisualStudio\exam-objective-new-03\Exam_Objective\obj\Release\Exam_Objective.
 F:\VisualStudio\exam-objective-new-03\Exam_Objective\obj\Release\Exam_Objective.csproj.CopyComplete
 F:\VisualStudio\exam-objective-new-03\Exam_Objective\obj\Release\Exam_Objective.dll
 F:\VisualStudio\exam-objective-new-03\Exam_Objective\obj\Release\Exam_Objective.pdb
+<<<<<<< HEAD
+=======
 F:\VisualStudio\exam-objective-new-03\Exam_Objective\obj\Release\Exam_Objective.csprojResolveAssemblyReference.cache
 >>>>>>> 42a72699a6492403ade3fde4fe0b6bca6d2f0197
+>>>>>>> ebc6af36ba77d23c78cc56f2a6dbcd8669a8e3d5

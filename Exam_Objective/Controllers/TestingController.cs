@@ -915,10 +915,13 @@ namespace Exam_Objective.Controllers
             Response.Flush();
             Response.End();
         }
+
         // --- Hard-Copy ---
         public ActionResult HardCopys(int etid, string subid, int g)
         {
             var user = Session["User"] as UserSystemModel;
+            List<HardCopyModel> h = new List<HardCopyModel>();
+           
             if (user == null)
             {
                 return RedirectToAction("Login", "Login");
@@ -934,26 +937,31 @@ namespace Exam_Objective.Controllers
             using (var DB = new dbEntities())
             {
                 ViewBag.dataGroup = (from gr in DB.TestGroup where gr.GroupID == g select gr.GroupName).FirstOrDefault();
+                var exbodyid = (from b in DB.ExamBody where b.ExamtopicID == etid select b.ExamBodyID).FirstOrDefault();
+                h.Add(new HardCopyModel { ExamtopicID = etid, SubjectID = subid, ExamBodyID = exbodyid });
+                ViewBag.dataEx = h.ToList();
             }
             return View();
         }
-        // Hard-Copy
-        public void HardCopy(int exbody)
+       
+        // Hard-Copy Get file.    
+        [HttpPost]
+        public JsonResult ExportDoc(HardCopyModel datah)
         {
             var user = Session["User"] as UserSystemModel;
             var jsonreturn = new JsonRespone();
+          
             try
             {
-                string filename = "StreamTest.docx";
-                string contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
                 StringBuilder html = new StringBuilder();
-                
+
                 html.Append("<body>");
+               
                 using (var DB = new dbEntities())
                 {
                     var dataProp = (from ex in DB.GetExam
                                     join p in DB.Proposition on ex.ProposID equals p.ProposID
-                                    where ex.ExamBodyID == exbody
+                                    where ex.ExamBodyID == datah.ExamBodyID
                                     select new PropositionModel
                                     {
                                         ProposID = ex.ProposID,
@@ -965,7 +973,7 @@ namespace Exam_Objective.Controllers
                     var dataChoices = (from ex in DB.GetExam
                                        join c in DB.Choice on ex.ProposID equals c.ProposID
                                        let countans = (from ca in DB.Choice where ca.ProposID == ex.ProposID && ca.Answer > 0 select ex).Count()
-                                       where ex.ExamBodyID == exbody
+                                       where ex.ExamBodyID == datah.ExamBodyID
                                        orderby c.ChoiceID
                                        select new ChoiceModel
                                        {
@@ -975,12 +983,36 @@ namespace Exam_Objective.Controllers
                                            Answer = c.Answer,
                                            countAnswer = countans
                                        }).ToList();
+                    var datasubject = (from s in DB.Subjects
+                                       where s.SubjectID == datah.SubjectID && s.UserID == user.UserID
+                                       select new SubjectsModel
+                                       {
+                                           SubjectID = s.SubjectID,
+                                           SubjectName = s.SubjectName
+                                       }).ToList();
+                    var dataExto = (from e in DB.ExamTopic
+                                     where e.ExamtopicID == datah.ExamtopicID
+                                     select new ExamTopicModel
+                                     {
+                                         ExamtopicName = e.ExamtopicName,
+                                         DatetoBegin = e.DatetoBegin,
+                                         TimetoBegin = e.TimetoBegin,
+                                         TimetoEnd = e.TimetoEnd
+                                     }).ToList();
 
-                    var i = 0;
+                    string[] mouth_TH = { "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม" };
+                    string timebegin = dataExto[0].TimetoBegin.Hours + "." + dataExto[0].TimetoBegin.Minutes;
+                    string timeend = dataExto[0].TimetoEnd.Hours + "." + dataExto[0].TimetoEnd.Minutes;
+                    // Header file test
+                    html.Append("<p>ข้อสอบวิชา"+datasubject[0].SubjectName+ "&nbsp;(" + datasubject[0].SubjectID+ ")&nbsp;สาขาวิชาวิศวกรรมคอมพิวเตอร์</p>");
+                    html.Append("<p>คณะวิศวกรรมศาสตร์และสถาปัตยกรรมศาสตร์&nbsp;มหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน</p>");
+                    html.Append("<p>"+dataExto[0].ExamtopicName+ "&nbsp;วันที่&nbsp;" + dataExto[0].DatetoBegin.Day+ "&nbsp;" + mouth_TH[dataExto[0].DatetoBegin.Month-1]+ "&nbsp;" + dataExto[0].DatetoBegin.Year+ "&nbsp;&nbsp;เวลา&nbsp;"+timebegin+"-"+timeend+ "&nbsp;น</p>");
+                    html.Append("<p>____________________________________________________________________________________</p>");
+                   var i = 0;
                     var j = 0;
-                    foreach(var row in dataProp)
+                    foreach (var row in dataProp)
                     {
-                       
+
                         if (row.Continuity == null)
                         {
                             i++;
@@ -1003,21 +1035,22 @@ namespace Exam_Objective.Controllers
                                 }
                             }
                             j = 0;
-                        }else if(row.Continuity == 0)
+                        }
+                        else if (row.Continuity == 0)
                         {
-                            
+
                             var countProp = DB.Proposition.Where(x => x.Continuity == row.ProposID).Count();
-                            countProp = i + countProp; 
+                            countProp = i + countProp;
                             if (Regex.IsMatch(row.TextPropos, "<img.*?>"))
                             {
-                                html.Append("<p>" + Regex.Replace(row.TextPropos, "<.*?>", String.Empty) + (i+1) +"-" + countProp + "</p>" + "<p>" + Regex.Match(row.TextPropos, "<img.*?/>") + "</p>");
+                                html.Append("<p>" + Regex.Replace(row.TextPropos, "<.*?>", String.Empty) + (i + 1) + "-" + countProp + "</p>" + "<p>" + Regex.Match(row.TextPropos, "<img.*?/>") + "</p>");
                             }
                             else
                             {
-                                html.Append("<p>" + Regex.Replace(row.TextPropos, "<.*?>", String.Empty) + (i+1) + "-" + countProp + "</p>");
+                                html.Append("<p>" + Regex.Replace(row.TextPropos, "<.*?>", String.Empty) + (i + 1) + "-" + countProp + "</p>");
                             }
 
-                            foreach(var prop in dataProp)
+                            foreach (var prop in dataProp)
                             {
 
                                 if (prop.Continuity == row.ProposID)
@@ -1046,66 +1079,270 @@ namespace Exam_Objective.Controllers
                             }
                         }
                     }
-                    
+
                 }
-                              
+
                 html.Append("</body>");
-                using (MemoryStream generatedDocument = new MemoryStream())
+                // Create file Document .docx
+                string logPath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "\\temp\\";
+                if (!Directory.Exists(logPath))
+                {
+                    Directory.CreateDirectory(logPath);
+                }
+                var fileName1 = "Word_Test_" + DateTime.Now.ToString("yyyyMMddHHmm")+".docx";
+                //save the file to server temp folder
+                string fullPath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase+ "\\temp\\" + fileName1;
+                using (WordprocessingDocument package = WordprocessingDocument.Create(fullPath, WordprocessingDocumentType.Document))
                     {
-                        using (WordprocessingDocument package = WordprocessingDocument.Create(generatedDocument, WordprocessingDocumentType.Document))
+                        MainDocumentPart mainPart = package.MainDocumentPart;
+                        if (mainPart == null)
                         {
-                            MainDocumentPart mainPart = package.MainDocumentPart;
-                            if (mainPart == null)
-                            {
-                                mainPart = package.AddMainDocumentPart();
-                                new Document(new Body()).Save(mainPart);
-                            }
+                            mainPart = package.AddMainDocumentPart();
+                            new Document(new Body()).Save(mainPart);
+                        }
 
-                            HtmlConverter converter = new HtmlConverter(mainPart);
-                            converter.BaseImageUrl = new Uri(Request.Url.Scheme + "://" + Request.Url.Authority);
+                        HtmlConverter converter = new HtmlConverter(mainPart);
+                        converter.BaseImageUrl = new Uri(Request.Url.Scheme + "://" + Request.Url.Authority);
 
-                            Body body = mainPart.Document.Body;
-                        
-                        
-                        
+                        Body body = mainPart.Document.Body;
+
                         var paragraphs = converter.Parse(html.ToString());
-                       
-                            for (int i = 0; i < paragraphs.Count; i++)
-                            {
-                                body.Append(paragraphs[i]);
-                            }
 
-                            mainPart.Document.Save();
-                        }
-
-                        byte[] bytesInStream = generatedDocument.ToArray(); // simpler way of converting to array
-                        generatedDocument.Close();
-
-                        Response.Clear();
-                        Response.ContentType = contentType;
-                        Response.AddHeader("content-disposition", "attachment;filename=" + filename);
-
-                        //this will generate problems
-                        Response.BinaryWrite(bytesInStream);
-                        try
+                        for (int i = 0; i < paragraphs.Count; i++)
                         {
-                            Response.Flush();
-                            Response.End();
+                            body.Append(paragraphs[i]);
                         }
-                        catch (Exception ex)
-                        {
-                            //Response.End(); generates an exception. if you don't use it, you get some errors when Word opens the file...
-                        }
+
+                        mainPart.Document.Save();
 
                     }
-                
-              
+                  
+                    return Json(new { fileName = fileName1, message = "" });
+                   
             }
             catch (Exception ex)
             {
-               
+                return Json(new { fileName = "", message = "Error"+ex.Message });
             }
+
+            
+            //return new JsonResult();
+        }
+
+        // AnswerHardCopy
+        [HttpPost]
+        public JsonResult ExportDocans(HardCopyModel datah)
+        {
+            var user = Session["User"] as UserSystemModel;
+            var jsonreturn = new JsonRespone();
+
+            try
+            {
+                StringBuilder html = new StringBuilder();
+
+                html.Append("<body>");
+
+                using (var DB = new dbEntities())
+                {
+                    var dataProp = (from ex in DB.GetExam
+                                    join p in DB.Proposition on ex.ProposID equals p.ProposID
+                                    where ex.ExamBodyID == datah.ExamBodyID
+                                    select new PropositionModel
+                                    {
+                                        ProposID = ex.ProposID,
+                                        ProposName = p.ProposName,
+                                        TextPropos = p.TextPropos,
+                                        Continuity = p.Continuity
+                                    }).ToList();
+
+                    var dataChoices = (from ex in DB.GetExam
+                                       join c in DB.Choice on ex.ProposID equals c.ProposID
+                                       let countans = (from ca in DB.Choice where ca.ProposID == ex.ProposID && ca.Answer > 0 select ex).Count()
+                                       where ex.ExamBodyID == datah.ExamBodyID
+                                       orderby c.ChoiceID
+                                       select new ChoiceModel
+                                       {
+                                           ProposID = ex.ProposID,
+                                           ChoiceID = c.ChoiceID,
+                                           TextChoice = c.TextChoice,
+                                           Answer = c.Answer,
+                                           countAnswer = countans
+                                       }).ToList();
+                    var datasubject = (from s in DB.Subjects
+                                       where s.SubjectID == datah.SubjectID && s.UserID == user.UserID
+                                       select new SubjectsModel
+                                       {
+                                           SubjectID = s.SubjectID,
+                                           SubjectName = s.SubjectName
+                                       }).ToList();
+                    var dataExto = (from e in DB.ExamTopic
+                                    where e.ExamtopicID == datah.ExamtopicID
+                                    select new ExamTopicModel
+                                    {
+                                        ExamtopicName = e.ExamtopicName,
+                                        DatetoBegin = e.DatetoBegin,
+                                        TimetoBegin = e.TimetoBegin,
+                                        TimetoEnd = e.TimetoEnd
+                                    }).ToList();
+
+                    string[] mouth_TH = { "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม" };
+                    string timebegin = dataExto[0].TimetoBegin.Hours + "." + dataExto[0].TimetoBegin.Minutes;
+                    string timeend = dataExto[0].TimetoEnd.Hours + "." + dataExto[0].TimetoEnd.Minutes;
+                    // Header file test
+                    html.Append("<p>เฉลยข้อสอบวิชา" + datasubject[0].SubjectName + "&nbsp;(" + datasubject[0].SubjectID + ")&nbsp;สาขาวิชาวิศวกรรมคอมพิวเตอร์</p>");
+                    html.Append("<p>คณะวิศวกรรมศาสตร์และสถาปัตยกรรมศาสตร์&nbsp;มหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน</p>");
+                    html.Append("<p>" + dataExto[0].ExamtopicName + "&nbsp;วันที่&nbsp;" + dataExto[0].DatetoBegin.Day + "&nbsp;" + mouth_TH[dataExto[0].DatetoBegin.Month - 1] + "&nbsp;" + dataExto[0].DatetoBegin.Year + "&nbsp;&nbsp;เวลา&nbsp;" + timebegin + "-" + timeend + "&nbsp;น</p>");
+                    html.Append("<p>____________________________________________________________________________________</p>");
+
+                    var i = 0;
+                    var j = 0;
+                    foreach (var row in dataProp)
+                    {
+
+                        if (row.Continuity == null)
+                        {
+                            i++;
+                            if (Regex.IsMatch(row.TextPropos, "<img.*?>"))
+                            {
+                                html.Append("<p>" + i + ". " + Regex.Replace(row.TextPropos, "<.*?>", String.Empty) + "</p>" + "<p>" + Regex.Match(row.TextPropos, "<img.*?/>") + "</p>");
+                            }
+                            else
+                            {
+                                html.Append("<p>" + i + ". " + Regex.Replace(row.TextPropos, "<.*?>", String.Empty) + "</p>");
+                            }
+
+                            foreach (var rowc in dataChoices)
+                            {
+                                if (row.ProposID == rowc.ProposID)
+                                {
+                                    // j++;
+                                    if (rowc.Answer > 0)
+                                    {
+                                        html.Append("<p>&nbsp;&nbsp;ตอบ" + rowc.ChoiceID + ". " + rowc.TextChoice.Substring(3, rowc.TextChoice.Length - 3));
+                                    }
+                                }
+                            }
+                            j = 0;
+                        }
+                        else if (row.Continuity == 0)
+                        {
+
+                            var countProp = DB.Proposition.Where(x => x.Continuity == row.ProposID).Count();
+                            countProp = i + countProp;
+                            if (Regex.IsMatch(row.TextPropos, "<img.*?>"))
+                            {
+                                html.Append("<p>" + Regex.Replace(row.TextPropos, "<.*?>", String.Empty) + (i + 1) + "-" + countProp + "</p>" + "<p>" + Regex.Match(row.TextPropos, "<img.*?/>") + "</p>");
+                            }
+                            else
+                            {
+                                html.Append("<p>" + Regex.Replace(row.TextPropos, "<.*?>", String.Empty) + (i + 1) + "-" + countProp + "</p>");
+                            }
+
+                            foreach (var prop in dataProp)
+                            {
+
+                                if (prop.Continuity == row.ProposID)
+                                {
+                                    i++;
+                                    if (Regex.IsMatch(row.TextPropos, "<img.*?>"))
+                                    {
+                                        html.Append("<p>" + i + ". " + Regex.Replace(row.TextPropos, "<.*?>", String.Empty) + "</p>" + "<p>" + Regex.Match(row.TextPropos, "<img.*?/>") + "</p>");
+                                    }
+                                    else
+                                    {
+                                        html.Append("<p>" + i + ". " + Regex.Replace(row.TextPropos, "<.*?>", String.Empty) + "</p>");
+                                    }
+
+                                    foreach (var rowc in dataChoices)
+                                    {
+                                        if (prop.ProposID == rowc.ProposID)
+                                        {
+                                            // j++;
+                                            if (rowc.Answer > 0)
+                                            {
+                                                html.Append("<p>&nbsp;&nbsp;ตอบ " + rowc.ChoiceID + ". " + rowc.TextChoice.Substring(3, rowc.TextChoice.Length - 3));
+                                            }
+                                        }
+                                    }
+                                    j = 0;
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+                html.Append("</body>");
+                // Create file Document .docx
+                string logPath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "\\temp\\";
+                if (!Directory.Exists(logPath))
+                {
+                    Directory.CreateDirectory(logPath);
+                }
+                var fileName1 = "Word_Answer_" + DateTime.Now.ToString("yyyyMMddHHmm") + ".docx";
+                //save the file to server temp folder
+                string fullPath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "\\temp\\" + fileName1;
+                using (WordprocessingDocument package = WordprocessingDocument.Create(fullPath, WordprocessingDocumentType.Document))
+                {
+                    MainDocumentPart mainPart = package.MainDocumentPart;
+                    if (mainPart == null)
+                    {
+                        mainPart = package.AddMainDocumentPart();
+                        new Document(new Body()).Save(mainPart);
+                    }
+
+                    HtmlConverter converter = new HtmlConverter(mainPart);
+                    converter.BaseImageUrl = new Uri(Request.Url.Scheme + "://" + Request.Url.Authority);
+
+                    Body body = mainPart.Document.Body;
+
+                    var paragraphs = converter.Parse(html.ToString());
+
+                    for (int i = 0; i < paragraphs.Count; i++)
+                    {
+                        body.Append(paragraphs[i]);
+                    }
+
+                    mainPart.Document.Save();
+
+                }
+
+                return Json(new { fileName = fileName1, message = "" });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { fileName = "", message = "Error" + ex.Message });
+            }
+
+
+            //return new JsonResult();
+        }
+        [HttpGet]
+        [DeleteFileAttribute] //Action Filter, it will auto delete the file after download, 
+                              //I will explain it later
+        public ActionResult Download(string file)
+        {
+            //get the temp folder and file path in server
+            string fullPath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "\\temp\\" + file;
+
+            //return the file for download, this is an Excel 
+            //so I set the file content type to "application/vnd.ms-excel"
+            return File(fullPath, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", file);
         }
 
     }
+    public class DeleteFileAttribute : ActionFilterAttribute
+{
+    public override void OnResultExecuted(ResultExecutedContext filterContext)
+    {
+        filterContext.HttpContext.Response.Flush();
+
+        //convert the current filter context to file and get the file path
+        string filePath = (filterContext.Result as FilePathResult).FileName;
+        
+        //delete the file after download
+        System.IO.File.Delete(filePath);
+    }
+}
 }
