@@ -843,18 +843,20 @@ namespace Exam_Objective.Controllers
                                    select new { ge.ProposID }
                                    ).ToList();
 
-                int xlRows = 1, xlCol = 1;
+                int xlRows = 1, xlCol = 2;
+                csvDefault.Append("ID,");
+                worksheet.Cells[1, 1].Value = "ID";
                 foreach (var c in dataAnswers)
                 {
-                    csvDefault.Append("" + c.ProposID + ",");
-                    txtDefault.Append("" + c.ProposID + ",");
-                    worksheet.Cells[1, xlCol].Value = c.ProposID;
+                    csvDefault.Append("ans" + xlCol + ",");                   
+                    worksheet.Cells[1, xlCol].Value = "ans" + xlCol;
                     xlCol++;
                 }
-
+               
                 csvDefault.Append("\r\n");
-                txtDefault.Append("\r\n");
-                xlCol = 1;
+               // txtDefault.Append("\r\n");
+                xlCol = 2;
+                txtDefault.Append("000000000000000000000Y  0000     0Y   S                  ");
                 foreach (var c in dataAnswers)
                 {
                     csvDefault.Append((from ch in DB.Choice where ch.ProposID == c.ProposID && ch.Answer == 1 select ch.ChoiceID).FirstOrDefault() + ",");
@@ -863,35 +865,40 @@ namespace Exam_Objective.Controllers
                     xlCol++;
                 }
 
-                xlCol = 1; xlRows = 3;
+                xlCol = 2; xlRows = 3;
                 foreach (var r in dataUserStudent)
                 {
                     csvDefault.Append("\r\n");
                     txtDefault.Append("\r\n");
+                    var idstudent = (from u in DB.UserSystem where u.UserID == r.UserID select u.StudentID).FirstOrDefault();
+                    txtDefault.Append("000000000000000000000Y  0000     0 Y  S "+Regex.Replace(idstudent, @"[^\d]","")+"00000");
+                    worksheet.Cells[xlRows, 1].Value = "" + Regex.Replace(idstudent, @"[^\d]", "");
                     var dataTesting = (from t in DB.Testing
                                        where t.ExamBodyID == r.ExamBodyID && t.UserID == r.UserID
                                        orderby t.ProposID
-                                       select new { t.ProposID, t.AnswerStudent }).ToList();
+                                       select new { t.ProposID, t.AnswerStudent}).ToList();
 
 
                     foreach (var c in dataTesting)
                     {
                         if (c.AnswerStudent.Length > 1)
-                        {
-                            csvDefault.Append("0,");
-                            txtDefault.Append("0");
-                            worksheet.Cells[xlRows, xlCol].Value = 0;
+                        { 
+                                csvDefault.Append("0,");
+                                txtDefault.Append("0");
+                                worksheet.Cells[xlRows, xlCol].Value = 0;
+                                    
                         }
                         else
-                        {
-                            csvDefault.Append(c.AnswerStudent + ",");
-                            txtDefault.Append(c.AnswerStudent);
-                            worksheet.Cells[xlRows, xlCol].Value = Int32.Parse(c.AnswerStudent);
+                        {                         
+                           
+                                csvDefault.Append(c.AnswerStudent + ",");
+                                txtDefault.Append(c.AnswerStudent);
+                                worksheet.Cells[xlRows, xlCol].Value = Int32.Parse(c.AnswerStudent);                           
                         }
                         xlCol++;
                     }
                     xlRows++;
-                    xlCol = 1;
+                    xlCol = 2;
                 }
 
             }
