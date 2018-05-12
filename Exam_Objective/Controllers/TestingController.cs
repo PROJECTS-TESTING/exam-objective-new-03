@@ -59,8 +59,9 @@ namespace Exam_Objective.Controllers
             }
             return View();
         }
-       
-        public ActionResult CreateTest(string etid) {
+
+        public ActionResult CreateTest(string etid)
+        {
             var user = Session["User"] as UserSystemModel;
             if (user == null)
             {
@@ -98,18 +99,18 @@ namespace Exam_Objective.Controllers
                                  }).ToList();
                 ViewBag.testGroup = GroupData;
             }
-           using(var DB = new dbEntities())
+            using (var DB = new dbEntities())
             {
                 var DataTest = (from e in DB.ExamTopic
                                 join g in DB.TestGroup on e.GroupID equals g.GroupID
-                                where e.UserID == user.UserID && e.SubjectID == etid 
+                                where e.UserID == user.UserID && e.SubjectID == etid
                                 select new ExamTopicModel
                                 {
                                     ExamtopicID = e.ExamtopicID,
                                     ExamtopicName = e.ExamtopicName,
                                     StudyGroup = g.GroupName,
                                     GroupID = e.GroupID
-                                   
+
                                 }).ToList();
 
                 ViewBag.DataExamtest = DataTest;
@@ -128,7 +129,7 @@ namespace Exam_Objective.Controllers
             }
             return View();
         }
-        
+
         public JsonResult CreateTesting(ExamTopicModel examtopic)
         {
             var jsonretern = new JsonRespone();
@@ -139,8 +140,8 @@ namespace Exam_Objective.Controllers
                 {
                     if (examtopic.isUpdateable != 1)
                     {
-                            examtopic.ExamtopicID = DB.ExamTopic.Count() != 0 ? DB.ExamTopic.Max(x => x.ExamtopicID) + 1:1;
-                        
+                        examtopic.ExamtopicID = DB.ExamTopic.Count() != 0 ? DB.ExamTopic.Max(x => x.ExamtopicID) + 1 : 1;
+
                         DB.ExamTopic.Add(new ExamTopic
                         {
                             ExamtopicID = examtopic.ExamtopicID,
@@ -156,7 +157,7 @@ namespace Exam_Objective.Controllers
                             ExamtopicPW = examtopic.ExamtopicPW,
                             NumberOfTimes = examtopic.NumberOfTimes,
                             InNetWork = examtopic.InNetWork
-                           
+
                         });
                         DB.SaveChanges();
                     }
@@ -183,7 +184,7 @@ namespace Exam_Objective.Controllers
                     }
                     jsonretern = new JsonRespone { status = true, message = "บันทึกเรียบร้อย" };
                 }
-             
+
             }
             catch (Exception ex)
             {
@@ -213,9 +214,9 @@ namespace Exam_Objective.Controllers
                                              ExamtopicPW = s.ExamtopicPW,
                                              //NumberOfTimes = s.NumberOfTimes,
                                              InNetWork = s.InNetWork
-                                             
 
-                                 }).FirstOrDefault();
+
+                                         }).FirstOrDefault();
                     if (Editexamtopic == null)
                     {
                         jsonreturn = new JsonRespone { status = false, message = "เกิดข้อผิดพลาด" };
@@ -263,7 +264,7 @@ namespace Exam_Objective.Controllers
         // --------------- แก้ไขแบบทดสอบ -------------
         public ActionResult EditQuiz(int etid, string subid)
         {
-           
+
             var user = Session["User"] as UserSystemModel;
             if (user == null)
             {
@@ -274,20 +275,21 @@ namespace Exam_Objective.Controllers
                 return RedirectToAction("Index", "Student");
             }
             // สร้างตัวข้อสอบไว้รอ
-            using(var DB = new dbEntities())
+            using (var DB = new dbEntities())
             {
                 if (DB.ExamBody.Where(eb => eb.ExamtopicID == etid).Count() == 0)
                 {
-                    DB.ExamBody.Add(new ExamBody {
+                    DB.ExamBody.Add(new ExamBody
+                    {
                         ExamBodyID = (DB.ExamBody.Count() != 0) ? DB.ExamBody.Max(e => e.ExamBodyID) + 1 : 1,
                         ExamtopicID = etid,
-                       
+
                     });
-                DB.SaveChanges();
+                    DB.SaveChanges();
                 }
                 ViewBag.DataExambodyID = (from e in DB.ExamBody where e.ExamtopicID == etid select e.ExamBodyID).FirstOrDefault();
             }
-             // รายละเอียดวิชา
+            // รายละเอียดวิชา
             using (var DB = new dbEntities())
             {
                 var SubjectData = (from s in DB.Subjects
@@ -322,7 +324,8 @@ namespace Exam_Objective.Controllers
             {
                 var Examto = (from e in DB.ExamTopic
                               where e.ExamtopicID == etid
-                              select new ExamTopicModel {
+                              select new ExamTopicModel
+                              {
                                   ExamtopicID = e.ExamtopicID,
                                   ExamtopicName = e.ExamtopicName,
                                   Explantion = e.Explantion
@@ -334,8 +337,8 @@ namespace Exam_Objective.Controllers
             {
                 var LessonData = (from l in DB.Lesson
                                   let countobj = (from o in DB.Objective
-                                                where o.LessonID == l.LessonID
-                                                select l).Count()
+                                                  where o.LessonID == l.LessonID
+                                                  select l).Count()
                                   where user.UserID == l.UserID && l.SubjectID == subid
                                   orderby l.LessonID
                                   select new LessonModel
@@ -348,16 +351,17 @@ namespace Exam_Objective.Controllers
                 ViewBag.Lesson = LessonData;
             }
             // วัตถุประสงค์
-            using(var DB = new dbEntities())
+            using (var DB = new dbEntities())
             {
                 var dataObj = (from o in DB.Objective
                                join l in DB.Lesson on o.LessonID equals l.LessonID
-                               let oPropos = (         
+                               let oPropos = (
                                           from p in DB.Proposition
                                           where p.ObjID == o.ObjID
                                           select o).Count()
                                where l.UserID == user.UserID && l.SubjectID == subid
-                               select new ObjectiveModel {
+                               select new ObjectiveModel
+                               {
                                    ObjID = o.ObjID,
                                    ObjName = o.ObjName,
                                    TextObj = o.TextObj,
@@ -367,7 +371,7 @@ namespace Exam_Objective.Controllers
                 ViewBag.DataObjective = dataObj;
             }
             // รายละเอียดข้อสอบแต่ละข้อในวิชานี้
-            using(var DB = new dbEntities())
+            using (var DB = new dbEntities())
             {
                 var DataQuiz = (from l in DB.Lesson
                                 join o in DB.Objective on l.LessonID equals o.LessonID
@@ -398,11 +402,11 @@ namespace Exam_Objective.Controllers
                                         ExamBodyID = g.ExamBodyID,
                                         ProposID = g.ProposID,
                                         ProposName = p.ProposName,
-                                       LessonID = l.LessonID,
-                                       LesName = l.LesName
+                                        LessonID = l.LessonID,
+                                        LesName = l.LesName
                                     }).ToList();
             }
-                return View();
+            return View();
         }
 
         public JsonResult AddQuiz(SelectQuizModel selectQ)
@@ -410,14 +414,14 @@ namespace Exam_Objective.Controllers
             var jsonreturn = new JsonRespone();
             try
             {
-                using(var DB = new dbEntities())
+                using (var DB = new dbEntities())
                 {
-                    for(var i = 0; i < selectQ.ProposID.Length; i++)
+                    for (var i = 0; i < selectQ.ProposID.Length; i++)
                     {
-                        DB.GetExam.Add(new GetExam {ExamBodyID = selectQ.ExamBodyID,ProposID = selectQ.ProposID[i] });DB.SaveChanges();
+                        DB.GetExam.Add(new GetExam { ExamBodyID = selectQ.ExamBodyID, ProposID = selectQ.ProposID[i] }); DB.SaveChanges();
                     }
                     jsonreturn = new JsonRespone { status = true, message = "บันทึกเรียบร้อย" };
-                }     
+                }
             }
             catch (Exception ex)
             {
@@ -520,17 +524,17 @@ namespace Exam_Objective.Controllers
             {
                 return RedirectToAction("Index", "Student");
             }
-            using(var DB = new dbEntities())
+            using (var DB = new dbEntities())
             {
                 ViewBag.dataGroup = (from gg in DB.TestGroup
                                      where gg.GroupID == g
                                      select gg.GroupName).FirstOrDefault();
             }
-            using(var DB = new dbEntities())
+            using (var DB = new dbEntities())
             {
                 ViewBag.dataSubject = (from s in DB.Subjects where s.SubjectID == subjid && s.UserID == user.UserID select s.SubjectName).FirstOrDefault();
             }
-            using(var DB = new dbEntities())
+            using (var DB = new dbEntities())
             {
                 var dataextopic = (from e in DB.ExamTopic
                                    where e.ExamtopicID == extopic
@@ -547,47 +551,47 @@ namespace Exam_Objective.Controllers
                 ViewBag.DataExamtopic = dataextopic;
 
                 var dataProp = (from ex in DB.GetExam
-                                           join p in DB.Proposition on ex.ProposID equals p.ProposID
-                                           where ex.ExamBodyID == exbody
-                                           select new PropositionModel
-                                           {
-                                               ProposID = ex.ProposID,
-                                               ProposName = p.ProposName,
-                                               TextPropos = p.TextPropos,
-                                               Continuity = p.Continuity
-                                           }).ToList();
+                                join p in DB.Proposition on ex.ProposID equals p.ProposID
+                                where ex.ExamBodyID == exbody
+                                select new PropositionModel
+                                {
+                                    ProposID = ex.ProposID,
+                                    ProposName = p.ProposName,
+                                    TextPropos = p.TextPropos,
+                                    Continuity = p.Continuity
+                                }).ToList();
                 if (dataextopic[0].Sequences.Equals("1") || dataextopic[0].Sequences.Equals("3"))
                 {
                     dataProp.Shuff();
                 }
                 ViewBag.dataProposition = dataProp;
-           
-                var dataChoices = (from ex in DB.GetExam
-                                      join c in DB.Choice on ex.ProposID equals c.ProposID
-                                      let countans = (from ca in DB.Choice where ca.ProposID == ex.ProposID && ca.Answer > 0 select ex).Count()
-                                      where ex.ExamBodyID == exbody
-                                      orderby c.ChoiceID
-                                      select new ChoiceModel
-                                      {
-                                          ProposID = ex.ProposID,
-                                          ChoiceID = c.ChoiceID,
-                                          TextChoice = c.TextChoice,
-                                          Answer = c.Answer,
-                                          countAnswer = countans
-                                      }).ToList();
 
-            if (dataextopic[0].Sequences.Equals("2") || dataextopic[0].Sequences.Equals("3"))
-            {
+                var dataChoices = (from ex in DB.GetExam
+                                   join c in DB.Choice on ex.ProposID equals c.ProposID
+                                   let countans = (from ca in DB.Choice where ca.ProposID == ex.ProposID && ca.Answer > 0 select ex).Count()
+                                   where ex.ExamBodyID == exbody
+                                   orderby c.ChoiceID
+                                   select new ChoiceModel
+                                   {
+                                       ProposID = ex.ProposID,
+                                       ChoiceID = c.ChoiceID,
+                                       TextChoice = c.TextChoice,
+                                       Answer = c.Answer,
+                                       countAnswer = countans
+                                   }).ToList();
+
+                if (dataextopic[0].Sequences.Equals("2") || dataextopic[0].Sequences.Equals("3"))
+                {
                     List<int> checkChoice = new List<int>();
-                    foreach(var datac in dataChoices)
+                    foreach (var datac in dataChoices)
                     {
-                        if(datac.ChoiceID == 4 && datac.TextChoice.Length > 13)
+                        if (datac.ChoiceID == 4 && datac.TextChoice.Length > 13)
                         {
                             if (datac.TextChoice.Substring(3, 7).Equals("ถูกทั้ง"))
                             {
                                 checkChoice.Add(datac.ProposID);
                             }
-                            else if (datac.TextChoice.Substring(3, 9).Equals("ถูกทุกข้อ")) 
+                            else if (datac.TextChoice.Substring(3, 9).Equals("ถูกทุกข้อ"))
                             {
                                 checkChoice.Add(datac.ProposID);
                             }
@@ -595,15 +599,15 @@ namespace Exam_Objective.Controllers
                             {
                                 checkChoice.Add(datac.ProposID);
                             }
-                            else if (datac.TextChoice.Length>15&&datac.TextChoice.Substring(3, 13).Equals("ไม่มีข้อใดถูก"))
+                            else if (datac.TextChoice.Length > 15 && datac.TextChoice.Substring(3, 13).Equals("ไม่มีข้อใดถูก"))
                             {
                                 checkChoice.Add(datac.ProposID);
-                            }                           
+                            }
                         }
                     }
                     ViewBag.dataCheck = checkChoice;
-            }
-                
+                }
+
                 ViewBag.dataChoice = dataChoices;
             }
             return View();
@@ -648,7 +652,7 @@ namespace Exam_Objective.Controllers
                 var dataUserStudent = (from t in DB.Testing
                                        where t.ExamBodyID == (from eb in DB.ExamBody where eb.ExamtopicID == etid select eb.ExamBodyID).FirstOrDefault()
                                        select new { t.ExamBodyID, t.UserID }).DistinctBy(e => e.UserID).ToList();
-               
+
                 foreach (var r in dataUserStudent)
                 {
                     int numberoftime = (from t in DB.Testing
@@ -670,8 +674,8 @@ namespace Exam_Objective.Controllers
                                 foreach (var a in dataTesting)
                                 {
                                     if (c.ProposID == a.ProposID && a.ChoiceID == Int16.Parse(strchoice[i]))
-                                    {  
-                                            score = a.Answer > 0 ? score + (float)a.Answer : score - 0.5f;    
+                                    {
+                                        score = a.Answer > 0 ? score + (float)a.Answer : score - 0.5f;
                                     }
                                 }
                             }
@@ -682,16 +686,17 @@ namespace Exam_Objective.Controllers
                             {
                                 if (c.ProposID == a.ProposID && c.AnswerStudent.Equals(a.ChoiceID.ToString()))
                                 {
-                                    if(a.Answer > 0)
-                                    score = score + (float)a.Answer;
+                                    if (a.Answer > 0)
+                                        score = score + (float)a.Answer;
                                 }
                             }
                         }
                     }
                     float scoresper = (score * 100) / dataTestAns.Count;
-                   
+
                     DataScoreStudent.Add(new ScoreStudent
-                    { Score = score,
+                    {
+                        Score = score,
                         Scoreper = scoresper,
                         countQuiz = dataTestAns.Count,
                         Fname = (from u in DB.UserSystem where u.UserID == r.UserID select u.Fname).FirstOrDefault(),
@@ -713,9 +718,9 @@ namespace Exam_Objective.Controllers
             List<ScoreStudent> DataScoreStudent = new List<ScoreStudent>();
             using (var DB = new dbEntities())
             {
-                 subjectName = (from s in DB.Subjects where s.SubjectID == subid && s.UserID == user.UserID select s.SubjectName).FirstOrDefault();
-                 groupName = (from gr in DB.TestGroup where gr.GroupID == g select gr.GroupName).FirstOrDefault();
-                 ExamtopicName = (from e1 in DB.ExamTopic where e1.ExamtopicID == etid select e1.ExamtopicName).FirstOrDefault();
+                subjectName = (from s in DB.Subjects where s.SubjectID == subid && s.UserID == user.UserID select s.SubjectName).FirstOrDefault();
+                groupName = (from gr in DB.TestGroup where gr.GroupID == g select gr.GroupName).FirstOrDefault();
+                ExamtopicName = (from e1 in DB.ExamTopic where e1.ExamtopicID == etid select e1.ExamtopicName).FirstOrDefault();
 
                 var dataUserStudent = (from t in DB.Testing
                                        where t.ExamBodyID == (from eb in DB.ExamBody where eb.ExamtopicID == etid select eb.ExamBodyID).FirstOrDefault()
@@ -773,14 +778,14 @@ namespace Exam_Objective.Controllers
 
             ExcelPackage pck = new ExcelPackage();
             ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Report");
-          
+
             // Header ExCEL FILE
             ws.Cells["A1"].Value = "วิชา";
             ws.Cells["B1"].Value = subjectName;
             ws.Cells["A2"].Value = "ชื่อแบบทดสอบ";
             ws.Cells["B2"].Value = ExamtopicName;
             ws.Cells["A3"].Value = "จำนวน";
-            ws.Cells["B3"].Value = DataScoreStudent[0].countQuiz+" ข้อ";
+            ws.Cells["B3"].Value = DataScoreStudent[0].countQuiz + " ข้อ";
             ws.Cells["A4"].Value = "กลุ่มเรียน";
             ws.Cells["B4"].Value = groupName;
             ws.Cells["A5"].Value = "อาจารย์ผู้สอน";
@@ -793,7 +798,7 @@ namespace Exam_Objective.Controllers
             ws.Cells["D8"].Value = "คะแนนเปอร์เซ็น";
 
             int rowNuber = 9;
-            foreach(var dataScore in DataScoreStudent)
+            foreach (var dataScore in DataScoreStudent)
             {
                 ws.Cells[string.Format("A{0}", rowNuber)].Value = dataScore.StudentID;
                 ws.Cells[string.Format("B{0}", rowNuber)].Value = dataScore.Fname + " " + dataScore.Lname;
@@ -805,29 +810,29 @@ namespace Exam_Objective.Controllers
             ws.Cells["A:AZ"].AutoFitColumns();
             Response.Clear();
             Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            Response.AddHeader("content-disposition", "attachment; filename="+ ExamtopicName + "-"+subjectName+"-"+groupName+".xlsx");
+            Response.AddHeader("content-disposition", "attachment; filename=" + ExamtopicName + "-" + subjectName + "-" + groupName + ".xlsx");
             Response.BinaryWrite(pck.GetAsByteArray());
             Response.Flush();
             Response.End();
 
         }
-       // Export File .CSV .xls .xlsx .dat .txt 
+        // Export File .CSV .xls .xlsx .dat .txt 
         public void ExportForAnalyze(int etid, string subid, string fileExtension)
         {
             var user = Session["User"] as UserSystemModel;
-            var subjectName = "";       
+            var subjectName = "";
             var ExamtopicName = "";
 
             StringBuilder csvDefault = new StringBuilder();
             StringBuilder txtDefault = new StringBuilder();
             ExcelPackage xlPackage = new ExcelPackage();
             ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add("Inventory");
-           
+
             using (var DB = new dbEntities())
             {
                 subjectName = (from s in DB.Subjects where s.SubjectID == subid && s.UserID == user.UserID select s.SubjectName).FirstOrDefault();
                 ExamtopicName = (from e1 in DB.ExamTopic where e1.ExamtopicID == etid select e1.ExamtopicName).FirstOrDefault();
-            
+
                 var dataUserStudent = (from t in DB.Testing
                                        where t.ExamBodyID == (from eb in DB.ExamBody where eb.ExamtopicID == etid select eb.ExamBodyID).FirstOrDefault()
                                        select new { t.ExamBodyID, t.UserID }).DistinctBy(e => e.UserID).ToList();
@@ -835,61 +840,70 @@ namespace Exam_Objective.Controllers
                 var dataAnswers = (from ge in DB.GetExam
                                    where ge.ExamBodyID == (from eb in DB.ExamBody where eb.ExamtopicID == etid select eb.ExamBodyID).FirstOrDefault()
                                    orderby ge.ProposID
-                                   select new {ge.ProposID}
+                                   select new { ge.ProposID }
                                    ).ToList();
 
-                int xlRows = 1, xlCol = 1;
-                foreach(var c in dataAnswers) {
-                    csvDefault.Append("" + c.ProposID + ",");
-                    txtDefault.Append("" + c.ProposID + ",");
-                    worksheet.Cells[1, xlCol].Value = c.ProposID;
+                int xlRows = 1, xlCol = 2;
+                csvDefault.Append("ID,");
+                worksheet.Cells[1, 1].Value = "ID";
+                foreach (var c in dataAnswers)
+                {
+                    csvDefault.Append("ans" + xlCol + ",");                   
+                    worksheet.Cells[1, xlCol].Value = "ans" + xlCol;
                     xlCol++;
                 }
-
+               
                 csvDefault.Append("\r\n");
-                txtDefault.Append("\r\n");
-                xlCol = 1;
-                foreach(var c in dataAnswers)
+               // txtDefault.Append("\r\n");
+                xlCol = 2;
+                txtDefault.Append("000000000000000000000Y  0000     0Y   S                  ");
+                foreach (var c in dataAnswers)
                 {
-                   csvDefault.Append((from ch in DB.Choice where ch.ProposID == c.ProposID && ch.Answer == 1 select ch.ChoiceID).FirstOrDefault()+","); 
-                   txtDefault.Append((from ch in DB.Choice where ch.ProposID == c.ProposID && ch.Answer == 1 select ch.ChoiceID).FirstOrDefault());
+                    csvDefault.Append((from ch in DB.Choice where ch.ProposID == c.ProposID && ch.Answer == 1 select ch.ChoiceID).FirstOrDefault() + ",");
+                    txtDefault.Append((from ch in DB.Choice where ch.ProposID == c.ProposID && ch.Answer == 1 select ch.ChoiceID).FirstOrDefault());
                     worksheet.Cells[2, xlCol].Value = (from ch in DB.Choice where ch.ProposID == c.ProposID && ch.Answer == 1 select ch.ChoiceID).FirstOrDefault();
                     xlCol++;
                 }
 
-                xlCol = 1; xlRows = 3;
+                xlCol = 2; xlRows = 3;
                 foreach (var r in dataUserStudent)
                 {
                     csvDefault.Append("\r\n");
                     txtDefault.Append("\r\n");
-                    var dataTesting = (from t in DB.Testing        
+                    var idstudent = (from u in DB.UserSystem where u.UserID == r.UserID select u.StudentID).FirstOrDefault();
+                    txtDefault.Append("000000000000000000000Y  0000     0 Y  S "+Regex.Replace(idstudent, @"[^\d]","")+"00000");
+                    worksheet.Cells[xlRows, 1].Value = "" + Regex.Replace(idstudent, @"[^\d]", "");
+                    var dataTesting = (from t in DB.Testing
                                        where t.ExamBodyID == r.ExamBodyID && t.UserID == r.UserID
                                        orderby t.ProposID
-                                       select new {t.ProposID, t.AnswerStudent }).ToList();
+                                       select new { t.ProposID, t.AnswerStudent}).ToList();
 
 
                     foreach (var c in dataTesting)
                     {
                         if (c.AnswerStudent.Length > 1)
-                        {
-                            csvDefault.Append("0,");
-                            txtDefault.Append("0");
-                            worksheet.Cells[xlRows, xlCol].Value = 0;
+                        { 
+                                csvDefault.Append("0,");
+                                txtDefault.Append("0");
+                                worksheet.Cells[xlRows, xlCol].Value = 0;
+                                    
                         }
-                        else {
-                            csvDefault.Append(c.AnswerStudent+",");
-                            txtDefault.Append(c.AnswerStudent);
-                            worksheet.Cells[xlRows, xlCol].Value = Int32.Parse(c.AnswerStudent);
+                        else
+                        {                         
+                           
+                                csvDefault.Append(c.AnswerStudent + ",");
+                                txtDefault.Append(c.AnswerStudent);
+                                worksheet.Cells[xlRows, xlCol].Value = Int32.Parse(c.AnswerStudent);                           
                         }
                         xlCol++;
                     }
                     xlRows++;
-                    xlCol = 1;
+                    xlCol = 2;
                 }
-               
+
             }
 
-                if (fileExtension.Equals("txt") || fileExtension.Equals("dat"))
+            if (fileExtension.Equals("txt") || fileExtension.Equals("dat"))
             {
                 byte[] bytes = Encoding.ASCII.GetBytes(txtDefault.ToString());
                 Response.Clear();
@@ -902,7 +916,7 @@ namespace Exam_Objective.Controllers
                 byte[] bytes = Encoding.ASCII.GetBytes(csvDefault.ToString());
                 Response.Clear();
                 Response.ContentType = "text/plain";
-                Response.AddHeader("content-disposition", "attachment; filename="+ExamtopicName.ToString()+"-"+subjectName+".csv");
+                Response.AddHeader("content-disposition", "attachment; filename=" + ExamtopicName.ToString() + "-" + subjectName + ".csv");
                 Response.BinaryWrite(bytes);
             }
             else if (fileExtension.Equals("xlsx"))
@@ -921,7 +935,7 @@ namespace Exam_Objective.Controllers
         {
             var user = Session["User"] as UserSystemModel;
             List<HardCopyModel> h = new List<HardCopyModel>();
-           
+
             if (user == null)
             {
                 return RedirectToAction("Login", "Login");
@@ -943,25 +957,27 @@ namespace Exam_Objective.Controllers
             }
             return View();
         }
-       
+
         // Hard-Copy Get file.    
-        [HttpPost]
-        public JsonResult ExportDoc(HardCopyModel datah)
+
+        public void ExportDoc(int etid, string subid, int exbo)
         {
             var user = Session["User"] as UserSystemModel;
             var jsonreturn = new JsonRespone();
-          
+
             try
             {
+                string filename = "Word_Test_" + DateTime.Now.ToString("yyyyMMddHHmm") + ".docx";
+                string contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
                 StringBuilder html = new StringBuilder();
 
                 html.Append("<body>");
-               
+
                 using (var DB = new dbEntities())
                 {
                     var dataProp = (from ex in DB.GetExam
                                     join p in DB.Proposition on ex.ProposID equals p.ProposID
-                                    where ex.ExamBodyID == datah.ExamBodyID
+                                    where ex.ExamBodyID == exbo
                                     select new PropositionModel
                                     {
                                         ProposID = ex.ProposID,
@@ -973,7 +989,7 @@ namespace Exam_Objective.Controllers
                     var dataChoices = (from ex in DB.GetExam
                                        join c in DB.Choice on ex.ProposID equals c.ProposID
                                        let countans = (from ca in DB.Choice where ca.ProposID == ex.ProposID && ca.Answer > 0 select ex).Count()
-                                       where ex.ExamBodyID == datah.ExamBodyID
+                                       where ex.ExamBodyID == exbo
                                        orderby c.ChoiceID
                                        select new ChoiceModel
                                        {
@@ -984,31 +1000,31 @@ namespace Exam_Objective.Controllers
                                            countAnswer = countans
                                        }).ToList();
                     var datasubject = (from s in DB.Subjects
-                                       where s.SubjectID == datah.SubjectID && s.UserID == user.UserID
+                                       where s.SubjectID == subid && s.UserID == user.UserID
                                        select new SubjectsModel
                                        {
                                            SubjectID = s.SubjectID,
                                            SubjectName = s.SubjectName
                                        }).ToList();
                     var dataExto = (from e in DB.ExamTopic
-                                     where e.ExamtopicID == datah.ExamtopicID
-                                     select new ExamTopicModel
-                                     {
-                                         ExamtopicName = e.ExamtopicName,
-                                         DatetoBegin = e.DatetoBegin,
-                                         TimetoBegin = e.TimetoBegin,
-                                         TimetoEnd = e.TimetoEnd
-                                     }).ToList();
+                                    where e.ExamtopicID == etid
+                                    select new ExamTopicModel
+                                    {
+                                        ExamtopicName = e.ExamtopicName,
+                                        DatetoBegin = e.DatetoBegin,
+                                        TimetoBegin = e.TimetoBegin,
+                                        TimetoEnd = e.TimetoEnd
+                                    }).ToList();
 
                     string[] mouth_TH = { "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม" };
                     string timebegin = dataExto[0].TimetoBegin.Hours + "." + dataExto[0].TimetoBegin.Minutes;
                     string timeend = dataExto[0].TimetoEnd.Hours + "." + dataExto[0].TimetoEnd.Minutes;
                     // Header file test
-                    html.Append("<p>ข้อสอบวิชา"+datasubject[0].SubjectName+ "&nbsp;(" + datasubject[0].SubjectID+ ")&nbsp;สาขาวิชาวิศวกรรมคอมพิวเตอร์</p>");
+                    html.Append("<p>ข้อสอบวิชา" + datasubject[0].SubjectName + "&nbsp;(" + datasubject[0].SubjectID + ")&nbsp;สาขาวิชาวิศวกรรมคอมพิวเตอร์</p>");
                     html.Append("<p>คณะวิศวกรรมศาสตร์และสถาปัตยกรรมศาสตร์&nbsp;มหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน</p>");
-                    html.Append("<p>"+dataExto[0].ExamtopicName+ "&nbsp;วันที่&nbsp;" + dataExto[0].DatetoBegin.Day+ "&nbsp;" + mouth_TH[dataExto[0].DatetoBegin.Month-1]+ "&nbsp;" + dataExto[0].DatetoBegin.Year+ "&nbsp;&nbsp;เวลา&nbsp;"+timebegin+"-"+timeend+ "&nbsp;น</p>");
+                    html.Append("<p>" + dataExto[0].ExamtopicName + "&nbsp;วันที่&nbsp;" + dataExto[0].DatetoBegin.Day + "&nbsp;" + mouth_TH[dataExto[0].DatetoBegin.Month - 1] + "&nbsp;" + dataExto[0].DatetoBegin.Year + "&nbsp;&nbsp;เวลา&nbsp;" + timebegin + "-" + timeend + "&nbsp;น</p>");
                     html.Append("<p>____________________________________________________________________________________</p>");
-                   var i = 0;
+                    var i = 0;
                     var j = 0;
                     foreach (var row in dataProp)
                     {
@@ -1083,16 +1099,10 @@ namespace Exam_Objective.Controllers
                 }
 
                 html.Append("</body>");
-                // Create file Document .docx
-                string logPath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "\\temp\\";
-                if (!Directory.Exists(logPath))
+                // Create file Document .docx                            
+                using (MemoryStream generatedDocument = new MemoryStream())
                 {
-                    Directory.CreateDirectory(logPath);
-                }
-                var fileName1 = "Word_Test_" + DateTime.Now.ToString("yyyyMMddHHmm")+".docx";
-                //save the file to server temp folder
-                string fullPath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase+ "\\temp\\" + fileName1;
-                using (WordprocessingDocument package = WordprocessingDocument.Create(fullPath, WordprocessingDocumentType.Document))
+                    using (WordprocessingDocument package = WordprocessingDocument.Create(generatedDocument, WordprocessingDocumentType.Document))
                     {
                         MainDocumentPart mainPart = package.MainDocumentPart;
                         if (mainPart == null)
@@ -1106,6 +1116,8 @@ namespace Exam_Objective.Controllers
 
                         Body body = mainPart.Document.Body;
 
+
+
                         var paragraphs = converter.Parse(html.ToString());
 
                         for (int i = 0; i < paragraphs.Count; i++)
@@ -1116,28 +1128,46 @@ namespace Exam_Objective.Controllers
                         mainPart.Document.Save();
 
                     }
-                  
-                    return Json(new { fileName = fileName1, message = "" });
-                   
+
+                    byte[] bytesInStream = generatedDocument.ToArray(); // simpler way of converting to array
+                    generatedDocument.Close();
+
+                    Response.Clear();
+                    Response.ContentType = contentType;
+                    Response.AddHeader("content-disposition", "attachment;filename=" + filename);
+
+                    //this will generate problems
+                    Response.BinaryWrite(bytesInStream);
+                    try
+                    {
+                        Response.Flush();
+                        Response.End();
+                    }
+                    catch (Exception ex)
+                    {
+                        //Response.End(); generates an exception. if you don't use it, you get some errors when Word opens the file...
+                    }
+
+                }
+
+
             }
             catch (Exception ex)
             {
-                return Json(new { fileName = "", message = "Error"+ex.Message });
-            }
 
-            
-            //return new JsonResult();
+            }
         }
 
         // AnswerHardCopy
-        [HttpPost]
-        public JsonResult ExportDocans(HardCopyModel datah)
+        public void ExportDocans(int etid, string subid, int exbo)
         {
             var user = Session["User"] as UserSystemModel;
             var jsonreturn = new JsonRespone();
 
             try
             {
+                string filename = "Word_Answer_" + DateTime.Now.ToString("yyyyMMddHHmm") + ".docx";
+                string contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
                 StringBuilder html = new StringBuilder();
 
                 html.Append("<body>");
@@ -1146,7 +1176,7 @@ namespace Exam_Objective.Controllers
                 {
                     var dataProp = (from ex in DB.GetExam
                                     join p in DB.Proposition on ex.ProposID equals p.ProposID
-                                    where ex.ExamBodyID == datah.ExamBodyID
+                                    where ex.ExamBodyID == exbo
                                     select new PropositionModel
                                     {
                                         ProposID = ex.ProposID,
@@ -1158,7 +1188,7 @@ namespace Exam_Objective.Controllers
                     var dataChoices = (from ex in DB.GetExam
                                        join c in DB.Choice on ex.ProposID equals c.ProposID
                                        let countans = (from ca in DB.Choice where ca.ProposID == ex.ProposID && ca.Answer > 0 select ex).Count()
-                                       where ex.ExamBodyID == datah.ExamBodyID
+                                       where ex.ExamBodyID == exbo
                                        orderby c.ChoiceID
                                        select new ChoiceModel
                                        {
@@ -1169,14 +1199,14 @@ namespace Exam_Objective.Controllers
                                            countAnswer = countans
                                        }).ToList();
                     var datasubject = (from s in DB.Subjects
-                                       where s.SubjectID == datah.SubjectID && s.UserID == user.UserID
+                                       where s.SubjectID == subid && s.UserID == user.UserID
                                        select new SubjectsModel
                                        {
                                            SubjectID = s.SubjectID,
                                            SubjectName = s.SubjectName
                                        }).ToList();
                     var dataExto = (from e in DB.ExamTopic
-                                    where e.ExamtopicID == datah.ExamtopicID
+                                    where e.ExamtopicID == etid
                                     select new ExamTopicModel
                                     {
                                         ExamtopicName = e.ExamtopicName,
@@ -1274,75 +1304,62 @@ namespace Exam_Objective.Controllers
 
                 html.Append("</body>");
                 // Create file Document .docx
-                string logPath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "\\temp\\";
-                if (!Directory.Exists(logPath))
+                using (MemoryStream generatedDocument = new MemoryStream())
                 {
-                    Directory.CreateDirectory(logPath);
-                }
-                var fileName1 = "Word_Answer_" + DateTime.Now.ToString("yyyyMMddHHmm") + ".docx";
-                //save the file to server temp folder
-                string fullPath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "\\temp\\" + fileName1;
-                using (WordprocessingDocument package = WordprocessingDocument.Create(fullPath, WordprocessingDocumentType.Document))
-                {
-                    MainDocumentPart mainPart = package.MainDocumentPart;
-                    if (mainPart == null)
+                    using (WordprocessingDocument package = WordprocessingDocument.Create(generatedDocument, WordprocessingDocumentType.Document))
                     {
-                        mainPart = package.AddMainDocumentPart();
-                        new Document(new Body()).Save(mainPart);
+                        MainDocumentPart mainPart = package.MainDocumentPart;
+                        if (mainPart == null)
+                        {
+                            mainPart = package.AddMainDocumentPart();
+                            new Document(new Body()).Save(mainPart);
+                        }
+
+                        HtmlConverter converter = new HtmlConverter(mainPart);
+                        converter.BaseImageUrl = new Uri(Request.Url.Scheme + "://" + Request.Url.Authority);
+
+                        Body body = mainPart.Document.Body;
+
+
+
+                        var paragraphs = converter.Parse(html.ToString());
+
+                        for (int i = 0; i < paragraphs.Count; i++)
+                        {
+                            body.Append(paragraphs[i]);
+                        }
+
+                        mainPart.Document.Save();
+
                     }
 
-                    HtmlConverter converter = new HtmlConverter(mainPart);
-                    converter.BaseImageUrl = new Uri(Request.Url.Scheme + "://" + Request.Url.Authority);
+                    byte[] bytesInStream = generatedDocument.ToArray(); // simpler way of converting to array
+                    generatedDocument.Close();
 
-                    Body body = mainPart.Document.Body;
+                    Response.Clear();
+                    Response.ContentType = contentType;
+                    Response.AddHeader("content-disposition", "attachment;filename=" + filename);
 
-                    var paragraphs = converter.Parse(html.ToString());
-
-                    for (int i = 0; i < paragraphs.Count; i++)
+                    //this will generate problems
+                    Response.BinaryWrite(bytesInStream);
+                    try
                     {
-                        body.Append(paragraphs[i]);
+                        Response.Flush();
+                        Response.End();
                     }
-
-                    mainPart.Document.Save();
+                    catch (Exception ex)
+                    {
+                        //Response.End(); generates an exception. if you don't use it, you get some errors when Word opens the file...
+                    }
 
                 }
 
-                return Json(new { fileName = fileName1, message = "" });
 
             }
             catch (Exception ex)
             {
-                return Json(new { fileName = "", message = "Error" + ex.Message });
+
             }
-
-
-            //return new JsonResult();
         }
-        [HttpGet]
-        [DeleteFileAttribute] //Action Filter, it will auto delete the file after download, 
-                              //I will explain it later
-        public ActionResult Download(string file)
-        {
-            //get the temp folder and file path in server
-            string fullPath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "\\temp\\" + file;
-
-            //return the file for download, this is an Excel 
-            //so I set the file content type to "application/vnd.ms-excel"
-            return File(fullPath, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", file);
-        }
-
     }
-    public class DeleteFileAttribute : ActionFilterAttribute
-{
-    public override void OnResultExecuted(ResultExecutedContext filterContext)
-    {
-        filterContext.HttpContext.Response.Flush();
-
-        //convert the current filter context to file and get the file path
-        string filePath = (filterContext.Result as FilePathResult).FileName;
-        
-        //delete the file after download
-        System.IO.File.Delete(filePath);
-    }
-}
 }
