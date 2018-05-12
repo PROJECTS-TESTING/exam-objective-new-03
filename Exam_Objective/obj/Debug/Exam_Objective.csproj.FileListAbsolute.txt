@@ -116,3 +116,7 @@ D:\GitHub\exam-objective-new-03\Exam_Objective\obj\Debug\Exam_Objective.dll
 D:\GitHub\exam-objective-new-03\Exam_Objective\obj\Debug\Exam_Objective.pdb
 D:\GitHub\exam-objective-new-03\Exam_Objective\obj\Debug\Exam_Objective.csprojResolveAssemblyReference.cache
 F:\VisualStudio\exam-objective-new-03\Exam_Objective\obj\Debug\Exam_Objective.csprojResolveAssemblyReference.cache
+D:\GitHub\exam-objective-new-03\Exam_Objective\bin\HtmlToOpenXml.pdb
+D:\GitHub\exam-objective-new-03\Exam_Objective\bin\HtmlToOpenXml.xml
+D:\GitHub\exam-objective-new-03\Exam_Objective\bin\WordGenerator.pdb
+D:\GitHub\exam-objective-new-03\Exam_Objective\bin\WordGenerator.dll.config
