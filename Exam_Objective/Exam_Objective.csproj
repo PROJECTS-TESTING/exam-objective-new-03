@@ -229,6 +229,7 @@
       <DependentUpon>ExamSystemModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ExamTopicModel.cs" />
+    <Compile Include="Models\FilexmlModel.cs" />
     <Compile Include="Models\GetExam.cs">
       <DependentUpon>ExamSystemModel.tt</DependentUpon>
     </Compile>
@@ -468,6 +469,7 @@
     <Content Include="Content\Plugins\line-icons\line-icons.css" />
     <Content Include="Content\Plugins\line-icons\Readme.txt" />
     <Content Include="Content\Plugins\line-icons\style.css" />
+    <Content Include="Content\Plugins\sky-forms\version-2.0.1\css\custom-sky-forms.css" />
     <Content Include="Content\sampleinbootstrapv3\bootstrap\css\bootstrap-theme.css" />
     <Content Include="Content\sampleinbootstrapv3\bootstrap\css\bootstrap-theme.min.css" />
     <Content Include="Content\sampleinbootstrapv3\bootstrap\css\bootstrap.css" />
@@ -22465,6 +22467,7 @@
     <Content Include="Scripts\tinymce\plugins\paste\plugin.min.js" />
     <Content Include="Scripts\tinymce\plugins\preview\plugin.min.js" />
     <Content Include="Scripts\tinymce\plugins\print\plugin.min.js" />
+    <Content Include="Scripts\tinymce\plugins\psuedo\plugin.min.js" />
     <Content Include="Scripts\tinymce\plugins\save\plugin.min.js" />
     <Content Include="Scripts\tinymce\plugins\searchreplace\plugin.min.js" />
     <Content Include="Scripts\tinymce\plugins\spellchecker\plugin.min.js" />
@@ -22900,6 +22903,7 @@
     <Content Include="Scripts\tinymce\skins\lightgray\fonts\tinymce.eot" />
     <Content Include="Scripts\tinymce\skins\lightgray\fonts\tinymce.ttf" />
     <Content Include="Scripts\tinymce\skins\lightgray\fonts\tinymce.woff" />
+    <Content Include="Views\ExamBank\Success.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

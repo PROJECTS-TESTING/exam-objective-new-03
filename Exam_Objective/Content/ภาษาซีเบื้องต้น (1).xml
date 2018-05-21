@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<ArrayOfDataImportExport xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DataImportExport>
+    <ProposName>Basic C-1</ProposName>
+    <TextPropos>&lt;p&gt;ตัวแปร Int เอาเก็บข้อมูลประเภทอะไร&lt;/p&gt;</TextPropos>
+    <ScoreMain>1</ScoreMain>
+    <CheckChoice>1</CheckChoice>
+    <Choice1>&lt;p&gt;ตัวเลขจำนวนเต็ม&lt;/p&gt;</Choice1>
+    <ScoreChoice1>1</ScoreChoice1>
+    <Choice2>&lt;p&gt;ตัวอักษร&lt;/p&gt;</Choice2>
+    <ScoreChoice2>0</ScoreChoice2>
+    <Choice3>&lt;p&gt;ตัวเลขทศนิยมสามตำแหน่ง&lt;/p&gt;</Choice3>
+    <ScoreChoice3>0</ScoreChoice3>
+    <Choice4>&lt;p&gt;ไม่มีข้อถูก&lt;/p&gt;</Choice4>
+    <ScoreChoice4>0</ScoreChoice4>
+  </DataImportExport>
+  <DataImportExport>
+    <ProposName>ทดสอบมากกว่าหนึ่งตัวเลือก</ProposName>
+    <TextPropos>&lt;p&gt;ทดสอบมากกว่าหนึ่งตัวเลือก&lt;/p&gt;</TextPropos>
+    <ScoreMain>1</ScoreMain>
+    <CheckChoice>2</CheckChoice>
+    <Choice1>&lt;p&gt;ทดสอบมากกว่าหนึ่งตัวเลือก1&lt;/p&gt;</Choice1>
+    <ScoreChoice1>0</ScoreChoice1>
+    <Choice2>&lt;p&gt;ทดสอบมากกว่าหนึ่งตัวเลือก2&lt;/p&gt;</Choice2>
+    <ScoreChoice2>0</ScoreChoice2>
+    <Choice3>&lt;p&gt;ทดสอบมากกว่าหนึ่งตัวเลือก3&lt;/p&gt;</Choice3>
+    <ScoreChoice3>0.5</ScoreChoice3>
+    <Choice4>&lt;p&gt;ทดสอบมากกว่าหนึ่งตัวเลือก4&lt;/p&gt;</Choice4>
+    <ScoreChoice4>0.5</ScoreChoice4>
+  </DataImportExport>
+  <DataImportExport>
+    <ProposName>ทดสอบสมการ</ProposName>
+    <TextPropos>&lt;p&gt;จงแก้สมการต่อไปนี้&amp;nbsp;&lt;img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEQAAAAaCAYAAAAOl/o1AAADPklEQVRYR+2YS6iNURTHf3cgr5KQCWKgDEXeTAyEAcojRYoQ5RHllsibDBQhQhl5hKRE5JEiykBC8hoYkBEG8ioD6X/tddtn3++cs/e+h+5Xd9epc/a39/r+67/X+q+1TxOdo4KBpgQ+vgE9E9aXbelDYHwsIV2Am8DksnmZijeWkLHAXKA59QVlWx9LyBrgA3CpbA6m4o0l5DSwDvgU8YLuwAFgHDAfeB2x518uMTwrgK3ALmAicB94GmKMJeQWMCUStQD0AxRVJzsAIeuBa8A7YIPTwgnu0ETMEOCM+RZDSC/gGLAgkhAtEyk7OgAhwtED+Az0BUYCj4EfwE93yPqt5y0jhpDpwFDgcAkJMchbgJ1eimj+PDDcS6MKQnoDd4HRwK/A8e3AVeBRiQkx6GGKKIKURkctShQh3RwZY4CZwJXAcVUWldzfwbyxrmkTK1vyv1JmmHfSRTg0Nwh474AJs8T0mSNA+5cC21wKtaTMOUAio40nAKmxP0TQjAIy7gAPgIWAqtAk91u5KpGaWqTiCVFWb2nojJGzzxNJv8LInjBqiBSN44BEV3rSmjJ9gO/AS6ArMMBDIu1YBmz05uSwPm/cnAFZ5Qip50i15wpnnaAIbhW5GsZmuYphzpjz6pdUWrOGL6oSHQEaATxx1gROd5jLNaxrzaIERxpFSGjHIlNkKHKzhk+INSsiZbezdsipc7WGTGvf+nU8C8XfTakREr5KWCyNs2H4hOj7V+C56zJl9GxB/2GaYS8NBTUXTC4hvri36TxTwYR9yEVgNtAf+OJEdkkNowIzp0Eteg4hfuNlGqLOM1aH2rgWErLckbAYeAWMAo7UICRXUP1KVO8QUyJQeJTma3OvDCEhA13NVqTcc+Kk1rbaaDcAz3BOhDRcWIta9xfAYOCCa1rChswHISdUYSpqeb0jr/K8EYTogNRZr44s3XVTRgt0dddV/3Zwww31QmG/B9ic+/IATSohwqM9phemIacaVXYN3zTgOrAX2BSEtHV4mr7RHvEqiJIUQuT8SmC/Z6fdFUa2ilJG3aoqzLyCe01mNkRtSyEkymDOomrX/4OuOfuYY7TMe2L+Dymzf8nYOwkJKPsDHTK+G32L9BcAAAAASUVORK5CYII=" alt="MathML (base64):PG1hdGg+CiAgICA8bXNxcnQgbWF0aHNpemU9IjE4Ij4KICAgICAgICA8bXN1cD4KICAgICAgICAgICAgPG1pPjM8L21pPgogICAgICAgICAgICA8bXJvdz4KICAgICAgICAgICAgICAgIDxtbj4xPC9tbj4KICAgICAgICAgICAgPC9tcm93PgogICAgICAgIDwvbXN1cD4KICAgICAgICA8bW8+KzwvbW8+CiAgICAgICAgPG1zdXA+CiAgICAgICAgICAgIDxtcm93PgogICAgICAgICAgICAgICAgPG1uPjM8L21uPgogICAgICAgICAgICA8L21yb3c+CiAgICAgICAgICAgIDxtcm93PgogICAgICAgICAgICAgICAgPG1uPjMzPC9tbj4KICAgICAgICAgICAgPC9tcm93PgogICAgICAgIDwvbXN1cD4KICAgIDwvbXNxcnQ+CjwvbWF0aD4=" width="55" height="21" /&gt;&amp;nbsp;&lt;/p&gt;</TextPropos>
+    <ScoreMain>1</ScoreMain>
+    <CheckChoice>1</CheckChoice>
+    <Choice1>&lt;p&gt;3&lt;/p&gt;</Choice1>
+    <ScoreChoice1>1</ScoreChoice1>
+    <Choice2>&lt;p&gt;33&lt;/p&gt;</Choice2>
+    <ScoreChoice2>0</ScoreChoice2>
+    <Choice3>&lt;p&gt;23&lt;/p&gt;</Choice3>
+    <ScoreChoice3>0</ScoreChoice3>
+    <Choice4>&lt;p&gt;56&lt;/p&gt;</Choice4>
+    <ScoreChoice4>0</ScoreChoice4>
+  </DataImportExport>
+</ArrayOfDataImportExport>

@@ -1,0 +1,213 @@
+<?xml version="1.0"?>
+<ArrayOfDataImportExport xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DataImportExport>
+    <ProposName>Computer Basics-1</ProposName>
+    <TextPropos>&lt;p&gt;เบลส์ ปาสคาล(Blaise Pascal) เป็นนักปรัชญา และนักคณิตศาสตร์ชาวฝรั่งเศส ได้ประดิษฐ์เครื่องบวกเลขแบบใด&lt;/p&gt;</TextPropos>
+    <ScoreMain>1</ScoreMain>
+    <CheckChoice>1</CheckChoice>
+    <Choice1>&lt;p&gt;ที่เราใช้ใช้กันทุกวันนี้&lt;/p&gt;</Choice1>
+    <ScoreChoice1>0</ScoreChoice1>
+    <Choice2>&lt;p&gt;เครื่องที่ใช้ในห้างสรรพสินค้า&lt;/p&gt;</Choice2>
+    <ScoreChoice2>0</ScoreChoice2>
+    <Choice3>&lt;p&gt;ลูกคิด&lt;/p&gt;</Choice3>
+    <ScoreChoice3>1</ScoreChoice3>
+    <Choice4>&lt;p&gt;เครื่องที่สร้างจากฟันเฟือง 8 ตัว&lt;/p&gt;</Choice4>
+    <ScoreChoice4>0</ScoreChoice4>
+  </DataImportExport>
+  <DataImportExport>
+    <ProposName>Computer Basics-2</ProposName>
+    <TextPropos>&lt;p&gt;ชาร์ลแบบเบจ (Charles Babbage)&amp;nbsp;นักคณิตศาสตร์ชาวอังกฤษคิดค้นเครี่องอะไรขึ้นมา&lt;/p&gt;</TextPropos>
+    <ScoreMain>1</ScoreMain>
+    <CheckChoice>1</CheckChoice>
+    <Choice1>&lt;p&gt;เครื่อง Time machine จนโดราเอมอน สามารถใช้เดินทางมาหาโนบิตะได้&lt;/p&gt;</Choice1>
+    <ScoreChoice1>0</ScoreChoice1>
+    <Choice2>&lt;p&gt;Personal Computer เครื่องที่สามของโลกที่สามารถทำงาน graphic&lt;/p&gt;</Choice2>
+    <ScoreChoice2>0</ScoreChoice2>
+    <Choice3>&lt;p&gt;เครื่องคานวณที่เรียกว่าเครื่องหาผลต่าง (Difference Engine)&lt;/p&gt;</Choice3>
+    <ScoreChoice3>1</ScoreChoice3>
+    <Choice4>&lt;p&gt;Slot Machine หรือที่รู้จักกันในนามปีศาจแขนเดียว&lt;/p&gt;</Choice4>
+    <ScoreChoice4>0</ScoreChoice4>
+  </DataImportExport>
+  <DataImportExport>
+    <ProposName>Computer Basics-3</ProposName>
+    <TextPropos>&lt;p&gt;เอดา ออกุสตา&amp;nbsp; ไบรอน ธิดาคนเดียวของลอร์ดไบรอน เอดาไดรับสมญาอะไรจนมีชื่อเสียง&lt;/p&gt;</TextPropos>
+    <ScoreMain>1</ScoreMain>
+    <CheckChoice>1</CheckChoice>
+    <Choice1>&lt;p&gt;Miss internet คนแรกของโลก&lt;/p&gt;</Choice1>
+    <ScoreChoice1>0</ScoreChoice1>
+    <Choice2>&lt;p&gt;นักเขียนโปรแกรมคนแรกของโลก&lt;/p&gt;</Choice2>
+    <ScoreChoice2>1</ScoreChoice2>
+    <Choice3>&lt;p&gt;ผู้ตั้งบริษัทร่วมกับ bill gate แต่เสียชีวิตไปก่อน&lt;/p&gt;</Choice3>
+    <ScoreChoice3>0</ScoreChoice3>
+    <Choice4>&lt;p&gt;Hacker คนที่สอง ต่อจาก Neo ใน Matrix&lt;/p&gt;</Choice4>
+    <ScoreChoice4>0</ScoreChoice4>
+  </DataImportExport>
+  <DataImportExport>
+    <ProposName>Computer Basics-4</ProposName>
+    <TextPropos>&lt;p&gt;ใครที่ได้รับการยกย่องว่าเป็นบิดาแห่งคอมพิวเตอร์&lt;/p&gt;</TextPropos>
+    <ScoreMain>1</ScoreMain>
+    <CheckChoice>1</CheckChoice>
+    <Choice1>&lt;p&gt;Bill gate&lt;/p&gt;</Choice1>
+    <ScoreChoice1>0</ScoreChoice1>
+    <Choice2>&lt;p&gt;Charlse Babbage&lt;/p&gt;</Choice2>
+    <ScoreChoice2>1</ScoreChoice2>
+    <Choice3>&lt;p&gt;Blaise Pascal&lt;/p&gt;</Choice3>
+    <ScoreChoice3>0</ScoreChoice3>
+    <Choice4>&lt;p&gt;Professor Haward Aiken&lt;/p&gt;</Choice4>
+    <ScoreChoice4>0</ScoreChoice4>
+  </DataImportExport>
+  <DataImportExport>
+    <ProposName>Computer Basics-5</ProposName>
+    <TextPropos>&lt;p&gt;ข้อใดไม่ใช่ข้อดีของคอมพิวเตอร์&lt;/p&gt;</TextPropos>
+    <ScoreMain>1</ScoreMain>
+    <CheckChoice>1</CheckChoice>
+    <Choice1>&lt;p&gt;ความเร็วสูง(High speed)&lt;/p&gt;</Choice1>
+    <ScoreChoice1>0</ScoreChoice1>
+    <Choice2>&lt;p&gt;มีความน่าเชื่อถือ (Reliability)&lt;/p&gt;</Choice2>
+    <ScoreChoice2>0</ScoreChoice2>
+    <Choice3>&lt;p&gt;รับคำสั่งจากมนุษย์&lt;/p&gt;</Choice3>
+    <ScoreChoice3>1</ScoreChoice3>
+    <Choice4>&lt;p&gt;สามารถจดจำได้แม่น (Retention)&lt;/p&gt;</Choice4>
+    <ScoreChoice4>0</ScoreChoice4>
+  </DataImportExport>
+  <DataImportExport>
+    <ProposName>Computer Basics-6</ProposName>
+    <TextPropos>&lt;p&gt;ปัจจุบันคอมพิวเตอร์แบบใดมีขนาดเล็กที่สุดในตัวเลือกที่มีให้&lt;/p&gt;</TextPropos>
+    <ScoreMain>1</ScoreMain>
+    <CheckChoice>1</CheckChoice>
+    <Choice1>&lt;p&gt;เมนเฟรมคอมพิวเตอร์(Mainframe computer)&lt;/p&gt;</Choice1>
+    <ScoreChoice1>0</ScoreChoice1>
+    <Choice2>&lt;p&gt;โนตบุ๊คคอมพิวเตอร์ (NoteBook Computer)&lt;/p&gt;</Choice2>
+    <ScoreChoice2>1</ScoreChoice2>
+    <Choice3>&lt;p&gt;ไมโครคอมพิวเตอร์ (Microcomputer)&lt;/p&gt;</Choice3>
+    <ScoreChoice3>0</ScoreChoice3>
+    <Choice4>&lt;p&gt;มินิคอมพิวเตอร์ (Mini Computer)&lt;/p&gt;</Choice4>
+    <ScoreChoice4>0</ScoreChoice4>
+  </DataImportExport>
+  <DataImportExport>
+    <ProposName>Computer Basics-7</ProposName>
+    <TextPropos>&lt;p&gt;ส่วนประกอบของคอมพิวเตอร์มี 5 ส่วน ส่วนใดในตัวเลือกไม่ใช่ส่วนประกอบของคอมพิวเตอร์&lt;/p&gt;</TextPropos>
+    <ScoreMain>1</ScoreMain>
+    <CheckChoice>1</CheckChoice>
+    <Choice1>&lt;p&gt;หน่วยรับ(Input unit)&lt;/p&gt;</Choice1>
+    <ScoreChoice1>0</ScoreChoice1>
+    <Choice2>&lt;p&gt;หน่วยความจำ(Memory unit)&lt;/p&gt;</Choice2>
+    <ScoreChoice2>0</ScoreChoice2>
+    <Choice3>&lt;p&gt;หน่วยคำนวณและตรรก(Arithmetic and logic unit หรือ ALU)&lt;/p&gt;</Choice3>
+    <ScoreChoice3>0</ScoreChoice3>
+    <Choice4>&lt;p&gt;หน่วยบำรุงรักษา(Maintenance unit)&lt;/p&gt;</Choice4>
+    <ScoreChoice4>1</ScoreChoice4>
+  </DataImportExport>
+  <DataImportExport>
+    <ProposName>Computer Basics-8</ProposName>
+    <TextPropos>&lt;p&gt;ข้อใดบรรยายคุณลกษณะของ Random Access Memory ที่ใช้ในเครื่องคอมพิวเตอร์ได้เหมาะสมที่สุด&lt;/p&gt;</TextPropos>
+    <ScoreMain>1</ScoreMain>
+    <CheckChoice>1</CheckChoice>
+    <Choice1>&lt;p&gt;ขนาดที่ใช้งานในเครื่องคอมพิวเตอร์ทั่วไปแบบตั้งโต๊ะคือ 40 Gbyte&lt;/p&gt;</Choice1>
+    <ScoreChoice1>0</ScoreChoice1>
+    <Choice2>&lt;p&gt;ราคาถูกที่สุดเมื่อเทียบกับราคาของหน่วยความจำชนิดอื่น&lt;/p&gt;</Choice2>
+    <ScoreChoice2>0</ScoreChoice2>
+    <Choice3>&lt;p&gt;ความเร็วในการทำงานช้ามากเมื่อเทียบกับการทำงานของหน่วยความจำชนิดอื่น&lt;/p&gt;</Choice3>
+    <ScoreChoice3>0</ScoreChoice3>
+    <Choice4>&lt;p&gt;ข้อมูลที่เก็บจะสูญหายเมื่อปิดเครื่อง&lt;/p&gt;</Choice4>
+    <ScoreChoice4>1</ScoreChoice4>
+  </DataImportExport>
+  <DataImportExport>
+    <ProposName>Computer Basics-9</ProposName>
+    <TextPropos>&lt;p&gt;อุปกรณ์ใดต่อไปนี้ถือว่าเป็นหน่วยรับ (Input unit) ของคอมพิวเตอร์&lt;/p&gt;</TextPropos>
+    <ScoreMain>1</ScoreMain>
+    <CheckChoice>1</CheckChoice>
+    <Choice1>&lt;p&gt;RAM&lt;/p&gt;</Choice1>
+    <ScoreChoice1>0</ScoreChoice1>
+    <Choice2>&lt;p&gt;ROM&lt;/p&gt;</Choice2>
+    <ScoreChoice2>0</ScoreChoice2>
+    <Choice3>&lt;p&gt;Scanner&lt;/p&gt;</Choice3>
+    <ScoreChoice3>1</ScoreChoice3>
+    <Choice4>&lt;p&gt;Monitor&lt;/p&gt;</Choice4>
+    <ScoreChoice4>0</ScoreChoice4>
+  </DataImportExport>
+  <DataImportExport>
+    <ProposName>Computer Basics-10</ProposName>
+    <TextPropos>&lt;p&gt;ข้อใดไม่ใช่ส่วนประกอบของหน่วยประมวลผลกลาง (CPU - Central Processing Unit)&lt;/p&gt;</TextPropos>
+    <ScoreMain>1</ScoreMain>
+    <CheckChoice>1</CheckChoice>
+    <Choice1>&lt;p&gt;หน่วยความจำหลัก (Main memory)&lt;/p&gt;</Choice1>
+    <ScoreChoice1>0</ScoreChoice1>
+    <Choice2>&lt;p&gt;หน่วยคำนวณและตรรก (Arithmetic and Logic Unit - ALU)&lt;/p&gt;</Choice2>
+    <ScoreChoice2>0</ScoreChoice2>
+    <Choice3>&lt;p&gt;หน่วยรับ (Input unit)&lt;/p&gt;</Choice3>
+    <ScoreChoice3>1</ScoreChoice3>
+    <Choice4>&lt;p&gt;หน่วยควบคุม (Control unit)&lt;/p&gt;</Choice4>
+    <ScoreChoice4>0</ScoreChoice4>
+  </DataImportExport>
+  <DataImportExport>
+    <ProposName>Computer Basics-11</ProposName>
+    <TextPropos>&lt;p&gt;การเก็บข้อมูลของคอมพิวเตอร์โดยแท้จริงแลวเก็บในเลขฐานใด&lt;/p&gt;</TextPropos>
+    <ScoreMain>1</ScoreMain>
+    <CheckChoice>1</CheckChoice>
+    <Choice1>&lt;p&gt;เก็บแบบ Analog&lt;/p&gt;</Choice1>
+    <ScoreChoice1>0</ScoreChoice1>
+    <Choice2>&lt;p&gt;ฐาน 2&lt;/p&gt;</Choice2>
+    <ScoreChoice2>1</ScoreChoice2>
+    <Choice3>&lt;p&gt;ฐาน 16&lt;/p&gt;</Choice3>
+    <ScoreChoice3>0</ScoreChoice3>
+    <Choice4>&lt;p&gt;ฐาน 10&lt;/p&gt;</Choice4>
+    <ScoreChoice4>0</ScoreChoice4>
+  </DataImportExport>
+  <DataImportExport>
+    <ProposName>Computer Basics-12</ProposName>
+    <TextPropos>&lt;p&gt;โปรแกรม Trojan hourse มีลักษณะอย่างไร&lt;/p&gt;</TextPropos>
+    <ScoreMain>1</ScoreMain>
+    <CheckChoice>1</CheckChoice>
+    <Choice1>&lt;p&gt;โปรแกรมพักจอภาพแบบ Screen saver&lt;/p&gt;</Choice1>
+    <ScoreChoice1>0</ScoreChoice1>
+    <Choice2>&lt;p&gt;โปรแกรมตรวจสอบไวรัสของ MCAFEE&lt;/p&gt;</Choice2>
+    <ScoreChoice2>0</ScoreChoice2>
+    <Choice3>&lt;p&gt;โปรแกรมอันตรายที่แปลงตัวเองมาในรูปของโปรแกรมที่มีประโยชน์ และแผลงฤทธิ์ทีหลัง&lt;/p&gt;</Choice3>
+    <ScoreChoice3>1</ScoreChoice3>
+    <Choice4>&lt;p&gt;โปรแกรม Format harddisk ที่ทำงานได้รวดเร็วมาก&lt;/p&gt;</Choice4>
+    <ScoreChoice4>0</ScoreChoice4>
+  </DataImportExport>
+  <DataImportExport>
+    <ProposName>Computer Basics-13</ProposName>
+    <TextPropos>&lt;p&gt;ขั้นตอนใดต่อไปนี้ไม่อยู่ในลำลับการประมวลผล&lt;/p&gt;</TextPropos>
+    <ScoreMain>1</ScoreMain>
+    <CheckChoice>1</CheckChoice>
+    <Choice1>&lt;p&gt;คำนวณ (Calculating)&lt;/p&gt;</Choice1>
+    <ScoreChoice1>0</ScoreChoice1>
+    <Choice2>&lt;p&gt;เปรียบเทียบ (Comparing)&lt;/p&gt;</Choice2>
+    <ScoreChoice2>0</ScoreChoice2>
+    <Choice3>&lt;p&gt;สื่อสาร (Communication)&lt;/p&gt;</Choice3>
+    <ScoreChoice3>1</ScoreChoice3>
+    <Choice4>&lt;p&gt;จัดหมวดหมู่ (Classifying)&lt;/p&gt;</Choice4>
+    <ScoreChoice4>0</ScoreChoice4>
+  </DataImportExport>
+  <DataImportExport>
+    <ProposName>Computer Basics-14</ProposName>
+    <TextPropos>&lt;p&gt;ไวรัสมาโครมักจะแฝงมากับไฟล์ข้อมูลในข้อใด&lt;/p&gt;</TextPropos>
+    <ScoreMain>1</ScoreMain>
+    <CheckChoice>1</CheckChoice>
+    <Choice1>&lt;p&gt;นามสกุล .txt&lt;/p&gt;</Choice1>
+    <ScoreChoice1>0</ScoreChoice1>
+    <Choice2>&lt;p&gt;นามสกุล .pdf&lt;/p&gt;</Choice2>
+    <ScoreChoice2>0</ScoreChoice2>
+    <Choice3>&lt;p&gt;นามสกุล .doc&lt;/p&gt;</Choice3>
+    <ScoreChoice3>1</ScoreChoice3>
+    <Choice4>&lt;p&gt;ถูกทั้งข้อ 2) และ 3)&lt;/p&gt;</Choice4>
+    <ScoreChoice4>0</ScoreChoice4>
+  </DataImportExport>
+  <DataImportExport>
+    <ProposName>Computer Basics-15</ProposName>
+    <TextPropos>&lt;p&gt;ข้อใดไม่เป็นอาการของอาการของไวรัส&lt;/p&gt;</TextPropos>
+    <ScoreMain>1</ScoreMain>
+    <CheckChoice>1</CheckChoice>
+    <Choice1>&lt;p&gt;ขนาดของโปรแกรมมีขนาดใหญ่ขึ้นผิดปกติ&lt;/p&gt;</Choice1>
+    <ScoreChoice1>0</ScoreChoice1>
+    <Choice2>&lt;p&gt;ไฟล์ที่แสดงสถานะของฮาร์ดดิสก์ค้างนานผิดปกติกว่าที่เคยเป็น&lt;/p&gt;</Choice2>
+    <ScoreChoice2>0</ScoreChoice2>
+    <Choice3>&lt;p&gt;หน่วยประมวลผลกลาง(CPU) เสียหาย&lt;/p&gt;</Choice3>
+    <ScoreChoice3>1</ScoreChoice3>
+    <Choice4>&lt;p&gt;ไม่มีข้อใดถูก&lt;/p&gt;</Choice4>
+    <ScoreChoice4>0</ScoreChoice4>
+  </DataImportExport>
+</ArrayOfDataImportExport>
