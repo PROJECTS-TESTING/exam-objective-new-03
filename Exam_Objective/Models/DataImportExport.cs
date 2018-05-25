@@ -1,4 +1,5 @@
 ﻿using System;
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,6 +12,8 @@ namespace Exam_Objective.Models
     {
         //[XmlElement("ProposID")]
         //public int ProposID { get; set; }
+        [XmlElement("ProposName")]
+        public string ProposName { get; set; }
         [XmlElement("TextPropos")]
         public string TextPropos { get; set; }
         [XmlElement("ScoreMain")]

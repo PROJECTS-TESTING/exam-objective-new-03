@@ -933,56 +933,255 @@ namespace Exam_Objective.Controllers
         [HttpPost]
         public ActionResult Importin(HttpPostedFileBase xmlFile,int ObjID)
         {
-            if (xmlFile.ContentType.Equals("application/xml") || xmlFile.ContentType.Equals("text/xml"))
+            var jsonreturn = new JsonRespone();
+            if (xmlFile !=null)
             {
-                try
+                if (xmlFile.ContentType.Equals("application/xml") || xmlFile.ContentType.Equals("text/xml"))
                 {
-                    var xmlPath = Server.MapPath("~/Content/" + xmlFile.FileName);
-                    xmlFile.SaveAs(xmlPath);
-                    XDocument xDoc = XDocument.Load(xmlPath);
-                    List<Proposition> proposList = xDoc.Descendants("PropositionModel").Select(PropositionModel => new Proposition
+                    try
                     {
-                        ObjID = ObjID,
-                        ProposName = PropositionModel.Element("ProposName").Value,
-                        TextPropos = PropositionModel.Element("TextPropos").Value,
-                        ScoreMain = Convert.ToInt32(PropositionModel.Element("ScoreMain").Value),
-                        CheckChoice = Convert.ToInt32(PropositionModel.Element("CheckChoice").Value)
-                    }).ToList();
-                    using (dbEntities de = new dbEntities())
-                    {
-                        foreach (var i in proposList)
+                        var xmlPath = Server.MapPath("~/Content/" + xmlFile.FileName);
+                        xmlFile.SaveAs(xmlPath);
+                        XDocument xDoc = XDocument.Load(xmlPath);
+                        List<ImportExportModel> productList = xDoc.Descendants("DataImportExport").Select(propos => new ImportExportModel
                         {
-                            var v = de.Proposition.Where(a => a.ProposID.Equals(i.ProposID)).FirstOrDefault();
-                            if (v != null)
+                            ProposID = 0,
+                            ObjID = ObjID,
+                            ProposName = propos.Element("ProposName").Value,
+                            TextPropos = propos.Element("TextPropos").Value,
+                            ScoreMain = Convert.ToInt32(propos.Element("ScoreMain").Value),
+                            CheckChoice = Convert.ToInt32(propos.Element("CheckChoice").Value),
+                            Choice1 = propos.Element("Choice1").Value,
+                            ScoreChoice1 = Convert.ToDouble(propos.Element("ScoreChoice1").Value),
+                            Choice2 = propos.Element("Choice2").Value,
+                            ScoreChoice2 = Convert.ToDouble(propos.Element("ScoreChoice2").Value),
+                            Choice3 = propos.Element("Choice3").Value,
+                            ScoreChoice3 = Convert.ToDouble(propos.Element("ScoreChoice3").Value),
+                            Choice4 = propos.Element("Choice4").Value,
+                            ScoreChoice4 = Convert.ToDouble(propos.Element("ScoreChoice4").Value)
+                        }).ToList();
+                        using (dbEntities de = new dbEntities())
+                        {
+                            foreach (var i in productList)
                             {
-                                v.ProposID = i.ProposID;
-                                v.ObjID = i.ObjID;
-                                v.ProposName = i.ProposName;
-                                v.ScoreMain = i.ScoreMain;
-                                v.CheckChoice = i.CheckChoice;
-                                
-                            }
-                            else
-                            {
-                                de.Proposition.Add(i);
+                                Proposition Propos = new Proposition();
+                                {
+                                    Propos.ProposID = i.ProposID;
+                                    Propos.ObjID = i.ObjID;
+                                    Propos.ProposName = i.ProposName;
+                                    Propos.TextPropos = i.TextPropos;
+                                    Propos.ScoreMain = i.ScoreMain;
+                                    Propos.CheckChoice = i.CheckChoice;
+                                    de.Proposition.Add(Propos);
+                                    de.SaveChanges();
+                                    int indexChoice = 4;
+                                    Choice pChoice;
+
+                                    string[] choice = new string[] { i.Choice1, i.Choice2, i.Choice3, i.Choice4 };
+                                    double[] answer = new double[] { i.ScoreChoice1, i.ScoreChoice2, i.ScoreChoice3, i.ScoreChoice4 };
+                                    for (int j = 0; j < indexChoice; j++)
+                                    {
+                                        pChoice = new Choice();
+                                        pChoice.ChoiceID = j + 1;
+                                        pChoice.ProposID = Propos.ProposID;
+                                        pChoice.TextChoice = choice[j];
+                                        pChoice.Answer = answer[j];
+                                        de.Choice.Add(pChoice);
+                                        de.SaveChanges();
+                                    }
+                                }
                             }
                         }
-                        de.SaveChanges();
-                        //ViewBag.Result = de.ProdectImport.ToList();
-                        return View();
+                        ViewBag.Success = "นำเข้าข้อสอบสำเร็จ";
+                        return View("Success");
+                    }
+                    catch (Exception ex)
+                    {
+                        ViewBag.Error = "Can't import xml file" + ex;
+                        return View("Success");
+
                     }
                 }
-                catch
+                else
                 {
-                    ViewBag.Error = "Can't import xml file";
-                    return View("Importin");
+                    ViewBag.Error = "Can't import xml file" ;
+                    return View("Success");
                 }
             }
             else
             {
-                ViewBag.Error = "Can't import xml file";
-                return View("Importin");
+                ViewBag.Error = "คุณไม่ได้เลือกไฟล์เพื่อที่จะนำเข้า";
+                return View("Success");
             }
+            
+        }
+        [HttpPost]
+        public ActionResult Importin5(HttpPostedFileBase xmlFile, int ObjID)
+        {
+            var jsonreturn = new JsonRespone();
+            if (xmlFile != null)
+            {
+                if (xmlFile.ContentType.Equals("application/xml") || xmlFile.ContentType.Equals("text/xml"))
+                {
+                    try
+                    {
+                        var xmlPath = Server.MapPath("~/Content/" + xmlFile.FileName);
+                        xmlFile.SaveAs(xmlPath);
+                        XDocument xDoc = XDocument.Load(xmlPath);
+                        List<ImportExportModel> productList = xDoc.Descendants("DataImportExport").Select(propos => new ImportExportModel
+                        {
+                            ProposID = 0,
+                            ObjID = ObjID,
+                            ProposName = propos.Element("ProposName").Value,
+                            TextPropos = propos.Element("TextPropos").Value,
+                            ScoreMain = Convert.ToInt32(propos.Element("ScoreMain").Value),
+                            CheckChoice = Convert.ToInt32(propos.Element("CheckChoice").Value),
+                            Choice1 = propos.Element("Choice1").Value,
+                            ScoreChoice1 = Convert.ToDouble(propos.Element("ScoreChoice1").Value),
+                            Choice2 = propos.Element("Choice2").Value,
+                            ScoreChoice2 = Convert.ToDouble(propos.Element("ScoreChoice2").Value),
+                            Choice3 = propos.Element("Choice3").Value,
+                            ScoreChoice3 = Convert.ToDouble(propos.Element("ScoreChoice3").Value),
+                            Choice4 = propos.Element("Choice4").Value,
+                            ScoreChoice4 = Convert.ToDouble(propos.Element("ScoreChoice4").Value),
+                            Choice5 = propos.Element("Choice5").Value,
+                            ScoreChoice5 = Convert.ToDouble(propos.Element("ScoreChoice5").Value)
+                        }).ToList();
+                        using (dbEntities de = new dbEntities())
+                        {
+                            foreach (var i in productList)
+                            {
+                                Proposition Propos = new Proposition();
+                                {
+                                    Propos.ProposID = i.ProposID;
+                                    Propos.ObjID = i.ObjID;
+                                    Propos.ProposName = i.ProposName;
+                                    Propos.TextPropos = i.TextPropos;
+                                    Propos.ScoreMain = i.ScoreMain;
+                                    Propos.CheckChoice = i.CheckChoice;
+                                    de.Proposition.Add(Propos);
+                                    de.SaveChanges();
+                                    int indexChoice = 5;
+                                    Choice pChoice;
+
+                                    string[] choice = new string[] { i.Choice1, i.Choice2, i.Choice3, i.Choice4, i.Choice5 };
+                                    double[] answer = new double[] { i.ScoreChoice1, i.ScoreChoice2, i.ScoreChoice3, i.ScoreChoice4, i.ScoreChoice5 };
+                                    for (int j = 0; j < indexChoice; j++)
+                                    {
+                                        pChoice = new Choice();
+                                        pChoice.ChoiceID = j + 1;
+                                        pChoice.ProposID = Propos.ProposID;
+                                        pChoice.TextChoice = choice[j];
+                                        pChoice.Answer = answer[j];
+                                        de.Choice.Add(pChoice);
+                                        de.SaveChanges();
+                                    }
+                                }
+                            }
+                        }
+                        ViewBag.Success = "นำเข้าข้อสอบสำเร็จ";
+                        return View("Success");
+                    }
+                    catch (Exception ex)
+                    {
+                        ViewBag.Error = "Can't import xml file" + ex;
+                        return View("Success");
+
+                    }
+                }
+                else
+                {
+                    ViewBag.Error = "Can't import xml file";
+                    return View("Success");
+                }
+            }
+            else
+            {
+                ViewBag.Error = "คุณไม่ได้เลือกไฟล์เพื่อที่จะนำเข้า";
+                return View("Success");
+            }
+
+        }
+        [HttpPost]
+        public ActionResult Importin2(HttpPostedFileBase xmlFile, int ObjID)
+        {
+            var jsonreturn = new JsonRespone();
+            if (xmlFile != null)
+            {
+                if (xmlFile.ContentType.Equals("application/xml") || xmlFile.ContentType.Equals("text/xml"))
+                {
+                    try
+                    {
+                        var xmlPath = Server.MapPath("~/Content/" + xmlFile.FileName);
+                        xmlFile.SaveAs(xmlPath);
+                        XDocument xDoc = XDocument.Load(xmlPath);
+                        List<ImportExportModel> productList = xDoc.Descendants("DataImportExport").Select(propos => new ImportExportModel
+                        {
+                            ProposID = 0,
+                            ObjID = ObjID,
+                            ProposName = propos.Element("ProposName").Value,
+                            TextPropos = propos.Element("TextPropos").Value,
+                            ScoreMain = Convert.ToInt32(propos.Element("ScoreMain").Value),
+                            CheckChoice = Convert.ToInt32(propos.Element("CheckChoice").Value),
+                            Choice1 = propos.Element("Choice1").Value,
+                            ScoreChoice1 = Convert.ToDouble(propos.Element("ScoreChoice1").Value),
+                            Choice2 = propos.Element("Choice2").Value,
+                            ScoreChoice2 = Convert.ToDouble(propos.Element("ScoreChoice2").Value)
+                        }).ToList();
+                        using (dbEntities de = new dbEntities())
+                        {
+                            foreach (var i in productList)
+                            {
+                                Proposition Propos = new Proposition();
+                                {
+                                    Propos.ProposID = i.ProposID;
+                                    Propos.ObjID = i.ObjID;
+                                    Propos.ProposName = i.ProposName;
+                                    Propos.TextPropos = i.TextPropos;
+                                    Propos.ScoreMain = i.ScoreMain;
+                                    Propos.CheckChoice = i.CheckChoice;
+                                    de.Proposition.Add(Propos);
+                                    de.SaveChanges();
+                                    int indexChoice = 2;
+                                    Choice pChoice;
+
+                                    string[] choice = new string[] { i.Choice1, i.Choice2 };
+                                    double[] answer = new double[] { i.ScoreChoice1, i.ScoreChoice2 };
+                                    for (int j = 0; j < indexChoice; j++)
+                                    {
+                                        pChoice = new Choice();
+                                        pChoice.ChoiceID = j + 1;
+                                        pChoice.ProposID = Propos.ProposID;
+                                        pChoice.TextChoice = choice[j];
+                                        pChoice.Answer = answer[j];
+                                        de.Choice.Add(pChoice);
+                                        de.SaveChanges();
+                                    }
+                                }
+                            }
+                        }
+                        ViewBag.Success = "นำเข้าข้อสอบสำเร็จ";
+                        return View("Success");
+                    }
+                    catch (Exception ex)
+                    {
+                        ViewBag.Error = "Can't import xml file" + ex;
+                        return View("Success");
+
+                    }
+                }
+                else
+                {
+                    ViewBag.Error = "Can't import xml file";
+                    return View("Success");
+                }
+            }
+            else
+            {
+                ViewBag.Error = "คุณไม่ได้เลือกไฟล์เพื่อที่จะนำเข้า";
+                return View("Success");
+            }
+
         }
         // GEGIN Export
         // Index of Export
@@ -1154,6 +1353,7 @@ namespace Exam_Objective.Controllers
                                   select new IXPropositionModel
                                   {  
                                       ProposID = p.ProposID,
+                                      ProposName = p.ProposName,
                                       TextPropos = p.TextPropos,
                                       ScoreMain = p.ScoreMain,
                                       CheckChoice = p.CheckChoice
@@ -1175,6 +1375,7 @@ namespace Exam_Objective.Controllers
                     dataExprot.Add(new DataImportExport
                     {
                         //ProposID = dataPropos[i].ProposID,
+                        ProposName = dataPropos[i].ProposName,
                         TextPropos = dataPropos[i].TextPropos,
                         ScoreMain = dataPropos[i].ScoreMain,
                         CheckChoice = dataPropos[i].CheckChoice,
@@ -1215,43 +1416,10 @@ namespace Exam_Objective.Controllers
                 Response.ClearContent();
                 Response.Buffer = true;
                 Response.AddHeader("content-disposition", "attachment;filename = " + ObjName + ".xml");
-                Response.ContentType = "text/xml";
+                Response.ContentType = "text/xml";                
                 var serializer = new System.Xml.Serialization.XmlSerializer(dataExprot.GetType());
                 serializer.Serialize(Response.OutputStream, dataExprot); 
             }
-        }
-        // GET: ExportData
-        public ActionResult ExportToWord()
-        {
-            // get the data from database
-            //var data = db.PersonalDetails.ToList();
-            // instantiate the GridView control from System.Web.UI.WebControls namespace
-            // set the data source
-            GridView gridview = new GridView();
-            //gridview.DataSource = data;
-            gridview.DataBind();
-
-            // Clear all the content from the current response
-            Response.ClearContent();
-            Response.Buffer = true;
-            // set the header
-            Response.AddHeader("content-disposition", "attachment;filename = itfunda.doc");
-            Response.ContentType = "application/ms-word";
-            Response.Charset = "";
-            // create HtmlTextWriter object with StringWriter
-            using (StringWriter sw = new StringWriter())
-            {
-                using (HtmlTextWriter htw = new HtmlTextWriter(sw))
-                {
-                    // render the GridView to the HtmlTextWriter
-                    gridview.RenderControl(htw);
-                    // Output the GridView content saved into StringWriter
-                    Response.Output.Write(sw.ToString());
-                    Response.Flush();
-                    Response.End();
-                }
-            }
-            return View();
         }
     }
 }

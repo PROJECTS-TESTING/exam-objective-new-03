@@ -7,29 +7,205 @@
 <div class="panel-heading">
     @{var ObjectiveModelEntity = (List<ObjectiveModel>)ViewBag.Objective;
 
-            foreach (var rows in ObjectiveModelEntity)
-            {
-            <h3><span class="icon icon-login"> นำเข้าข้อสอบของจุดประสงค์ </span>@rows.ObjName</h3>
-            }
-    }
-</div>
-@using (Html.BeginForm("Importin", "ExamBank", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-<div class="col-md-10 form-group">
-    <label>XML File<span class="required">*</span></label>
-    @{var ObjectiveID = (List<ObjectiveModel>)ViewBag.Objective;
-
-        foreach (var rows in ObjectiveID)
+        foreach (var rows in ObjectiveModelEntity)
         {
-        <input type="hidden" id="ObjID" name="ObjID" value="@rows.ObjID" />
+            <h3><span class="icon icon-login"> นำเข้าข้อสอบของจุดประสงค์ </span>@rows.ObjName</h3>
         }
     }
-        <input type="file" id="xmlFile" name="xmlFile" /><br />
-        <button type="submit" value="Import" id="Import" class="btn btn-primary icon-login" title="คลิกเพื่อนำเข้าข้อสอบ"> นำเข้าข้อสอบ</button>
 </div>
-    
-}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        เลือกรูปแบบการนำเข้าของไฟล์ข้อสอบ
+    </div>
+    <div class="panel-body">
+        <div class="panel-body">
+            <button type="button" id="Bxml2" class="btn btn-default btn-sm icon-login" title="คลิกเพื่อนำเข้าข้อสอบจากไฟล์ xml แบบ 2 ตัวเลือก"> ไฟล์ XML แบบตัวเลือก 2 ตัวเลือก</button>
+            <button type="button" id="Bxml4" class="btn btn-default btn-sm icon-login" title="คลิกเพื่อนำเข้าข้อสอบจากไฟล์ xml แบบ 4 ตัวเลือก"> ไฟล์ XML แบบตัวเลือก 4 ตัวเลือก</button>
+            <button type="button" id="Bxml5" class="btn btn-default btn-sm icon-login" title="คลิกเพื่อนำเข้าข้อสอบจากไฟล์ xml แบบ 5 ตัวเลือก"> ไฟล์ XML แบบตัวเลือก 5 ตัวเลือก</button>
+        </div>
+    </div>
+</div>
+
+<div class="panel-body">
+    <div class="panel-body">
+        <div id="selectxml4" class="modal fade">
+            <div id="selectxml">
+                @using (Html.BeginForm("Importin", "ExamBank", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+
+                                <h4 class="modal-title"><label id="title" name="title"></label></h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-horizontal">
+                                    <div class="form-group">
+                                        <div class="col-md-10">
+                                            <label>XML File รูปแบบตัวเลือก 4 ตัวเลือก<span class="required">*</span></label>
+                                            @{var ObjectiveID = (List<ObjectiveModel>)ViewBag.Objective;
+
+                                                foreach (var rows in ObjectiveID)
+                                                {
+                                                    <input type="hidden" id="ObjID" name="ObjID" value="@rows.ObjID" />
+                                                }
+                                            }
+                                            <input type="file" id="xmlFile" name="xmlFile" /><br />
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" value="Import" id="Import" class="btn btn-primary icon-login" title="คลิกเพื่อนำเข้าข้อสอบ"> นำเข้าข้อสอบ</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel-body">
+    <div class="panel-body">
+        <div id="selectxml2" class="modal fade">
+            <div id="selectxml">
+                @using (Html.BeginForm("Importin2", "ExamBank", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+
+                                <h4 class="modal-title"><label id="title" name="title"></label></h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-horizontal">
+                                    <div class="form-group">
+                                        <div class="col-md-10">
+                                            <label>XML File รูปแบบตัวเลือก 2 ตัวเลือก<span class="required">*</span></label>
+                                            @{var ObjectiveID = (List<ObjectiveModel>)ViewBag.Objective;
+
+                                                foreach (var rows in ObjectiveID)
+                                                {
+                                                    <input type="hidden" id="ObjID" name="ObjID" value="@rows.ObjID" />
+                                                }
+                                            }
+                                            <input type="file" id="xmlFile" name="xmlFile" /><br />
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" value="Import" id="Import" class="btn btn-primary icon-login" title="คลิกเพื่อนำเข้าข้อสอบ"> นำเข้าข้อสอบ</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel-body">
+    <div class="panel-body">
+        <div id="selectxml5" class="modal fade">
+            <div id="selectxml">
+                @using (Html.BeginForm("Importin5", "ExamBank", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+
+                                <h4 class="modal-title"><label id="title" name="title"></label></h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-horizontal">
+                                    <div class="form-group">
+                                        <div class="col-md-10">
+                                            <label>XML File รูปแบบตัวเลือก 5 ตัวเลือก<span class="required">*</span></label>
+                                            @{var ObjectiveID = (List<ObjectiveModel>)ViewBag.Objective;
+
+                                                foreach (var rows in ObjectiveID)
+                                                {
+                                                    <input type="hidden" id="ObjID" name="ObjID" value="@rows.ObjID" />
+                                                }
+                                            }
+                                            <input type="file" id="xmlFile" name="xmlFile" /><br />
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" value="Import" id="Import" class="btn btn-primary icon-login" title="คลิกเพื่อนำเข้าข้อสอบ"> นำเข้าข้อสอบ</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<form id="formXML">
+    <div id="XMLModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"><label id="title" name="title"></label></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-md-10">
+
+                                <label>เลือกไฟล์สำหรับนำเข้าข้อสอบ<span class="required">*</span></label>
+                                <input type="file" id="xmlFile4" name="xmlFile4" />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="btnImportxml4" class="btn btn-primary" title="นำเข้าข้อสอบ">นำเข้า</button>
+                            <button type="button" id="btnClose" class="btn btn-danger" data-dismiss="modal" title="ยกเลิกการนำเข้าข้อสอบ">ยกเลิก</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
 
 @section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.inputmask.bundle.js"></script>
+    <script src="~/Scripts/jquery.inputmask.bundle.min.js"></script>
+    <script type="text/javascript">
+        //show table for option:selected
+        //$("#selectxml4").hide(); //เปิดมายังไม่ให้โชว์อะไร
+        //$('select.showCate').bind('change', function () {
+        // $('select.showCate').each(function () {
+        //if ($(this).val() == '1') {
+        //   $("#selectxml").show();
+        // }
+
+        //});
+        //$('select.showCate').removeAttr('disabled');
+        //});
+        $("#Bxml4").click(function () {
+            $("#selectxml4").modal("show");
+        });
+        $("#Bxml2").click(function () {
+            $("#selectxml2").modal("show");
+        });
+        $("#Bxml5").click(function () {
+            $("#selectxml5").modal("show");
+        });
+
+
+
+    </script>
 
 }

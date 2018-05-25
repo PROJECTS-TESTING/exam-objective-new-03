@@ -60,6 +60,7 @@ F:\VisualStudio\exam-objective-new-03\Exam_Objective\bin\HtmlToOpenXml.xml
 F:\VisualStudio\exam-objective-new-03\Exam_Objective\bin\WordGenerator.pdb
 F:\VisualStudio\exam-objective-new-03\Exam_Objective\bin\WordGenerator.dll.config
 F:\VisualStudio\exam-objective-new-03\Exam_Objective\obj\Debug\Exam_Objective.csproj.CopyComplete
+F:\VisualStudio\exam-objective-new-03\Exam_Objective\obj\Debug\Exam_Objective.csprojResolveAssemblyReference.cache
 D:\GitHub\exam-objective-new-03\Exam_Objective\bin\ApplicationInsights.config
 D:\GitHub\exam-objective-new-03\Exam_Objective\bin\Exam_Objective.dll.config
 D:\GitHub\exam-objective-new-03\Exam_Objective\bin\Exam_Objective.dll
@@ -110,9 +111,8 @@ D:\GitHub\exam-objective-new-03\Exam_Objective\bin\Microsoft.AI.DependencyCollec
 D:\GitHub\exam-objective-new-03\Exam_Objective\bin\Microsoft.AI.ServerTelemetryChannel.xml
 D:\GitHub\exam-objective-new-03\Exam_Objective\bin\Microsoft.AI.WindowsServer.xml
 D:\GitHub\exam-objective-new-03\Exam_Objective\bin\Microsoft.AI.Web.xml
+D:\GitHub\exam-objective-new-03\Exam_Objective\obj\Debug\Exam_Objective.csprojResolveAssemblyReference.cache
 D:\GitHub\exam-objective-new-03\Exam_Objective\obj\Debug\Exam_Objective.csproj.ResolveComReference.cache
 D:\GitHub\exam-objective-new-03\Exam_Objective\obj\Debug\Exam_Objective.csproj.CoreCompileInputs.cache
 D:\GitHub\exam-objective-new-03\Exam_Objective\obj\Debug\Exam_Objective.dll
 D:\GitHub\exam-objective-new-03\Exam_Objective\obj\Debug\Exam_Objective.pdb
-D:\GitHub\exam-objective-new-03\Exam_Objective\obj\Debug\Exam_Objective.csprojResolveAssemblyReference.cache
-F:\VisualStudio\exam-objective-new-03\Exam_Objective\obj\Debug\Exam_Objective.csprojResolveAssemblyReference.cache
