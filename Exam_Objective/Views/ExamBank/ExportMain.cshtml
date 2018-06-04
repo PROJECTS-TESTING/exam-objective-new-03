@@ -20,29 +20,112 @@
         }
     }
 </div>
-<div class="panel panel-default">
+<div class="panel panel-info">
 
     <div class="panel-heading">
-        เลือกจุดประสงค์เพื่อส่งออกข้อสอบ
+        จำนวนข้อสอบแต่ละจุดประสงค์
     </div>
     <div class="panel-body">
         <div class="panel-body">
             @{
-                var o2Entitycon = (List<ObjectiveModel>)ViewBag.PObjective;
-                if (o2Entitycon.Count > 0 && o2Entitycon != null)
+                var oEntity = (List<ObjectiveModel>)ViewBag.PObjective;
+                var ctCountap = (List<ObjectiveModel>)ViewBag.ObjectiveNotDis;
+                if (oEntity.Count > 0 && oEntity != null)
                 {
-                    foreach (var rows in o2Entitycon)
+
+                    foreach (var rows in oEntity)
                     {
-                        <a href="@Url.Action("ExportFile", "ExamBank", new { ObjID = rows.ObjID })" class="nav-link" title="คลิ๊กเพื่อส่งออกข้อสอบตามจุดประสงค์">
-                            <!-- target="_blank" //สำหรับเปิดแล้วขึ้นหน้าใหม่-->
-                            <span style="padding-left:60px;" class="icon-login"> @rows.ObjName </span><br />
-                        </a>
+                        <li>
+                            @rows.ObjName
+                            @foreach (var r2 in ctCountap)
+                            {
+                                if (rows.ObjID == r2.ObjID)
+                                {
+                                     <a>(</a>@r2.CountProposID<a>)</a>
+                                }
+                            }
+                        </li>
                     }
                 }
             }
         </div>
     </div>
 </div>
+<button id="btnreport" name="btnreport" class="btn btn-success" data-toggle="modal" data-target="#reportModalXML"><span class="fa  fa-file-archive-o"></span> XML Format</button>
+<button id="btnreport" name="btnreport" class="btn btn-danger" data-toggle="modal" data-target="#reportModalGIFT"><span class="fa  fa-file-archive-o"></span> GIFT Format</button>
+<div class="modal fade" id="reportModalXML" tabindex="-1" role="dialog" aria-labelledby="User" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h5 class="modal-title"><label id="title" name="title"></label><label>เลือกจุดประสงค์เพื่อส่งออกข้อสอบ (XML Format)</label></h5>
+            </div>
+            <div class="panel-body">
+                <div class="panel-body">
+                    @{
+                        var o2Entitycon = (List<ObjectiveModel>)ViewBag.PObjective;
+
+                        if (o2Entitycon.Count > 0 && o2Entitycon != null)
+                        {
+                            foreach (var rows in o2Entitycon)
+                            {
+
+                                <a href="@Url.Action("ExportFile", "ExamBank", new { ObjID = @rows.ObjID })" class="nav-link" data-objective="@rows.ObjID" title="คลิ๊กเพื่อส่งออกข้อสอบตามจุดประสงค์">
+                                    <!-- target="_blank" //สำหรับเปิดแล้วขึ้นหน้าใหม่-->
+                                    <span style="padding-left:60px;" class="icon-cloud-download"> @rows.ObjName </span><br />
+                                </a>
+
+                            }
+
+                        }
+                    }
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">ยกเลิก</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="reportModalGIFT" tabindex="-1" role="dialog" aria-labelledby="User" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h5 class="modal-title"><label id="title" name="title"></label><label>เลือกจุดประสงค์เพื่อส่งออกข้อสอบ (GIFT Format)</label></h5>
+            </div>
+            <div class="panel-body">
+                <div class="panel-body">
+                    @{
+                        var o2Entitycon2 = (List<ObjectiveModel>)ViewBag.PObjective;
+
+                        if (o2Entitycon2.Count > 0 && o2Entitycon2 != null)
+                        {
+                            foreach (var rows in o2Entitycon2)
+                            {
+
+                                <a href="@Url.Action("ExportFileGift", "ExamBank", new { ObjID = @rows.ObjID })" class="nav-link" data-objective="@rows.ObjID" title="คลิ๊กเพื่อส่งออกข้อสอบตามจุดประสงค์">
+                                    <!-- target="_blank" //สำหรับเปิดแล้วขึ้นหน้าใหม่-->
+                                    <span style="padding-left:60px;" class="icon-cloud-download"> @rows.ObjName </span><br />
+                                </a>
+
+                            }
+
+                        }
+                    }
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">ยกเลิก</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section scripts{
 
 }

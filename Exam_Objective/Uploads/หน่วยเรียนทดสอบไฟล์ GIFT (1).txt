@@ -1,0 +1,34 @@
+Japanese characters originally came from what country?
+{~India
+=China
+~Korea
+~Egypt
+}
+
+India characters originally came from what country?
+{~India
+=China
+~Korea
+~Egypt
+}
+
+China characters originally came from what country?
+{~India
+=China
+~Korea
+~Egypt
+}
+
+Korea characters originally came from what country?
+{~India
+=China
+~Korea
+~Egypt
+}
+
+Egypt characters originally came from what country?
+{~India
+=China
+~Korea
+~Egypt
+}

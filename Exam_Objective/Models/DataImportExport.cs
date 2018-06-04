@@ -36,5 +36,9 @@ namespace Exam_Objective.Models
         public string Choice4 { get; set; }
         [XmlElement("ScoreChoice4")]
         public double Answer4 { get; set; }
+        public string AnsQ1 { get; set; }
+        public string AnsQ2 { get; set; }
+        public string AnsQ3 { get; set; }
+        public string AnsQ4 { get; set; }
     }
 }

@@ -278,17 +278,17 @@ namespace Exam_Objective.Controllers
                 using (var DB = new dbEntities())
                 {
                     var EditObj = (from ob in DB.Objective
-                                      join le in DB.Lesson on ob.LessonID equals le.LessonID
-                                      where ob.ObjID == Id
-                                      select new ObjectiveModel
-                                      {
-                                          ObjID = ob.ObjID,
-                                          ObjName = ob.ObjName,
-                                          TextObj = ob.TextObj,
-                                          PLessonID = ob.LessonID,
-                                          PLesName = le.LesName
-                                          
-                                      }).FirstOrDefault();
+                                   join le in DB.Lesson on ob.LessonID equals le.LessonID
+                                   where ob.ObjID == Id
+                                   select new ObjectiveModel
+                                   {
+                                       ObjID = ob.ObjID,
+                                       ObjName = ob.ObjName,
+                                       TextObj = ob.TextObj,
+                                       PLessonID = ob.LessonID,
+                                       PLesName = le.LesName
+
+                                   }).FirstOrDefault();
                     if (EditObj == null)
                     {
                         jsonreturn = new JsonRespone { status = false, message = "เกิดข้อผิดพลาด" };
@@ -522,7 +522,7 @@ namespace Exam_Objective.Controllers
                     else
                     {
                         var proposUpdate = DB.Proposition.Where(x => x.ProposID == propos.ProposID).FirstOrDefault();
-                        
+
                         if (proposUpdate != null)
                         {
                             DB.Proposition.Where(x => x.ProposID == proposUpdate.ProposID).ForEach(x =>
@@ -694,7 +694,7 @@ namespace Exam_Objective.Controllers
                     {
                         DB.Proposition.Remove(DeletePropos);
                         DB.SaveChanges();
-                        for (int i = 1;i <= ChoiceCount;i++ )
+                        for (int i = 1; i <= ChoiceCount; i++)
                         {
                             var DeleteChoice = DB.Choice.Where(d => d.ProposID == id && d.ChoiceID == i).FirstOrDefault();
                             DB.Choice.Remove(DeleteChoice);
@@ -931,10 +931,10 @@ namespace Exam_Objective.Controllers
             }
         }
         [HttpPost]
-        public ActionResult Importin(HttpPostedFileBase xmlFile,int ObjID)
+        public ActionResult Importin(HttpPostedFileBase xmlFile, int ObjID)
         {
             var jsonreturn = new JsonRespone();
-            if (xmlFile !=null)
+            if (xmlFile != null)
             {
                 if (xmlFile.ContentType.Equals("application/xml") || xmlFile.ContentType.Equals("text/xml"))
                 {
@@ -1004,7 +1004,7 @@ namespace Exam_Objective.Controllers
                 }
                 else
                 {
-                    ViewBag.Error = "Can't import xml file" ;
+                    ViewBag.Error = "Can't import xml file";
                     return View("Success");
                 }
             }
@@ -1013,7 +1013,7 @@ namespace Exam_Objective.Controllers
                 ViewBag.Error = "คุณไม่ได้เลือกไฟล์เพื่อที่จะนำเข้า";
                 return View("Success");
             }
-            
+
         }
         [HttpPost]
         public ActionResult Importin5(HttpPostedFileBase xmlFile, int ObjID)
@@ -1183,6 +1183,192 @@ namespace Exam_Objective.Controllers
             }
 
         }
+        // Import Proposition Gift Format
+        public ActionResult ImportinGift(HttpPostedFileBase postedFile, int ObjID) 
+        {
+            var jsonreturn = new JsonRespone();
+            if (postedFile != null)
+            {
+                try
+                {
+                    string filePath = string.Empty;
+                    if (postedFile != null)
+                    {
+                        string path = Server.MapPath("~/Uploads/");
+                        if (!Directory.Exists(path))
+                        {
+                            Directory.CreateDirectory(path);
+                        }
+
+                        filePath = path + Path.GetFileName(postedFile.FileName);
+                        string extension = Path.GetExtension(postedFile.FileName);
+                        postedFile.SaveAs(filePath);
+
+                        //Create a DataTable.
+                        DataTable dt = new DataTable();
+                        dt.Columns.AddRange(new DataColumn[14] { new DataColumn("ProposID", typeof(int)),
+                                new DataColumn("ObjID", typeof(int)),
+                                new DataColumn("ProposName", typeof(string)),
+                                new DataColumn("TextPropos", typeof(string)),
+                                new DataColumn("ScoreMain", typeof(int)),
+                                new DataColumn("CheckChoice", typeof(int)),
+                                new DataColumn("Choice1", typeof(string)),
+                                new DataColumn("ScoreChoice1", typeof(double)),
+                                new DataColumn("Choice2", typeof(string)),
+                                new DataColumn("ScoreChoice2", typeof(double)),
+                                new DataColumn("Choice3", typeof(string)),
+                                new DataColumn("ScoreChoice3", typeof(double)),
+                                new DataColumn("Choice4", typeof(string)),
+                                new DataColumn("ScoreChoice4", typeof(double))});
+                        //Read the contents of CSV file.
+                        string csvData = System.IO.File.ReadAllText(filePath);
+
+                        //Execute a loop over the rows.
+                        foreach (string row in csvData.Split('}'))
+                        {
+                            if (!string.IsNullOrEmpty(row) && row.Length > 10)
+                            {
+                                dt.Rows.Add();
+                                int i = 0;
+                                int a = 0;
+                                int[] ans = new int[4];
+                                // Using for loop reading from array
+                                for (int j = 0; j < row.Length; j++)
+                                {
+                                    if (row[j] == '=' || row[j] == '~')
+                                    {
+                                        if (row[j] == '=')
+                                        {
+                                            ans[a] = 1;
+                                        }
+                                        else
+                                        {
+                                            ans[a] = 0;
+                                        }
+                                        a++;
+                                    }
+                                }
+                                //Execute a loop over the columns.
+                                a = 0;
+                                foreach (string cell in row.Split('=', '~'))
+                                {
+                                    if (i == 0)
+                                    {
+                                        string[] cell1 = cell.Split('{');
+                                        dt.Rows[dt.Rows.Count - 1][i] = 0; i++;
+                                        dt.Rows[dt.Rows.Count - 1][i] = ObjID; i++;
+                                        dt.Rows[dt.Rows.Count - 1][i] = cell1[0]; i++;
+                                        dt.Rows[dt.Rows.Count - 1][i] = cell1[0]; i++;
+                                        dt.Rows[dt.Rows.Count - 1][i] = 1; i++;
+                                        dt.Rows[dt.Rows.Count - 1][i] = 1;
+                                    }
+                                    else
+                                    {
+                                        dt.Rows[dt.Rows.Count - 1][i] = cell; i++;
+                                        dt.Rows[dt.Rows.Count - 1][i] = ans[a]; a++;
+                                    }
+                                    i++;
+                                }
+                            }
+                        }
+                        List<ImportExportModel> dataImport = new List<ImportExportModel>();
+                        for (int i = 0; i < dt.Rows.Count; i++)
+                        {
+                            ImportExportModel import = new ImportExportModel();
+                            import.ProposID = Convert.ToInt32(dt.Rows[i]["ProposID"]);
+                            import.ObjID = Convert.ToInt32(dt.Rows[i]["ObjID"]);
+                            import.ProposName = dt.Rows[i]["ProposName"].ToString();
+                            import.TextPropos = dt.Rows[i]["TextPropos"].ToString();
+                            import.ScoreMain = Convert.ToInt32(dt.Rows[i]["ScoreMain"]);
+                            import.CheckChoice = Convert.ToInt32(dt.Rows[i]["CheckChoice"]);
+                            import.Choice1 = dt.Rows[i]["Choice1"].ToString();
+                            import.ScoreChoice1 = Convert.ToDouble(dt.Rows[i]["ScoreChoice1"]);
+                            import.Choice2 = dt.Rows[i]["Choice2"].ToString();
+                            import.ScoreChoice2 = Convert.ToDouble(dt.Rows[i]["ScoreChoice2"]);
+                            import.Choice3 = dt.Rows[i]["Choice3"].ToString();
+                            import.ScoreChoice3 = Convert.ToDouble(dt.Rows[i]["ScoreChoice3"]);
+                            import.Choice4 = dt.Rows[i]["Choice4"].ToString();
+                            import.ScoreChoice4 = Convert.ToDouble(dt.Rows[i]["ScoreChoice4"]);
+                            dataImport.Add(import);
+                        }
+                        int Repeat = 0;
+                        using (var DB = new dbEntities())
+                        {
+                            var ProposData = (from p in DB.Proposition
+                                              where p.ObjID == ObjID
+                                              orderby p.ProposID
+                                              select new PropositionModel
+                                              {
+                                                  TextPropos = p.TextPropos,
+                                              }).ToList();
+                            foreach (var i in dataImport)
+                            {
+                                foreach (var j in ProposData)
+                                {
+                                    if (i.TextPropos == j.TextPropos)
+                                    {
+                                        Repeat = 1;
+                                    }
+                                }
+                            }
+                        }
+                        if (Repeat == 0)
+                        {
+                            using (dbEntities de = new dbEntities())
+                            {
+                                foreach (var i in dataImport)
+                                {
+                                    Proposition Propos = new Proposition();
+                                    {
+                                        Propos.ProposID = i.ProposID;
+                                        Propos.ObjID = i.ObjID;
+                                        Propos.ProposName = i.ProposName;
+                                        Propos.TextPropos = i.TextPropos;
+                                        Propos.ScoreMain = i.ScoreMain;
+                                        Propos.CheckChoice = i.CheckChoice;
+                                        de.Proposition.Add(Propos);
+                                        de.SaveChanges();
+                                        int indexChoice = 4;
+                                        Choice pChoice;
+
+                                        string[] choice = new string[] { i.Choice1, i.Choice2, i.Choice3, i.Choice4 };
+                                        double[] answer = new double[] { i.ScoreChoice1, i.ScoreChoice2, i.ScoreChoice3, i.ScoreChoice4 };
+                                        for (int j = 0; j < indexChoice; j++)
+                                        {
+                                            pChoice = new Choice();
+                                            pChoice.ChoiceID = j + 1;
+                                            pChoice.ProposID = Propos.ProposID;
+                                            pChoice.TextChoice = choice[j];
+                                            pChoice.Answer = answer[j];
+                                            de.Choice.Add(pChoice);
+                                            de.SaveChanges();
+                                        }
+                                    }
+                                }
+                            }
+                            ViewBag.Success = "นำเข้าข้อสอบสำเร็จ";
+                            
+                        } else {
+                            ViewBag.Success = "นำเข้าข้อสอบไม่สำเร็จมีข้อสอบซ้ำ"; 
+                        }
+                        
+                    }
+                    return View("Success");
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Error = "Can't import xml file" + ex;
+                    return View("Success");
+
+                }
+            }
+            else
+            {
+                ViewBag.Error = "คุณไม่ได้เลือกไฟล์เพื่อที่จะนำเข้า";
+                return View("Success");
+            }
+
+        }
         // GEGIN Export
         // Index of Export
         public ActionResult Export()
@@ -1339,19 +1525,19 @@ namespace Exam_Objective.Controllers
             string[] TChoice = new string[6];
             using (var DB = new dbEntities())
             {
-                ObjName = (from o in DB.Objective where o.ObjID == ObjID  select o.ObjName).FirstOrDefault();
-                
+                ObjName = (from o in DB.Objective where o.ObjID == ObjID select o.ObjName).FirstOrDefault();
+
             }
-            
+
             using (var DB = new dbEntities())
             {
 
                 var dataPropos = (from p in DB.Proposition
-                                  //join c in DB.Choice on p.ProposID equals c.ProposID
+                                      //join c in DB.Choice on p.ProposID equals c.ProposID
                                   where p.ObjID == ObjID
                                   orderby p.ProposID
                                   select new IXPropositionModel
-                                  {  
+                                  {
                                       ProposID = p.ProposID,
                                       ProposName = p.ProposName,
                                       TextPropos = p.TextPropos,
@@ -1371,7 +1557,8 @@ namespace Exam_Objective.Controllers
                                   }).ToList();
                 List<DataImportExport> dataExprot = new List<DataImportExport>();
                 string[] Choice = new string[6];
-                for (var i=0;i<dataPropos.Count;i++) {
+                for (var i = 0; i < dataPropos.Count; i++)
+                {
                     dataExprot.Add(new DataImportExport
                     {
                         //ProposID = dataPropos[i].ProposID,
@@ -1388,8 +1575,10 @@ namespace Exam_Objective.Controllers
                         Answer3 = 0.0f,
                         Answer4 = 0.0f,
                     });
-                    foreach (var dataCo in dataChoice) {
-                        if (dataPropos[i].ProposID == dataCo.ProposID) {
+                    foreach (var dataCo in dataChoice)
+                    {
+                        if (dataPropos[i].ProposID == dataCo.ProposID)
+                        {
                             if (dataCo.ChoiceID == 1)
                             {
                                 dataExprot.ElementAt(i).Choice1 = dataCo.TextChoice;
@@ -1416,10 +1605,152 @@ namespace Exam_Objective.Controllers
                 Response.ClearContent();
                 Response.Buffer = true;
                 Response.AddHeader("content-disposition", "attachment;filename = " + ObjName + ".xml");
-                Response.ContentType = "text/xml";                
+                Response.ContentType = "text/xml";
                 var serializer = new System.Xml.Serialization.XmlSerializer(dataExprot.GetType());
-                serializer.Serialize(Response.OutputStream, dataExprot); 
+                serializer.Serialize(Response.OutputStream, dataExprot);
             }
+        }
+        public void ExportFileGift(int ObjID)  //Export GIFT Format
+        {
+            StringWriter sw = new StringWriter();
+
+            
+            var ObjName = "";
+            string[] TChoice = new string[6];
+            using (var DB = new dbEntities())
+            {
+                ObjName = (from o in DB.Objective where o.ObjID == ObjID select o.ObjName).FirstOrDefault();
+
+            }
+
+            using (var DB = new dbEntities())
+            {
+
+                var dataPropos = (from p in DB.Proposition
+                                      //join c in DB.Choice on p.ProposID equals c.ProposID
+                                  where p.ObjID == ObjID
+                                  orderby p.ProposID
+                                  select new IXPropositionModel
+                                  {
+                                      ProposID = p.ProposID,
+                                      ProposName = p.ProposName,
+                                      TextPropos = p.TextPropos,
+                                      ScoreMain = p.ScoreMain,
+                                      CheckChoice = p.CheckChoice
+                                  }).ToList();
+                var dataChoice = (from c in DB.Choice
+                                  join p in DB.Proposition on c.ProposID equals p.ProposID
+                                  where p.ObjID == ObjID
+                                  orderby p.ProposID
+                                  select new IXChoiceModel
+                                  {
+                                      ChoiceID = c.ChoiceID,
+                                      ProposID = c.ProposID,
+                                      TextChoice = c.TextChoice,
+                                      Answer = c.Answer
+                                  }).ToList();
+                List<DataImportExport> dataExprot = new List<DataImportExport>();
+                string[] Choice = new string[6];
+                for (var i = 0; i < dataPropos.Count; i++)
+                {
+                    dataExprot.Add(new DataImportExport
+                    {
+                        //ProposID = dataPropos[i].ProposID,
+                        ProposName = dataPropos[i].ProposName,
+                        TextPropos = dataPropos[i].TextPropos,
+                        ScoreMain = dataPropos[i].ScoreMain,
+                        CheckChoice = dataPropos[i].CheckChoice,
+                        Choice1 = "",
+                        Choice2 = "",
+                        Choice3 = "",
+                        Choice4 = "",
+                        Answer1 = 0.0f,
+                        Answer2 = 0.0f,
+                        Answer3 = 0.0f,
+                        Answer4 = 0.0f,
+                        AnsQ1 = "",
+                        AnsQ2 = "",
+                        AnsQ3 = "",
+                        AnsQ4 = "",
+                    });
+                    foreach (var dataCo in dataChoice)
+                    {
+                        if (dataPropos[i].ProposID == dataCo.ProposID)
+                        {
+                            if (dataCo.ChoiceID == 1)
+                            {
+                                dataExprot.ElementAt(i).Choice1 = dataCo.TextChoice;
+                                dataExprot.ElementAt(i).Answer1 = dataCo.Answer;
+                                if (dataCo.Answer > 0){
+                                    dataExprot.ElementAt(i).AnsQ1 = "=";
+                                }
+                                else{
+                                    dataExprot.ElementAt(i).AnsQ1 = "~";
+                                }
+                            }
+                            if (dataCo.ChoiceID == 2)
+                            {
+                                dataExprot.ElementAt(i).Choice2 = dataCo.TextChoice;
+                                dataExprot.ElementAt(i).Answer2 = dataCo.Answer;
+                                if (dataCo.Answer > 0)
+                                {
+                                    dataExprot.ElementAt(i).AnsQ2 = "=";
+                                }
+                                else
+                                {
+                                    dataExprot.ElementAt(i).AnsQ2 = "~";
+                                }
+                            }
+                            if (dataCo.ChoiceID == 3)
+                            {
+                                dataExprot.ElementAt(i).Choice3 = dataCo.TextChoice;
+                                dataExprot.ElementAt(i).Answer3 = dataCo.Answer;
+                                if (dataCo.Answer > 0)
+                                {
+                                    dataExprot.ElementAt(i).AnsQ3 = "=";
+                                }
+                                else
+                                {
+                                    dataExprot.ElementAt(i).AnsQ3 = "~";
+                                }
+                            }
+                            if (dataCo.ChoiceID == 4)
+                            {
+                                dataExprot.ElementAt(i).Choice4 = dataCo.TextChoice;
+                                dataExprot.ElementAt(i).Answer4 = dataCo.Answer;
+                                if (dataCo.Answer > 0)
+                                {
+                                    dataExprot.ElementAt(i).AnsQ4 = "=";
+                                }
+                                else
+                                {
+                                    dataExprot.ElementAt(i).AnsQ4 = "~";
+                                }
+                            }
+                        }
+                    }
+                }                
+                foreach (var propos in dataExprot)
+                {
+                    sw.WriteLine(string.Format("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}",
+                        propos.TextPropos,
+                        "{",
+                        propos.AnsQ1,
+                        propos.Choice1,
+                        propos.AnsQ2,
+                        propos.Choice2,
+                        propos.AnsQ3,
+                        propos.Choice3,
+                        propos.AnsQ4,
+                        propos.Choice4,
+                        "}"));
+                }
+                Response.ClearContent();
+                Response.AddHeader("content-disposition", "attachment;filename = " + ObjName + ".txt");
+                Response.ContentType = "text/plain";
+                Response.Write(sw.ToString());
+                Response.End();            }
+
         }
     }
 }

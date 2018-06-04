@@ -13,15 +13,20 @@
         }
     }
 </div>
-<div class="panel panel-default">
+<div class="panel panel-info">
     <div class="panel-heading">
         เลือกรูปแบบการนำเข้าของไฟล์ข้อสอบ
     </div>
     <div class="panel-body">
         <div class="panel-body">
-            <button type="button" id="Bxml2" class="btn btn-default btn-sm icon-login" title="คลิกเพื่อนำเข้าข้อสอบจากไฟล์ xml แบบ 2 ตัวเลือก"> ไฟล์ XML แบบตัวเลือก 2 ตัวเลือก</button>
-            <button type="button" id="Bxml4" class="btn btn-default btn-sm icon-login" title="คลิกเพื่อนำเข้าข้อสอบจากไฟล์ xml แบบ 4 ตัวเลือก"> ไฟล์ XML แบบตัวเลือก 4 ตัวเลือก</button>
-            <button type="button" id="Bxml5" class="btn btn-default btn-sm icon-login" title="คลิกเพื่อนำเข้าข้อสอบจากไฟล์ xml แบบ 5 ตัวเลือก"> ไฟล์ XML แบบตัวเลือก 5 ตัวเลือก</button>
+            <button type="button" id="Bxml2" class="btn btn-default btn-sm icon-login" title="คลิกเพื่อนำเข้าข้อสอบจากไฟล์ xml แบบ 2 ตัวเลือก">  XML Format แบบตัวเลือก 2 ตัวเลือก</button>
+            <button type="button" id="Bxml4" class="btn btn-default btn-sm icon-login" title="คลิกเพื่อนำเข้าข้อสอบจากไฟล์ xml แบบ 4 ตัวเลือก">  XML Format แบบตัวเลือก 4 ตัวเลือก</button>
+            <button type="button" id="Bxml5" class="btn btn-default btn-sm icon-login" title="คลิกเพื่อนำเข้าข้อสอบจากไฟล์ xml แบบ 5 ตัวเลือก">  XML Format แบบตัวเลือก 5 ตัวเลือก</button>
+        </div>
+        <div class="panel-body">
+            <button type="button" id="Bgift2" class="btn btn-default btn-sm icon-login" title="คลิกเพื่อนำเข้าข้อสอบจากรูปแบบ GIFT Format แบบ 2 ตัวเลือก"> GIFT Format แบบตัวเลือก 2 ตัวเลือก</button>
+            <button type="button" id="Bgift4" class="btn btn-default btn-sm icon-login" title="คลิกเพื่อนำเข้าข้อสอบจากรูปแบบ GIFT Format แบบ 4 ตัวเลือก"> GIFT Format แบบตัวเลือก 4 ตัวเลือก</button>
+            <button type="button" id="Bgift5" class="btn btn-default btn-sm icon-login" title="คลิกเพื่อนำเข้าข้อสอบจากรูปแบบ GIFT Format แบบ 5 ตัวเลือก"> GIFT Format แบบตัวเลือก 5 ตัวเลือก</button>
         </div>
     </div>
 </div>
@@ -146,6 +151,46 @@
         </div>
     </div>
 </div>
+<div class="panel-body">
+    <div class="panel-body">
+        <div id="selectgift4" class="modal fade">
+            <div id="selectxml">
+                @using (Html.BeginForm("ImportinGift", "ExamBank", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+
+                                <h4 class="modal-title"><label id="title" name="title"></label></h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-horizontal">
+                                    <div class="form-group">
+                                        <div class="col-md-10">
+                                            <label>GIFT Format รูปแบบตัวเลือก 4 ตัวเลือก<span class="required">*</span></label>
+                                            @{var ObjectiveID = (List<ObjectiveModel>)ViewBag.Objective;
+
+                                                foreach (var rows in ObjectiveID)
+                                                {
+                                                    <input type="hidden" id="ObjID" name="ObjID" value="@rows.ObjID" />
+                                                }
+                                            }
+                                            <input type="file" id="postedFile" name="postedFile" /><br />
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" value="Import" id="Import" class="btn btn-primary icon-login" title="คลิกเพื่อนำเข้าข้อสอบ"> นำเข้าข้อสอบ</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
 
 <form id="formXML">
     <div id="XMLModal" class="modal fade">
@@ -202,6 +247,9 @@
         });
         $("#Bxml5").click(function () {
             $("#selectxml5").modal("show");
+        });
+        $("#Bgift4").click(function () {
+            $("#selectgift4").modal("show");
         });
 
 
