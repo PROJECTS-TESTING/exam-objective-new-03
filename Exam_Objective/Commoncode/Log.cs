@@ -16,7 +16,7 @@ namespace ConsoleAppLog
         
         private static void Init()
         {
-            string logPath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "\\Logs\\" + DateTime.Now.ToString("yyyy-MM-dd") + "\\";
+            string logPath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + @"Logs\" + DateTime.Now.ToString("yyyy-MM-dd") + @"\";
             if (!Directory.Exists(logPath))
             {
                 Directory.CreateDirectory(logPath);
@@ -24,7 +24,7 @@ namespace ConsoleAppLog
         }
         private static void Init(string folderName)
         {
-            string logPath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "\\" + folderName + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + "\\";
+            string logPath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + @"\" + folderName + @"\" + DateTime.Now.ToString("yyyy-MM-dd") + @"\";
             if (!Directory.Exists(logPath))
             {
                 Directory.CreateDirectory(logPath);
@@ -32,40 +32,39 @@ namespace ConsoleAppLog
         }
         // --Method ที่ใช้งาน -----------------------------------------------------
         public static void Warning(string message)
-        {
-            new Thread(() => WriteWarning(message)).Start();
+        {        
+            WriteWarning(message);
         }
 
         public static void Error(string message)
         {
-            new Thread(() => WriteError(message)).Start();
+            WriteError(message);
         }
 
         public static void Info(string message)
         {
-            new Thread(() => WriteInfo(message)).Start();
+            WriteInfo(message);
         }
 
         public static void More(string message, string fileName)
         {
-            new Thread(() => WriteMore(message, fileName)).Start();
+             WriteMore(message, fileName);
         }
 
         public static void More(string message, string folderName, string fileName)
         {
-            new Thread(() => WriteMore(message, folderName, fileName)).Start();
+           WriteMore(message, folderName, fileName);
         }
         //----------------------------------------------------------------------------
         private static void WriteWarning(string message)
         {
             try
             {
-                lock (lockerError)
-                {
+              
                     Init();
                     string fileName = string.Empty;
-                    fileName = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "\\Logs\\" +
-                                DateTime.Now.ToString("yyyy-MM-dd") + "\\" + $"Warning-{DateTime.Now:yyyyMMdd}" + ".txt";
+                    fileName = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + @"\Logs\" +
+                                DateTime.Now.ToString("yyyy-MM-dd") + @"\" + $"Warning-{DateTime.Now:yyyyMMdd}" + ".txt";
                     using (StreamWriter sw = new StreamWriter(fileName, true))
                     {
                         sw.Write("{0:dd/MM/yyyy-HH:mm:ss} | ", DateTime.Now);
@@ -73,7 +72,7 @@ namespace ConsoleAppLog
                         sw.Close();
                         sw.Dispose();
                     }
-                }
+                
             }
             catch
             {
@@ -85,12 +84,11 @@ namespace ConsoleAppLog
         {
             try
             {
-                lock (lockerError)
-                {
+               
                     Init();
                     string fileName = string.Empty;
-                    fileName = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "\\Logs\\" +
-                               DateTime.Now.ToString("yyyy-MM-dd") + "\\" + $"Error-{DateTime.Now:yyyyMMdd}" + ".txt";
+                    fileName = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + @"\Logs\" +
+                               DateTime.Now.ToString("yyyy-MM-dd") + @"\" + $"Error-{DateTime.Now:yyyyMMdd}" + ".txt";
                     using (StreamWriter sw = new StreamWriter(fileName, true))
                     {
                         sw.Write("{0:dd/MM/yyyy-HH:mm:ss} | ", DateTime.Now);
@@ -115,7 +113,7 @@ namespace ConsoleAppLog
                     //        }
                     //    }
                     //}catch{}
-                }
+                
             }
             catch
             {
@@ -127,11 +125,10 @@ namespace ConsoleAppLog
         {
             try
             {
-                lock (lockerInfo)
-                {
+               
                     Init();
                     string fileName = string.Empty;
-                    fileName = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "\\Logs\\" + DateTime.Now.ToString("yyyy-MM-dd") + "\\" + $"Info-{DateTime.Now:yyyyMMdd}" + ".txt";
+                    fileName = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + @"\Logs\" + DateTime.Now.ToString("yyyy-MM-dd") + @"\" + $"Info-{DateTime.Now:yyyyMMdd}" + ".txt";
                     using (StreamWriter sw = new StreamWriter(fileName, true))
                     {
                         sw.Write("{0:dd/MM/yyyy-HH:mm:ss} | ", DateTime.Now);
@@ -139,7 +136,7 @@ namespace ConsoleAppLog
                         sw.Close();
                         sw.Dispose();
                     }
-                }
+                
             }
             catch
             {
@@ -151,10 +148,9 @@ namespace ConsoleAppLog
         {
             try
             {
-                lock (lockerInfo)
-                {
+                
                     Init();
-                    fileName = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "\\Logs\\" + DateTime.Now.ToString("yyyy-MM-dd") + "\\" + fileName + ".txt";
+                    fileName = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + @"\Logs\" + DateTime.Now.ToString("yyyy-MM-dd") + @"\" + fileName + ".txt";
                     using (StreamWriter sw = new StreamWriter(fileName, true))
                     {
                         sw.Write("{0:dd/MM/yyyy-HH:mm:ss} | ", DateTime.Now);
@@ -162,7 +158,7 @@ namespace ConsoleAppLog
                         sw.Close();
                         sw.Dispose();
                     }
-                }
+                
             }
             catch
             {
@@ -174,10 +170,9 @@ namespace ConsoleAppLog
         {
             try
             {
-                lock (lockerInfo)
-                {
+               
                     Init(folderName);
-                    fileName = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "\\" + folderName + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + "\\" + fileName + ".txt";
+                    fileName = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + @"\" + folderName + @"\" + DateTime.Now.ToString("yyyy-MM-dd") + @"\" + fileName + ".txt";
                     using (StreamWriter sw = new StreamWriter(fileName, true))
                     {
                         sw.Write("{0:dd/MM/yyyy-HH:mm:ss} | ", DateTime.Now);
@@ -185,7 +180,7 @@ namespace ConsoleAppLog
                         sw.Close();
                         sw.Dispose();
                     }
-                }
+                
             }
             catch
             {
@@ -196,7 +191,7 @@ namespace ConsoleAppLog
 
         private static void DeleteFile()
         {
-            string pahtDirectory = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "\\Logs\\" +
+            string pahtDirectory = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + @"\Logs\" +
                                 DateTime.Now.ToString("yyyy-MM-dd");
             DirectoryInfo directoryInfo = new DirectoryInfo(pahtDirectory);
             foreach (FileInfo file in directoryInfo.GetFiles())
